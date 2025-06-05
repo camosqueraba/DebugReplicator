@@ -1,0 +1,37 @@
+﻿<Application x:Class="DebugReplicator.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:DebugReplicator"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush x:Key="principal_konecta"         Color="#002855"/>
+            <SolidColorBrush x:Key="amarillo_secundario_konecta"    Color="#ffc72c"/>
+            <SolidColorBrush x:Key="oscuro_konecta"            Color="#040b25"/>
+            <SolidColorBrush x:Key="azul_footer_konecta"            Color="#FF002855"/>
+            <SolidColorBrush x:Key="blanco"                         Color="White"/>
+            <SolidColorBrush x:Key="gris_fondo"                     Color="#FFF8F8F8"/>
+
+            <SolidColorBrush x:Key="gris_ventana_inactiva"      Color="#DCDCDC"/>
+            <SolidColorBrush x:Key="gris_transparente" Color="#7777" Opacity=".1"/>
+
+
+            <SolidColorBrush x:Key="color_gris_texto_footer"        Color="#6E7783" Opacity="0.5"/>
+            <SolidColorBrush x:Key="color_fondo_body"               Color="#F8F8F8"/>
+            <SolidColorBrush x:Key="negro_texto"                    Color="Black"/>
+            <SolidColorBrush x:Key="color_transparente"             Color="Transparent"/>
+            <SolidColorBrush x:Key="gris_texto_secundario"          Color="#777"/>
+            <SolidColorBrush x:Key="amarillo"                       Color="#FFC300"/>
+            <SolidColorBrush x:Key="naranja_principal"              Color="#FF9933"/>
+            <SolidColorBrush x:Key="naranja_hover"                  Color="#FF7A33"/>
+            <SolidColorBrush x:Key="naranja_borde_boton"            Color="#F4AB34"/>
+            <SolidColorBrush x:Key="naranja_transparente"           Color="#F4AB34" Opacity=".1"/>
+            <SolidColorBrush x:Key="danger_red"                     Color="#E73A1C"/>
+            <SolidColorBrush x:Key="success_green"                  Color="#4BB543"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
