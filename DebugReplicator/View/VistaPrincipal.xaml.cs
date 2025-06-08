@@ -1,7 +1,11 @@
 ﻿using DebugReplicator.Controller;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+//using System.Windows.Forms;
+
+//using System.Windows.Forms;
 using WinForms = System.Windows.Forms;
 
 namespace DebugReplicator.View
@@ -23,10 +27,11 @@ namespace DebugReplicator.View
         {
             string boton = (string)((Button)sender).Tag;
 
+            /*
             WinForms.ToolStripMenuItem openMenuItem = new WinForms.ToolStripMenuItem();
             WinForms.OpenFileDialog openFileDialog1 = new WinForms.OpenFileDialog();
-            WinForms.FolderBrowserDialog folderBrowserDialog1 = new WinForms.FolderBrowserDialog();
-            
+            WinForms.FolderBrowserDialog folderBrowserDialog1 = new WinForms.FolderBrowserDialog();            
+
             folderBrowserDialog1.SelectedPath = Environment.GetEnvironmentVariable("USERPROFILE") + @"\" + "Downloads";
             
             WinForms.DialogResult result = folderBrowserDialog1.ShowDialog();
@@ -49,8 +54,25 @@ namespace DebugReplicator.View
                         TextblockCarpetaDestino.Text = RutaCarpetaDestino = folderName;
                 }
             }
+            openFileDialog.FileName = null;
+            */
 
-            
+            CommonOpenFileDialog openFileDialog = new CommonOpenFileDialog();
+            openFileDialog.IsFolderPicker = true;
+            openFileDialog.DefaultFileName = string.Empty;
+            openFileDialog.InitialDirectory = Environment.GetEnvironmentVariable("USERPROFILE") + @"\" + "Downloads";
+                         
+            CommonFileDialogResult result = openFileDialog.ShowDialog();
+
+            if (result == CommonFileDialogResult.Ok)
+            {
+                string folderName = openFileDialog.FileName;
+
+                if (boton == "carpeta_origen")
+                    TextblockCarpetaOrigen.Text = RutaCarpetaOrigen = folderName;
+                if (boton == "carpeta_destino")
+                    TextblockCarpetaDestino.Text = RutaCarpetaDestino = folderName;
+            }
 
             /*
             var dialog = new WinForms.FolderBrowserDialog();
@@ -64,11 +86,18 @@ namespace DebugReplicator.View
             */
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonSiguiente_Click(object sender, RoutedEventArgs e)
         {
             Replicador replicador = new Replicador();
             string[] archivos_indexar = new string[2];
-            replicador.ReplicarCarpetaDebug(RutaCarpetaOrigen, "BOT_", 1, 10, RutaCarpetaDestino, archivos_indexar);
+            //replicador.ReplicarCarpetaDebug(RutaCarpetaOrigen, "BOT_", 1, 10, RutaCarpetaDestino, archivos_indexar);
+            bool resultCopiar = replicador.CopiarCarpetaBaseADestino(RutaCarpetaOrigen, RutaCarpetaDestino);
+
+            if (resultCopiar)
+            {
+
+            }
+
         }
     }
 }

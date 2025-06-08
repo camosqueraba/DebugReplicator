@@ -39,8 +39,6 @@ namespace DebugReplicator.Controller
 
             }
 
-
-
             return ReplicarCarpeta;
         }
 
@@ -55,6 +53,18 @@ namespace DebugReplicator.Controller
             }
             
             return replicarExe;
+        }
+
+        public bool CopiarCarpetaBaseADestino(string urlCarpetaBase, string carpetaDestino)
+        {
+            bool copiado = false;
+
+            string nombreCarpetaOrigen = FileSystem.GetName(urlCarpetaBase);
+            string nombreNuevaCarpetaDestino = Path.Combine(carpetaDestino, nombreCarpetaOrigen);
+
+            GestorCarpetasArchivos.CopyDirectory(urlCarpetaBase, nombreNuevaCarpetaDestino, true);
+
+            return copiado;
         }
     }
 }
