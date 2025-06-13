@@ -4,39 +4,39 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DebugReplicator.View"
+             xmlns:viewmodels="clr-namespace:DebugReplicator.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewmodels:VistaListaArchivosViewModel/>
+    </UserControl.DataContext>
     <Grid Background="{StaticResource color_fondo_body}">
         <StackPanel>
             <Label Content="Seleccionar archivos para indexar" HorizontalAlignment="Center" Margin="0,20,0,0" FontSize="20" FontWeight="Bold"/>
-            
-            <!--
-            <StackPanel Orientation="Vertical" Width="600" HorizontalAlignment="Center" Margin="0,20,0,0">
-                <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
-                    <Border Width="110" Margin="5">
-                        <Label Content="Carpeta Origen" HorizontalAlignment="Left" FontSize="14"/>
+            <StackPanel Orientation="Vertical" Width="700">
+                <StackPanel Orientation="Horizontal">
+                    <Border BorderBrush="Black" BorderThickness="0.25">
+                        <TextBlock Text=""                   Width="30"  TextAlignment="Center"  />
                     </Border>
-                    <Border Margin="5">
-                        <Button Content="Seleccionar" FontSize="14" Tag="carpeta_origen" Click="ButtonSeleccionarCarpetaClick"/>
+                    <Border BorderBrush="Black" BorderThickness="0.25">
+                        <TextBlock Text="Nombre"             Width="400" TextAlignment="Center" />
                     </Border>
-                    <Border Margin="5">
-                        <TextBlock x:Name="TextblockCarpetaOrigen" Text="Ninguna carpeta seleccionada" FontSize="14"/>
+                    <Border BorderBrush="Black" BorderThickness="0.25">
+                        <TextBlock Text="Fecha Modificacion" Width="150" TextAlignment="Center" />
                     </Border>
+                    <Border BorderBrush="Black" BorderThickness="0.25">
+                        <TextBlock Text="Tamano"             Width="100" TextAlignment="Center" />
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="0.25">
+                        <TextBlock Text=""                   Width="20"  TextAlignment="Center" />
+                    </Border>
+                    
                 </StackPanel>
-                <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
-                    <Border Width="110" Margin="5">
-                        <Label Content="Carpeta Destino" HorizontalAlignment="Left" FontSize="14"/>
-                    </Border>
-                    <Border Margin="5">
-                        <Button Content="Seleccionar" FontSize="14" Tag="carpeta_destino"  Click="ButtonSeleccionarCarpetaClick"/>
-                    </Border>
-                    <Border Margin="5">
-                        <TextBlock x:Name="TextblockCarpetaDestino" Text="Ninguna carpeta seleccionada" FontSize="14"/>
-                    </Border>
-                </StackPanel>
-                <Button Content="Siguiente" Margin="10" HorizontalAlignment="Center"  VerticalAlignment="Bottom" Background="Azure" Click="ButtonSiguiente_Click" />
+                <ListBox ItemsSource="{Binding FileItems, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalContentAlignment="Stretch" Margin="0,20,0,0"/>
+                              
             </StackPanel>
-            -->
+            
         </StackPanel>
     </Grid>
 </UserControl>

@@ -63,6 +63,7 @@ namespace DebugReplicator.Controller
             string nombreNuevaCarpetaDestino = Path.Combine(carpetaDestino, nombreCarpetaOrigen);
 
             GestorCarpetasArchivos.CopyDirectory(urlCarpetaBase, nombreNuevaCarpetaDestino, true);
+            copiado = true;
 
             return copiado;
         }

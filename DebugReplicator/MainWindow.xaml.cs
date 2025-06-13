@@ -1,5 +1,6 @@
 ﻿using DebugReplicator.Controller;
 using DebugReplicator.View;
+using DebugReplicator.ViewModels;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -13,6 +14,7 @@ namespace DebugReplicator
     /// </summary>
     public partial class MainWindow : Window
     {
+        
         private DateTime TiempoInicial { get; set; }
         
         public MainWindow()
@@ -36,7 +38,9 @@ namespace DebugReplicator
             ContenedorLoading.Visibility = Visibility.Hidden;
 
             GridContenidoPrincipal.Children.Clear();
-            GridContenidoPrincipal.Children.Add(new VistaPrincipal());
+            GridContenidoPrincipal.Children.Add(new VistaListaArchivos());
+
+            //Model.TryNavigateToPath(@"C:\Users\camos\OneDrive\Documentos\Carlos\TrabajoKonecta\Simuladores\Bots_SAC\HUBIntegration_BOT64");
         }
 
 

@@ -3,9 +3,6 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Windows;
 using System.Windows.Controls;
-//using System.Windows.Forms;
-
-//using System.Windows.Forms;
 using WinForms = System.Windows.Forms;
 
 namespace DebugReplicator.View
@@ -17,6 +14,8 @@ namespace DebugReplicator.View
     {
         private static string RutaCarpetaOrigen { get; set; }
         private static string RutaCarpetaDestino { get; set; }
+
+        private MainWindow VentanaPrincipal = (MainWindow)Application.Current.MainWindow;
 
         public VistaPrincipal()
         {
@@ -95,7 +94,8 @@ namespace DebugReplicator.View
 
             if (resultCopiar)
             {
-
+                VentanaPrincipal.GridContenidoPrincipal.Children.Clear();
+                VentanaPrincipal.GridContenidoPrincipal.Children.Add(new VistaListaArchivos());
             }
 
         }

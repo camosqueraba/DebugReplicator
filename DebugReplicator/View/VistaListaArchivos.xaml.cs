@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DebugReplicator.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,17 @@ namespace DebugReplicator.View
     /// </summary>
     public partial class VistaListaArchivos : UserControl
     {
+        public VistaListaArchivosViewModel Model
+        {
+            get => this.DataContext as VistaListaArchivosViewModel;
+            set => this.DataContext = value;
+        }
+
         public VistaListaArchivos()
         {
             InitializeComponent();
+
+            Model.TryNavigateToPath(@"C:\Users\camos\OneDrive\Documentos\Carlos\TrabajoKonecta\Simuladores\Bots_SAC\HUBIntegration_BOT64");
         }
     }
 }
