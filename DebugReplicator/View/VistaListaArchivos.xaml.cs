@@ -33,5 +33,10 @@ namespace DebugReplicator.View
 
             Model.TryNavigateToPath(@"C:\Users\camos\OneDrive\Documentos\Carlos\TrabajoKonecta\Simuladores\Bots_SAC\HUBIntegration_BOT64");
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Model.TryNavigateToPath(@"C:\Users\camos\OneDrive\Documentos\Carlos\TrabajoKonecta\Simuladores\Bots_SAC\HUBIntegration_BOT64");
+        }
     }
 }

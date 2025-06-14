@@ -124,7 +124,7 @@
     <Compile Include="Converters\FileSizeFormatConverter.cs" />
     <Compile Include="Converters\IconToImageConverter.cs" />
     <Compile Include="Explorer\ExplorerHelpers.cs" />
-    <Compile Include="Explorer\Fetcher.cs" />
+    <Compile Include="Explorer\ExploradorDirectorios.cs" />
     <Compile Include="Helpers\IconHelper.cs" />
     <Compile Include="Themes\ColourfulDarkTheme.xaml.cs">
       <DependentUpon>ColourfulDarkTheme.xaml</DependentUpon>

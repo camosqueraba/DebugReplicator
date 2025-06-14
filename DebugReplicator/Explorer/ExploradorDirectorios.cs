@@ -7,8 +7,8 @@ using System.Windows;
 
 namespace DebugReplicator.Explorer
 {
-    public static class Fetcher
-    {
+    public static class ExploradorDirectorios
+    {        
         public static List<FileModel> GetFiles(string directory)
         {
             List<FileModel> files = new List<FileModel>();

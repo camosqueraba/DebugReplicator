@@ -1,11 +1,17 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 
 namespace DebugReplicator.UIControls
 {
-    public class FileModel
+    public class FileModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        
+
         // Using icon because it's easier
+
         public Icon Icon { get; set; }
 
         public string Name { get; set; }
@@ -19,6 +25,27 @@ namespace DebugReplicator.UIControls
         public FileType Type { get; set; }
 
         public long SizeBytes { get; set; }
+
+        private bool seleccionado;
+        public bool Seleccionado
+        {
+            get { return seleccionado; }
+            set
+            {
+                seleccionado = value;
+                // Call OnPropertyChanged whenever the property is updated
+                OnPropertyChanged();
+            }
+        }
+
+        // Create the OnPropertyChanged method to raise the event
+        // The calling member's name will be used as the parameter.
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public FileModel Contenido {  get; set; } 
 
         public bool IsFile => Type == FileType.File;
         public bool IsFolder => Type == FileType.Folder;

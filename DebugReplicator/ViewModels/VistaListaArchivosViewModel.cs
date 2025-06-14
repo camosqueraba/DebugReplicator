@@ -29,7 +29,7 @@ namespace DebugReplicator.ViewModels
             {
                 ClearFiles();
 
-                foreach(FileModel drive in Fetcher.GetDrives())
+                foreach(FileModel drive in ExploradorDirectorios.GetDrives())
                 {
                     FilesControl fc = CreateFileControl(drive);
                     AddFile(fc);
@@ -46,13 +46,13 @@ namespace DebugReplicator.ViewModels
             {
                 ClearFiles();
 
-                foreach(FileModel dir in Fetcher.GetDirectories(path))
+                foreach(FileModel dir in ExploradorDirectorios.GetDirectories(path))
                 {
                     FilesControl fc = CreateFileControl(dir);
                     AddFile(fc);
                 }
 
-                foreach (FileModel file in Fetcher.GetFiles(path))
+                foreach (FileModel file in ExploradorDirectorios.GetFiles(path))
                 {
                     FilesControl fc = CreateFileControl(file);
                     AddFile(fc);

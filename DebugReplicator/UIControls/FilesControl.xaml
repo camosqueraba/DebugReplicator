@@ -6,24 +6,39 @@
              xmlns:local="clr-namespace:DebugReplicator.UIControls"
              xmlns:Converters="clr-namespace:DebugReplicator.Converters"
              mc:Ignorable="d" 
-             Height="20" d:DesignWidth="800"
+             Height="20" Width="700"
+             Background="White"
              KeyDown="UserControl_KeyDown">
     <UserControl.Resources>
         <Converters:FileSizeFormatConverter x:Key="FileSizeFormatConverter"/>
         <Converters:IconToImageConverter x:Key="IconToImageConverter"/>
     </UserControl.Resources>
-    <Grid MouseDown="Grid_MouseDown">
-        <StackPanel Orientation="Horizontal" Width="700" HorizontalAlignment="Left">
-            
-            <Image Source="{Binding Icon, Converter={StaticResource IconToImageConverter}}"               Width="30" />            
-            <TextBlock Text="{Binding Name}"                                                              Width="400"/>            
+    <Grid MouseDown="Grid_MouseDown" Width="730">
+        <StackPanel Orientation="Horizontal"  HorizontalAlignment="Left">
+            <Border Width="46" >
+                <Image Source="{Binding Icon, Converter={StaticResource IconToImageConverter}}"/>
+            </Border>
+            <Border Width="380" >
+                <TextBlock Text="{Binding Name}"/>
+            </Border>
+            <Border Width="150" >
+                <TextBlock Text="{Binding DateModified}" HorizontalAlignment="Center"/>
+            </Border>
+            <Border Width="100" >
+                <TextBlock Text="{Binding SizeBytes, Converter={StaticResource FileSizeFormatConverter}}"  HorizontalAlignment="Center"/>
+            </Border>
+            <Border Width="30" >
+                <CheckBox  IsChecked="{Binding Seleccionado, Mode=TwoWay}" HorizontalAlignment="Center"/>
+            </Border>
+                      
+                       
             <!--                                                                                          
             <TextBlock Text="{Binding DateCreated}"                                                       Width="125"/>
             -->
-            <TextBlock Text="{Binding DateModified}"                                                      Width="150"/>
+            
             <!--<TextBlock Text="{Binding Type}"                                                          Width="70"/>-->
-            <TextBlock Text="{Binding SizeBytes, Converter={StaticResource FileSizeFormatConverter}}"     Width="100"/>
-            <TextBlock Text=""     Width="20"/>
+            
+            
             
         </StackPanel>
     </Grid>

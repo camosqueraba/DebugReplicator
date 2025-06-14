@@ -12,53 +12,7 @@
         Height="500" Width="900"
         MinHeight="500" MinWidth="590"
         Closing="CerrarVentana">
-    <Window.Resources>
-        <Style x:Key="boton_ventana" TargetType="Button">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="{StaticResource principal_konecta}" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="Height" Value="30" />
-            <Setter Property="Width" Value="30" />
-            <Setter Property="Margin" Value="5,0,0,0"/>
-            <Setter Property="HorizontalAlignment" Value="Right" />
-            <Setter Property="Template" >
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="50">
-                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="{StaticResource blanco}" />
-                    <Setter Property="Background" Value="{StaticResource principal_konecta}" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="boton_ventana_cerrar" BasedOn="{StaticResource boton_ventana}" TargetType="{x:Type Button}">
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{StaticResource danger_red}" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="border_barra_superior_activo" TargetType="Border">
-            <Setter Property="Background" Value="{StaticResource blanco}" />
-            <Setter Property="CornerRadius" Value="20, 20, 0, 0" />
-            <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
-            <Setter Property="BorderBrush" Value="{StaticResource principal_konecta}"/>
-        </Style>
-        <Style x:Key="border_barra_superior_desactivo" TargetType="Border">
-            <Setter Property="Background" Value="{StaticResource gris_texto_secundario}" />
-            <Setter Property="CornerRadius" Value="20, 20, 0, 0" />
-            <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
-            <Setter Property="BorderBrush" Value="{StaticResource principal_konecta}"/>
-        </Style>
-    </Window.Resources>
+    
     <Border Background="{StaticResource color_fondo_body}">
         <Grid>
             <Grid.RowDefinitions>
