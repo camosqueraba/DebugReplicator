@@ -4,11 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using static System.Net.WebRequestMethods;
 
 namespace DebugReplicator.Explorer
 {
     public static class ExploradorDirectorios
-    {        
+    {
+        public static Dictionary<string, List<FileModel>> Directorios = new Dictionary<string, List<FileModel>>();
         public static List<FileModel> GetFiles(string directory)
         {
             List<FileModel> files = new List<FileModel>();
@@ -23,26 +25,26 @@ namespace DebugReplicator.Explorer
             try
             {
                 foreach (string file in Directory.GetFiles(directory))
-                {
-                    currentFile = file;
-
-                    // Checks if it isn't an extension.
-                    if (Path.GetExtension(file) != ".lnk")
                     {
-                        FileInfo fInfo = new FileInfo(file);
-                        FileModel fModel = new FileModel()
-                        {
-                            Icon = IconHelper.GetIconOfFile(file, true, false),
-                            Name = fInfo.Name,
-                            Path = fInfo.FullName,
-                            DateCreated = fInfo.CreationTime,
-                            DateModified = fInfo.LastWriteTime,
-                            Type = FileType.File,
-                            SizeBytes = fInfo.Length
-                        };
+                        currentFile = file;
 
-                        files.Add(fModel);
-                    }
+                        // Checks if it isn't an extension.
+                        if (Path.GetExtension(file) != ".lnk")
+                        {
+                            FileInfo fInfo = new FileInfo(file);
+                            FileModel fModel = new FileModel()
+                            {
+                                Icon = IconHelper.GetIconOfFile(file, true, false),
+                                Name = fInfo.Name,
+                                Path = fInfo.FullName,
+                                DateCreated = fInfo.CreationTime,
+                                DateModified = fInfo.LastWriteTime,
+                                Type = FileType.File,
+                                SizeBytes = fInfo.Length
+                            };
+
+                            files.Add(fModel);
+                        }
                 }
 
                 return files;
@@ -81,49 +83,51 @@ namespace DebugReplicator.Explorer
             string currentDirectory = "";
 
             try
-            {
+            {   
                 // Checks for normal directories
                 foreach (string dir in Directory.GetDirectories(directory))
-                {
-                    currentDirectory = dir;
-
-                    DirectoryInfo dInfo = new DirectoryInfo(dir);
-                    FileModel dModel = new FileModel()
                     {
-                        Icon = IconHelper.GetIconOfFile(dir, true, true),
-                        Name = dInfo.Name,
-                        Path = dInfo.FullName,
-                        DateCreated = dInfo.CreationTime,
-                        DateModified = dInfo.LastWriteTime,
-                        Type = FileType.Folder,
-                        SizeBytes = long.MaxValue
-                    };
+                        currentDirectory = dir;
 
-                    directories.Add(dModel);
-                }
-
-                // Checks for directory shortcuts
-                foreach (string file in Directory.GetFiles(directory))
-                {
-                    if (Path.GetExtension(file) == ".lnk")
-                    {
-                        string realDirPath = ExplorerHelpers.GetShortcutTargetFolder(file);
-                        FileInfo dInfo = new FileInfo(realDirPath);
+                        DirectoryInfo dInfo = new DirectoryInfo(dir);
                         FileModel dModel = new FileModel()
                         {
-                            Icon = IconHelper.GetIconOfFile(realDirPath, true, true),
+                            Icon = IconHelper.GetIconOfFile(dir, true, true),
                             Name = dInfo.Name,
                             Path = dInfo.FullName,
                             DateCreated = dInfo.CreationTime,
                             DateModified = dInfo.LastWriteTime,
                             Type = FileType.Folder,
-                            SizeBytes = 0
+                            SizeBytes = long.MaxValue
                         };
 
                         directories.Add(dModel);
                     }
-                }
 
+                // Checks for directory shortcuts
+                foreach (string file in Directory.GetFiles(directory))
+                    {
+                        if (Path.GetExtension(file) == ".lnk")
+                        {
+                            string realDirPath = ExplorerHelpers.GetShortcutTargetFolder(file);
+                            FileInfo dInfo = new FileInfo(realDirPath);
+                            FileModel dModel = new FileModel()
+                            {
+                                Icon = IconHelper.GetIconOfFile(realDirPath, true, true),
+                                Name = dInfo.Name,
+                                Path = dInfo.FullName,
+                                DateCreated = dInfo.CreationTime,
+                                DateModified = dInfo.LastWriteTime,
+                                Type = FileType.Folder,
+                                SizeBytes = 0
+                            };
+
+                            directories.Add(dModel);
+                        }
+                    }
+
+                //Directorios.Add(directory, directories);
+               
                 return directories;
             }
 
@@ -155,8 +159,7 @@ namespace DebugReplicator.Explorer
             List<FileModel> drives = new List<FileModel>();
 
             try
-            {
-
+            {                
                 foreach (string drive in Directory.GetLogicalDrives())
                 {
                     DriveInfo dInfo = new DriveInfo(drive);
@@ -187,6 +190,24 @@ namespace DebugReplicator.Explorer
             }
 
             return drives;
+        }
+
+        public static List<FileModel> ObtenerContenidoCarpeta(string path)
+        {
+            List<FileModel> files = new List<FileModel>();
+
+            if (Directorios.ContainsKey(path))
+            {
+                files = Directorios[path];
+            }
+            else
+            {
+                files.AddRange(GetDirectories(path));
+                files.AddRange(GetFiles(path));
+                Directorios.Add(path, files);
+            }
+
+            return files;
         }
     }
 }
