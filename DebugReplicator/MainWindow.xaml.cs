@@ -38,9 +38,8 @@ namespace DebugReplicator
             ContenedorLoading.Visibility = Visibility.Hidden;
 
             GridContenidoPrincipal.Children.Clear();
-            GridContenidoPrincipal.Children.Add(new VistaListaArchivos());
-
-            //Model.TryNavigateToPath(@"C:\Users\camos\OneDrive\Documentos\Carlos\TrabajoKonecta\Simuladores\Bots_SAC\HUBIntegration_BOT64");
+            GridContenidoPrincipal.Children.Add(new VistaPrincipal());
+            
         }
 
 

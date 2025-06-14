@@ -14,7 +14,7 @@
     <Grid Background="{StaticResource color_fondo_body}">
         <StackPanel Width="800">
             <Label Content="Seleccionar archivos para indexar" HorizontalAlignment="Center" Margin="0,20,0,20" FontSize="20" FontWeight="Bold"/>
-            <Button Width="70" HorizontalAlignment="Left" Margin="35,0,0,10" Click="Button_Click">
+            <Button Width="70" HorizontalAlignment="Left" Margin="35,0,0,10" Click="ButtonVistaAnterior_Click">
                 <StackPanel Orientation="Horizontal">                    
                     <materialDesign:PackIcon Kind="ArrowBack" Width="15" Height="15" VerticalAlignment="Center"/>
                     <TextBlock Text="Atras"/>
@@ -24,9 +24,11 @@
                 <Border BorderThickness="0.1" BorderBrush="Black">
                     <StackPanel Orientation="Horizontal" >
                         <Border BorderBrush="Black"  Width="60">
-                            
+                            <Button Width="60" HorizontalAlignment="Center" Background="Transparent" BorderBrush="Transparent" Click="ButtonDirectorioAnterior_Click">
+                                <materialDesign:PackIcon Kind="ArrowTop" Width="15" Height="15" VerticalAlignment="Center"/>
+                            </Button>
                         </Border>
-                        <Border BorderBrush="Black"  Width="380" BorderThickness="0,0,0.1,0">
+                        <Border BorderBrush="Black"  Width="380" BorderThickness="0.1,0,0.1,0">
                             <TextBlock Text="Nombre"              TextAlignment="Center" />
                         </Border>
                         <Border BorderBrush="Black"  Width="150" BorderThickness="0,0,0.1,0">

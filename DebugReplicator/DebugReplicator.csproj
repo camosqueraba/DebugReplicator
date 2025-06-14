@@ -123,6 +123,7 @@
     <Compile Include="Controller\Replicador.cs" />
     <Compile Include="Converters\FileSizeFormatConverter.cs" />
     <Compile Include="Converters\IconToImageConverter.cs" />
+    <Compile Include="DTOs\ResultadoProceso.cs" />
     <Compile Include="Explorer\ExplorerHelpers.cs" />
     <Compile Include="Explorer\ExploradorDirectorios.cs" />
     <Compile Include="Helpers\IconHelper.cs" />

@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic.FileIO;
+﻿using DebugReplicator.DTOs;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -55,8 +56,9 @@ namespace DebugReplicator.Controller
             return replicarExe;
         }
 
-        public bool CopiarCarpetaBaseADestino(string urlCarpetaBase, string carpetaDestino)
+        public ResultadoProceso CopiarCarpetaBaseADestino(string urlCarpetaBase, string carpetaDestino)
         {
+            ResultadoProceso resultadoProceso = new ResultadoProceso();
             bool copiado = false;
 
             string nombreCarpetaOrigen = FileSystem.GetName(urlCarpetaBase);
@@ -65,7 +67,10 @@ namespace DebugReplicator.Controller
             GestorCarpetasArchivos.CopyDirectory(urlCarpetaBase, nombreNuevaCarpetaDestino, true);
             copiado = true;
 
-            return copiado;
+            resultadoProceso.Resultado = copiado;
+            resultadoProceso.ResultadoContenido = nombreNuevaCarpetaDestino;
+
+            return resultadoProceso;
         }
     }
 }

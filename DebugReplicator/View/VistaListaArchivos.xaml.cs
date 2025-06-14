@@ -21,22 +21,31 @@ namespace DebugReplicator.View
     /// </summary>
     public partial class VistaListaArchivos : UserControl
     {
+        private MainWindow VentanaPrincipal = (MainWindow)Application.Current.MainWindow;
+        public static string RutaCarpetaBase {  get; set; } 
         public VistaListaArchivosViewModel Model
         {
             get => this.DataContext as VistaListaArchivosViewModel;
             set => this.DataContext = value;
         }
 
-        public VistaListaArchivos()
+        public VistaListaArchivos(string rutaCarpetaBase)
         {
             InitializeComponent();
 
-            Model.TryNavigateToPath(@"C:\Users\camos\OneDrive\Documentos\Carlos\TrabajoKonecta\Simuladores\Bots_SAC\HUBIntegration_BOT64");
+            RutaCarpetaBase = rutaCarpetaBase;
+            Model.TryNavigateToPath(rutaCarpetaBase);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonDirectorioAnterior_Click(object sender, RoutedEventArgs e)
         {
-            Model.TryNavigateToPath(@"C:\Users\camos\OneDrive\Documentos\Carlos\TrabajoKonecta\Simuladores\Bots_SAC\HUBIntegration_BOT64");
+            Model.TryNavigateToPath(RutaCarpetaBase);
+        }
+
+        private void ButtonVistaAnterior_Click(object sender, RoutedEventArgs e)
+        {
+            VentanaPrincipal.GridContenidoPrincipal.Children.Clear();
+            VentanaPrincipal.GridContenidoPrincipal.Children.Add(new VistaPrincipal());
         }
     }
 }

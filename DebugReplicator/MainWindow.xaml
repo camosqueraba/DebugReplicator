@@ -59,16 +59,16 @@
             <Grid Grid.Row="1">
                 <Border Background="{StaticResource principal_konecta}"  BorderBrush="{StaticResource principal_konecta}">
                     <StackPanel Orientation="Horizontal" Margin="10, 0" HorizontalAlignment="Center">
-                        <materialDesign:PackIcon Kind="Account" Width="15" Height="15" VerticalAlignment="Center" Foreground="White"/>
+                        <materialDesign:PackIcon Kind="Account" Width="20" Height="20" VerticalAlignment="Center" Foreground="White"/>
                         <Label x:Name="lbl_nombre_usuario" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
 
-                        <materialDesign:PackIcon Kind="Monitor" Width="15" Height="15" VerticalAlignment="Center" Foreground="White"/>
+                        <materialDesign:PackIcon Kind="Monitor" Width="20" Height="20" VerticalAlignment="Center" Foreground="White"/>
                         <Label x:Name="lbl_informacion_maquina" FontSize="14" Foreground="White"  VerticalAlignment="Center"/>
 
-                        <materialDesign:PackIcon Kind="Calendar" Width="15" Height="15" VerticalAlignment="Center" Foreground="White"/>
+                        <materialDesign:PackIcon Kind="Calendar" Width="20" Height="20" VerticalAlignment="Center" Foreground="White"/>
                         <Label x:Name="lbl_fecha"   FontSize="14"  Foreground="White"  VerticalAlignment="Center"/>
 
-                        <materialDesign:PackIcon Kind="ApplicationOutline" Width="15" Height="15" VerticalAlignment="Center" Foreground="White"/>
+                        <materialDesign:PackIcon Kind="SourceBranch" Width="20" Height="20" VerticalAlignment="Center" Foreground="White"/>
                         <Label x:Name="lbl_vesion_proyecto" FontSize="14" Foreground="White"  VerticalAlignment="Center"/>
                     </StackPanel>
                 </Border>

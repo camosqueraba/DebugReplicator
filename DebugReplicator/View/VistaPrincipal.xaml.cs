@@ -1,4 +1,5 @@
 ﻿using DebugReplicator.Controller;
+using DebugReplicator.DTOs;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Windows;
@@ -90,12 +91,13 @@ namespace DebugReplicator.View
             Replicador replicador = new Replicador();
             string[] archivos_indexar = new string[2];
             //replicador.ReplicarCarpetaDebug(RutaCarpetaOrigen, "BOT_", 1, 10, RutaCarpetaDestino, archivos_indexar);
-            bool resultCopiar = replicador.CopiarCarpetaBaseADestino(RutaCarpetaOrigen, RutaCarpetaDestino);
+            ResultadoProceso resultCopiar = replicador.CopiarCarpetaBaseADestino(RutaCarpetaOrigen, RutaCarpetaDestino);
 
-            if (resultCopiar)
+            if (resultCopiar != null && resultCopiar.Resultado)
             {
+                string carpetaReplicada = resultCopiar.ResultadoContenido;
                 VentanaPrincipal.GridContenidoPrincipal.Children.Clear();
-                VentanaPrincipal.GridContenidoPrincipal.Children.Add(new VistaListaArchivos());
+                VentanaPrincipal.GridContenidoPrincipal.Children.Add(new VistaListaArchivos(carpetaReplicada));
             }
 
         }
