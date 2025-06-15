@@ -4,39 +4,50 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DebugReplicator.View"
-             mc:Ignorable="d"
-             
+             mc:Ignorable="d"             
              Height="500" Width="900"
-             MinHeight="500" MinWidth="590">
+             >
     <Grid Background="{StaticResource color_fondo_body}">
         <StackPanel>
             <Label Content="Seleccionar carpeta Origen/Destino" HorizontalAlignment="Center" Margin="0,20,0,0" FontSize="20" FontWeight="Bold"/>
-            <StackPanel Orientation="Vertical" Width="600" HorizontalAlignment="Center" Margin="0,20,0,0">
-                <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,20,0,0">
+                <StackPanel  Orientation="Horizontal"  Margin="0,10,0,0">
                     <Border Width="110" Margin="5">
-                        <Label Content="Carpeta Origen" HorizontalAlignment="Left" FontSize="14"/>
+                        <Label Content="Carpeta Origen"  FontSize="14"/>
                     </Border>
                     <Border Margin="5">
-                        <TextBox x:Name="TextblockCarpetaOrigen" Text="Ninguna carpeta seleccionada" FontSize="14"/>
+                        <TextBox x:Name="TextblockCarpetaOrigen" Text="{Binding RutaCarpetaOrigen}" Width="200" FontSize="14"/>
                     </Border>
                     <Border Margin="5">
-                        <Button Content="Seleccionar" FontSize="14" Tag="carpeta_origen" Click="ButtonSeleccionarCarpetaClick"/>
+                        <Button Content="Seleccionar" FontSize="14" Tag="carpeta_origen" Width="100" Click="ButtonSeleccionarCarpetaClick"/>
                     </Border>
                     
                 </StackPanel>
-                <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
+                <StackPanel  Orientation="Horizontal"  Margin="0,10,0,0">
                     <Border Width="110" Margin="5">
-                        <Label Content="Carpeta Destino" HorizontalAlignment="Left" FontSize="14"/>
+                        <Label Content="Carpeta Destino"  FontSize="14"/>
                     </Border>
                     <Border Margin="5">
-                        <TextBox x:Name="TextblockCarpetaDestino" Text="Ninguna carpeta seleccionada" FontSize="14"/>
+                        <TextBox x:Name="TextblockCarpetaDestino" Text="{Binding RutaCarpetaDestino}" Width="200" FontSize="14"/>
                     </Border>
-                    <Border Margin="5">
-                        <Button Content="Seleccionar" FontSize="14" Tag="carpeta_destino"  Click="ButtonSeleccionarCarpetaClick"/>
+                    <Border Margin="5" >
+                        <Button Content="Seleccionar" FontSize="14" Tag="carpeta_destino" Width="100"  Click="ButtonSeleccionarCarpetaClick"/>
                     </Border>
                     
                 </StackPanel>
-                <Button Content="Siguiente" Margin="10" HorizontalAlignment="Center"  VerticalAlignment="Bottom" Background="Azure" Click="ButtonSiguiente_Click" />
+                <StackPanel  Orientation="Horizontal"  Margin="0,10,0,0">
+                    <Border Width="110" Margin="5">
+                        
+                    </Border>
+                    <Border Margin="5" Width="200">
+                        
+                    </Border>
+                    <Border Margin="5" >
+                        <Button Content="Siguiente"  FontSize="14"   Width="100" Click="ButtonSiguiente_Click" />
+                    </Border>
+
+                </StackPanel>
+                
             </StackPanel>
         </StackPanel>   
     </Grid>

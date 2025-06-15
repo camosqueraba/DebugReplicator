@@ -38,8 +38,9 @@ namespace DebugReplicator
             ContenedorLoading.Visibility = Visibility.Hidden;
 
             GridContenidoPrincipal.Children.Clear();
-            GridContenidoPrincipal.Children.Add(new VistaPrincipal());
-            
+            //GridContenidoPrincipal.Children.Add(new VistaPrincipal());
+            GridContenidoPrincipal.Children.Add(new VistaListaArchivos(@"C:\Users\camos\Downloads\Pruebas_DebugReplicator\CarpetaDestino\Debug"));
+
         }
 
 

@@ -23,7 +23,7 @@ namespace DebugReplicator.View
     {
         private MainWindow VentanaPrincipal = (MainWindow)Application.Current.MainWindow;
         public static string RutaCarpetaBase {  get; set; } 
-        public VistaListaArchivosViewModel Model
+        public VistaListaArchivosViewModel ListaArchivosViewModel
         {
             get => this.DataContext as VistaListaArchivosViewModel;
             set => this.DataContext = value;
@@ -34,18 +34,28 @@ namespace DebugReplicator.View
             InitializeComponent();
 
             RutaCarpetaBase = rutaCarpetaBase;
-            Model.TryNavigateToPath(rutaCarpetaBase);
+            ListaArchivosViewModel.TryNavigateToPath(rutaCarpetaBase);
         }
 
         private void ButtonDirectorioAnterior_Click(object sender, RoutedEventArgs e)
         {
-            Model.TryNavigateToPath(RutaCarpetaBase);
+            ListaArchivosViewModel.TryNavigateToPath(RutaCarpetaBase);
         }
 
         private void ButtonVistaAnterior_Click(object sender, RoutedEventArgs e)
         {
             VentanaPrincipal.GridContenidoPrincipal.Children.Clear();
             VentanaPrincipal.GridContenidoPrincipal.Children.Add(new VistaPrincipal());
+        }
+
+        private void ButtonContinuar_Click(object sender, RoutedEventArgs e)
+        {
+            var algo = ListaArchivosViewModel.FileItems;
+
+            foreach (var item in algo)
+            {
+                var algo_ = item.File;
+            }
         }
     }
 }

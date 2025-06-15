@@ -14,12 +14,20 @@
     <Grid Background="{StaticResource color_fondo_body}">
         <StackPanel Width="800">
             <Label Content="Seleccionar archivos para indexar" HorizontalAlignment="Center" Margin="0,20,0,20" FontSize="20" FontWeight="Bold"/>
-            <Button Width="70" HorizontalAlignment="Left" Margin="35,0,0,10" Click="ButtonVistaAnterior_Click">
-                <StackPanel Orientation="Horizontal">                    
-                    <materialDesign:PackIcon Kind="ArrowBack" Width="15" Height="15" VerticalAlignment="Center"/>
-                    <TextBlock Text="Atras"/>
-                </StackPanel>
-            </Button>
+            <StackPanel Orientation="Horizontal">
+                <Button Width="70" HorizontalAlignment="Left" Margin="35,0,0,10" Click="ButtonVistaAnterior_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ArrowBack" Width="15" Height="15" VerticalAlignment="Center"/>
+                        <TextBlock Text="Atras"/>
+                    </StackPanel>
+                </Button>
+                <Button Width="70" HorizontalAlignment="Left" Margin="30,0,0,10" Click="ButtonContinuar_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Continuar"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            
             <StackPanel Orientation="Vertical" Width="730">
                 <Border BorderThickness="0.1" BorderBrush="Black">
                     <StackPanel Orientation="Horizontal" >

@@ -48,16 +48,6 @@ namespace DebugReplicator.UIControls
             {
                 NavigateToPathCallback?.Invoke(File);
             }
-        }
-
-        private void CheckBox_Checked(object sender, System.Windows.RoutedEventArgs e)
-        {
-            File.Seleccionado = true;
-        }
-
-        private void CheckBox_Unchecked(object sender, System.Windows.RoutedEventArgs e)
-        {
-            File.Seleccionado = false;
-        }
+        }        
     }
 }

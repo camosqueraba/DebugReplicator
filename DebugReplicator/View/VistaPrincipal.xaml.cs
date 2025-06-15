@@ -1,5 +1,6 @@
 ﻿using DebugReplicator.Controller;
 using DebugReplicator.DTOs;
+using DebugReplicator.ViewModels;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Windows;
@@ -14,7 +15,7 @@ namespace DebugReplicator.View
     public partial class VistaPrincipal : UserControl
     {
         private static string RutaCarpetaOrigen { get; set; }
-        private static string RutaCarpetaDestino { get; set; }
+        private static string RutaCarpetaDestino { get; set; }        
 
         private MainWindow VentanaPrincipal = (MainWindow)Application.Current.MainWindow;
 
