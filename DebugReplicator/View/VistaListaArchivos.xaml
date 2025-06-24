@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:DebugReplicator.View"
-             xmlns:viewmodels="clr-namespace:DebugReplicator.ViewModels"
+             xmlns:viewmodels="clr-namespace:DebugReplicator.ViewModel"
              mc:Ignorable="d" 
              d:Height="450" Width="840">
     <UserControl.DataContext>

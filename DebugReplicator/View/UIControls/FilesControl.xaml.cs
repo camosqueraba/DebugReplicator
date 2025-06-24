@@ -1,8 +1,9 @@
-﻿using System;
+﻿using DebugReplicator.Model;
+using System;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace DebugReplicator.UIControls
+namespace DebugReplicator.View.UIControls
 {
     /// <summary>
     /// Interaction logic for FilesControl.xaml

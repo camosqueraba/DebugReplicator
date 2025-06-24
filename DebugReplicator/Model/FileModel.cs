@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 
-namespace DebugReplicator.UIControls
+namespace DebugReplicator.Model
 {
     public class FileModel : INotifyPropertyChanged
     {

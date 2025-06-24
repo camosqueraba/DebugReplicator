@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DebugReplicator.DTOs
+namespace DebugReplicator.Model.DTOs
 {
     public class ResultadoProceso
     {

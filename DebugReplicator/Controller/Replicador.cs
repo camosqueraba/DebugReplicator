@@ -1,4 +1,4 @@
-﻿using DebugReplicator.DTOs;
+﻿using DebugReplicator.Model.DTOs;
 using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;

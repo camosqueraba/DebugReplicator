@@ -1,5 +1,5 @@
 ﻿using DebugReplicator.Helpers;
-using DebugReplicator.UIControls;
+using DebugReplicator.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;

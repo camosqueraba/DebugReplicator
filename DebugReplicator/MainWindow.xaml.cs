@@ -1,6 +1,6 @@
 ﻿using DebugReplicator.Controller;
 using DebugReplicator.View;
-using DebugReplicator.ViewModels;
+using DebugReplicator.ViewModel;
 using System;
 using System.Net;
 using System.Net.Sockets;

@@ -1,6 +1,6 @@
 ﻿using DebugReplicator.Controller;
-using DebugReplicator.DTOs;
-using DebugReplicator.ViewModels;
+using DebugReplicator.Model.DTOs;
+using DebugReplicator.ViewModel;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Windows;
