@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace DebugReplicator.Converters
+namespace DebugReplicator.Controller.Converters
 {
     public class FileSizeFormatConverter : IValueConverter
     {

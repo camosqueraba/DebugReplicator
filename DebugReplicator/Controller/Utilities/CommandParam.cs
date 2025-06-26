@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace DebugReplicator.Utilities
+namespace DebugReplicator.Controller.Utilities
 {
     public class CommandParam : ICommand
     {

@@ -1,16 +1,11 @@
 ﻿using DebugReplicator.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 
-namespace DebugReplicator.Converters
+namespace DebugReplicator.Controller.Converters
 {
     /// <summary>
     /// Convers <see cref="System.Drawing.Icon"/> to a <see cref="System.Windows.Media.ImageSource"/>

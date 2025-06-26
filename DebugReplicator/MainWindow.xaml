@@ -27,7 +27,7 @@
                               VerticalContentAlignment="Top" Margin="10">
 
                     <Grid x:Name="GridContenidoPrincipal">
-                        
+                        <ContentControl Content="{Binding CurrentViewModel}" />
                     </Grid>
                 </ScrollViewer>
 

@@ -13,27 +13,39 @@
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,20,0,0">
                 <StackPanel  Orientation="Horizontal"  Margin="0,10,0,0">
                     <Border Width="110" Margin="5">
-                        <Label Content="Carpeta Origen"  FontSize="14"/>
+                        <Label Content="Carpeta origen"  FontSize="14"/>
                     </Border>
                     <Border Margin="5">
-                        <TextBox x:Name="TextblockCarpetaOrigen" Text="{Binding RutaCarpetaOrigen}" Width="200" FontSize="14"/>
+                        <TextBox x:Name="TextboxCarpetaOrigen" Text="{Binding CarpetaOrigen}" Width="200" FontSize="14"/>
                     </Border>
                     <Border Margin="5">
-                        <Button Content="Seleccionar" FontSize="14" Tag="carpeta_origen" Width="100" Click="ButtonSeleccionarCarpetaClick"/>
+                        <Button Content="Seleccionar" FontSize="14" Tag="carpeta_origen" Width="100"  Command="{Binding SeleccionarCarpetaOrigenCommand}"/>
                     </Border>
                     
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal"  Margin="0,10,0,0">
                     <Border Width="110" Margin="5">
-                        <Label Content="Carpeta Destino"  FontSize="14"/>
+                        <Label Content="Carpeta destino"  FontSize="14"/>
                     </Border>
                     <Border Margin="5">
-                        <TextBox x:Name="TextblockCarpetaDestino" Text="{Binding RutaCarpetaDestino}" Width="200" FontSize="14"/>
+                        <TextBox x:Name="TextboxCarpetaDestino" Text="{Binding CarpetaDestino}" Width="200" FontSize="14"/>
                     </Border>
                     <Border Margin="5" >
-                        <Button Content="Seleccionar" FontSize="14" Tag="carpeta_destino" Width="100"  Click="ButtonSeleccionarCarpetaClick"/>
+                        <Button Content="Seleccionar" FontSize="14" Tag="carpeta_destino" Width="100"   Command="{Binding SeleccionarCarpetaDestinoCommand}"/>
                     </Border>
                     
+                </StackPanel>
+                <StackPanel  Orientation="Horizontal"  Margin="0,10,0,0">
+                    <Border Width="110" Margin="5">
+                        <Label Content="Nombre carpeta replicada"  FontSize="14"/>
+                    </Border>
+                    <Border Margin="5">
+                        <TextBox x:Name="TextboxCarpetaReplicada" Text="{Binding NombreCarpetaReplicada}" Width="200" FontSize="14"/>
+                    </Border>
+                    <Border Margin="5" >
+                        
+                    </Border>
+
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal"  Margin="0,10,0,0">
                     <Border Width="110" Margin="5">
@@ -43,7 +55,7 @@
                         
                     </Border>
                     <Border Margin="5" >
-                        <Button Content="Siguiente"  FontSize="14"   Width="100" Click="ButtonSiguiente_Click" />
+                        <Button Content="Siguiente"  FontSize="14"   Width="100" Command="{Binding SiguienteCommand}"/>
                     </Border>
 
                 </StackPanel>

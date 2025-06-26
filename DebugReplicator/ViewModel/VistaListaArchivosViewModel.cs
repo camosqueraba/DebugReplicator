@@ -1,19 +1,46 @@
-﻿using DebugReplicator.Explorer;
+﻿using DebugReplicator.Controller;
+using DebugReplicator.Explorer;
 using DebugReplicator.Model;
-using DebugReplicator.Utilities;
+using DebugReplicator.Model.DTOs;
 using DebugReplicator.View.UIControls;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Input;
 
 namespace DebugReplicator.ViewModel
 {
     public class VistaListaArchivosViewModel : BaseViewModel
     {
+        /*
+         public string Campo1 { get; }
+        public string Campo2 { get; }
+        public string Campo3 { get; }
+        public string Carpeta { get; }
+        */
+
+        public ICommand VolverCommand { get; }
+        private readonly NavigationStore _navigationStore;
+
+        private readonly VistaPrincipalViewModel _VistaPrincipalViewModel;         
+
         public ObservableCollection<FilesControl> FileItems { get; set; }
 
-        public VistaListaArchivosViewModel()
+        public VistaListaArchivosViewModel(VistaPrincipalViewModel vistaPrincipalViewModel, NavigationStore navigationStore, DatosInicialesDTO datosInicialesDTO)
         {
+
+            _VistaPrincipalViewModel = vistaPrincipalViewModel;
+            _navigationStore = navigationStore;  
+
             FileItems = new ObservableCollection<FilesControl>();
+
+            this.TryNavigateToPath(datosInicialesDTO.NombreCarpetaReplicada);
+
+            VolverCommand = new RelayCommand(Volver);
+        }
+
+        private void Volver()
+        {  
+            _navigationStore.CurrentViewModel = _VistaPrincipalViewModel;
         }
 
         #region Navigation

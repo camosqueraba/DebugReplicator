@@ -8,20 +8,18 @@
              xmlns:viewmodels="clr-namespace:DebugReplicator.ViewModel"
              mc:Ignorable="d" 
              d:Height="450" Width="840">
-    <UserControl.DataContext>
-        <viewmodels:VistaListaArchivosViewModel/>
-    </UserControl.DataContext>
+   
     <Grid Background="{StaticResource color_fondo_body}">
         <StackPanel Width="800">
             <Label Content="Seleccionar archivos para indexar" HorizontalAlignment="Center" Margin="0,20,0,20" FontSize="20" FontWeight="Bold"/>
             <StackPanel Orientation="Horizontal">
-                <Button Width="70" HorizontalAlignment="Left" Margin="35,0,0,10" Click="ButtonVistaAnterior_Click">
+                <Button Width="70" HorizontalAlignment="Left" Margin="35,0,0,10" Command="{Binding VolverCommand}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="ArrowBack" Width="15" Height="15" VerticalAlignment="Center"/>
                         <TextBlock Text="Atras"/>
                     </StackPanel>
                 </Button>
-                <Button Width="70" HorizontalAlignment="Left" Margin="30,0,0,10" Click="ButtonContinuar_Click">
+                <Button Width="70" HorizontalAlignment="Left" Margin="30,0,0,10" >
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Continuar"/>
                     </StackPanel>
@@ -32,7 +30,7 @@
                 <Border BorderThickness="0.1" BorderBrush="Black">
                     <StackPanel Orientation="Horizontal" >
                         <Border BorderBrush="Black"  Width="60">
-                            <Button Width="60" HorizontalAlignment="Center" Background="Transparent" BorderBrush="Transparent" Click="ButtonDirectorioAnterior_Click">
+                            <Button Width="60" HorizontalAlignment="Center" Background="Transparent" BorderBrush="Transparent">
                                 <materialDesign:PackIcon Kind="ArrowTop" Width="15" Height="15" VerticalAlignment="Center"/>
                             </Button>
                         </Border>

@@ -104,14 +104,23 @@
     </Compile>
     <Compile Include="Controller\GestorCarpetasArchivos.cs" />
     <Compile Include="Controller\GlobalVars.cs" />
+    <Compile Include="Controller\NavigationService.cs" />
+    <Compile Include="Controller\NavigationStore.cs" />
+    <Compile Include="Controller\RelayCommand.cs" />
     <Compile Include="Controller\Replicador.cs" />
-    <Compile Include="Controller\Utilities\Converters\FileSizeFormatConverter.cs" />
-    <Compile Include="Controller\Utilities\Converters\IconToImageConverter.cs" />
+    <Compile Include="Controller\Services\FolderDialogService.cs" />
+    <Compile Include="Controller\Services\IFolderDialogService.cs" />
+    <Compile Include="Controller\Converters\FileSizeFormatConverter.cs" />
+    <Compile Include="Controller\Converters\IconToImageConverter.cs" />
+    <Compile Include="Model\DTOs\DatosInicialesDTO.cs" />
     <Compile Include="Model\DTOs\ResultadoProceso.cs" />
     <Compile Include="Controller\Explorer\ExplorerHelpers.cs" />
     <Compile Include="Controller\Explorer\ExploradorDirectorios.cs" />
     <Compile Include="Controller\Helpers\IconHelper.cs" />
     <Compile Include="Model\FileModel.cs" />
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\MenuViewModel.cs" />
+    <Compile Include="ViewModel\VistaPrincipalViewModel.cs" />
     <Compile Include="View\UIControls\FilesControl.xaml.cs">
       <DependentUpon>FilesControl.xaml</DependentUpon>
     </Compile>
@@ -178,5 +187,6 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

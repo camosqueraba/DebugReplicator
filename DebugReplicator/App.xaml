@@ -2,7 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:DebugReplicator"
-             StartupUri="MainWindow.xaml">
+             xmlns:viewModels="clr-namespace:DebugReplicator.ViewModel"
+             xmlns:views="clr-namespace:DebugReplicator.View"
+             >
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -32,6 +34,17 @@
             <SolidColorBrush x:Key="naranja_transparente"           Color="#F4AB34" Opacity=".1"/>
             <SolidColorBrush x:Key="danger_red"                     Color="#E73A1C"/>
             <SolidColorBrush x:Key="success_green"                  Color="#4BB543"/>
+
+            <DataTemplate DataType="{x:Type viewModels:VistaPrincipalViewModel}">
+                <views:VistaPrincipal/>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type viewModels:VistaListaArchivosViewModel}">
+                <views:VistaListaArchivos/>
+            </DataTemplate>
+            
         </ResourceDictionary>
+
+        
     </Application.Resources>
 </Application>
