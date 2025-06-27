@@ -35,6 +35,15 @@
             <SolidColorBrush x:Key="danger_red"                     Color="#E73A1C"/>
             <SolidColorBrush x:Key="success_green"                  Color="#4BB543"/>
 
+            <Style x:Key="TextBoxInError" TargetType="TextBox">
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="True">
+                        <Setter Property="BorderBrush" Value="Red"/>
+                        <Setter Property="BorderThickness" Value="2"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>            
+
             <DataTemplate DataType="{x:Type viewModels:VistaPrincipalViewModel}">
                 <views:VistaPrincipal/>
             </DataTemplate>

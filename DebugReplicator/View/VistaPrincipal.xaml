@@ -2,52 +2,62 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DebugReplicator.View"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"             
              mc:Ignorable="d"             
-             Height="500" Width="900"
-             >
+             Height="500" Width="900">
+    
     <Grid Background="{StaticResource color_fondo_body}">
         <StackPanel>
             <Label Content="Seleccionar carpeta Origen/Destino" HorizontalAlignment="Center" Margin="0,20,0,0" FontSize="20" FontWeight="Bold"/>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,20,0,0">
-                <StackPanel  Orientation="Horizontal"  Margin="0,10,0,0">
+                <StackPanel  Orientation="Horizontal"  Margin="0,5,0,0">
                     <Border Width="110" Margin="5">
                         <Label Content="Carpeta origen"  FontSize="14"/>
                     </Border>
                     <Border Margin="5">
-                        <TextBox x:Name="TextboxCarpetaOrigen" Text="{Binding CarpetaOrigen}" Width="200" FontSize="14"/>
+                        <StackPanel Orientation="Vertical">
+                            <TextBox x:Name="TextboxCarpetaOrigen" Text="{Binding CarpetaOrigen,  UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Width="200" Height="30" FontSize="14"/>
+                            <TextBlock Foreground="Red"  Text="{Binding CarpetaOrigenError}" />
+                        </StackPanel>
+                        
                     </Border>
                     <Border Margin="5">
-                        <Button Content="Seleccionar" FontSize="14" Tag="carpeta_origen" Width="100"  Command="{Binding SeleccionarCarpetaOrigenCommand}"/>
+                        <Button Content="Seleccionar" FontSize="14" Tag="carpeta_origen" VerticalAlignment="Top" Width="100" Height="30" Command="{Binding SeleccionarCarpetaOrigenCommand}"/>
                     </Border>
                     
                 </StackPanel>
-                <StackPanel  Orientation="Horizontal"  Margin="0,10,0,0">
+                <StackPanel  Orientation="Horizontal"  Margin="0,5,0,0">
                     <Border Width="110" Margin="5">
                         <Label Content="Carpeta destino"  FontSize="14"/>
                     </Border>
                     <Border Margin="5">
-                        <TextBox x:Name="TextboxCarpetaDestino" Text="{Binding CarpetaDestino}" Width="200" FontSize="14"/>
+                        <StackPanel Orientation="Vertical">
+                            <TextBox x:Name="TextboxCarpetaDestino" Text="{Binding CarpetaDestino, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Width="200" Height="30" FontSize="14"/>
+                            <TextBlock Foreground="Red"  Text="{Binding CarpetaDestinoError}" />
+                        </StackPanel>
                     </Border>
                     <Border Margin="5" >
-                        <Button Content="Seleccionar" FontSize="14" Tag="carpeta_destino" Width="100"   Command="{Binding SeleccionarCarpetaDestinoCommand}"/>
+                        <Button Content="Seleccionar" FontSize="14" Tag="carpeta_destino" VerticalAlignment="Top" Width="100" Height="30"  Command="{Binding SeleccionarCarpetaDestinoCommand}"/>
                     </Border>
                     
                 </StackPanel>
-                <StackPanel  Orientation="Horizontal"  Margin="0,10,0,0">
+                <StackPanel  Orientation="Horizontal"  Margin="0,5,0,0">
                     <Border Width="110" Margin="5">
                         <Label Content="Nombre carpeta replicada"  FontSize="14"/>
                     </Border>
                     <Border Margin="5">
-                        <TextBox x:Name="TextboxCarpetaReplicada" Text="{Binding NombreCarpetaReplicada}" Width="200" FontSize="14"/>
+                        <StackPanel Orientation="Vertical">
+                            <TextBox x:Name="TextboxCarpetaReplicada" Text="{Binding NombreCarpetaReplicada, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                                     Width="200" Height="30" FontSize="14"/>
+                            <TextBlock Foreground="Red"  Text="{Binding NombreCarpetaReplicadaError}" />
+                        </StackPanel>
                     </Border>
                     <Border Margin="5" >
                         
                     </Border>
 
                 </StackPanel>
-                <StackPanel  Orientation="Horizontal"  Margin="0,10,0,0">
+                <StackPanel  Orientation="Horizontal"  Margin="0,5,0,0">
                     <Border Width="110" Margin="5">
                         
                     </Border>
@@ -55,7 +65,7 @@
                         
                     </Border>
                     <Border Margin="5" >
-                        <Button Content="Siguiente"  FontSize="14"   Width="100" Command="{Binding SiguienteCommand}"/>
+                        <Button Content="Siguiente"  FontSize="14"   Width="100" Height="30"  Command="{Binding SiguienteCommand}"/>
                     </Border>
 
                 </StackPanel>
