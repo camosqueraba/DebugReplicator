@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace DebugReplicator.Model
 {
@@ -35,6 +36,7 @@ namespace DebugReplicator.Model
                 seleccionado = value;
                 // Call OnPropertyChanged whenever the property is updated
                 OnPropertyChanged();
+                CommandManager.InvalidateRequerySuggested();
             }
         }
 

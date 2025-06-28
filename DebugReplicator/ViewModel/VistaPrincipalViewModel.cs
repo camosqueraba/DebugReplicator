@@ -69,7 +69,7 @@ namespace DebugReplicator.ViewModel
         public ICommand SiguienteCommand { get; }
         public ICommand SeleccionarCarpetaOrigenCommand { get; }
         public ICommand SeleccionarCarpetaDestinoCommand { get; }
-        public ICommand SeleccionarCarpetaReplicadaCommand { get; }
+        
 
 
         Dictionary<string, List<string>> Errores = new Dictionary<string, List<string>>();
