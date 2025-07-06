@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="DebugReplicator.View.UIControls.IndexedFileControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DebugReplicator.View.UIControls"
+             xmlns:Converters="clr-namespace:DebugReplicator.Controller.Converters"
+             mc:Ignorable="d" 
+             Height="20" Width="700"
+             Background="White"
+             KeyDown="UserControl_KeyDown">
+    <UserControl.Resources>
+        <Converters:FileSizeFormatConverter x:Key="FileSizeFormatConverter"/>
+        <Converters:IconToImageConverter x:Key="IconToImageConverter"/>
+    </UserControl.Resources>
+    <Grid MouseDown="Grid_MouseDown" Width="730">
+        <StackPanel Orientation="Horizontal"  HorizontalAlignment="Left">
+            <Border Width="46" >
+                <Image Source="{Binding Icon, Converter={StaticResource IconToImageConverter}}"/>
+            </Border>
+            <Border>
+                <TextBlock Text="{Binding Name}" Width="380"/>
+            </Border>
+            <Border>
+                <!--<TextBlock Text="{Binding DateModified}" HorizontalAlignment="Center"/>-->
+                <TextBox Text="{Binding NombreIndexado}" HorizontalAlignment="Center" Width="270"/>
+            </Border>
+            
+        </StackPanel>
+    </Grid>
+</UserControl>

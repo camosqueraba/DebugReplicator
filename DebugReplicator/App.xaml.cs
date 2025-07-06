@@ -27,7 +27,7 @@ namespace DebugReplicator
             var formularioVM = new VistaPrincipalViewModel(_navigationStore, _folderDialogService);
             _navigationStore.CurrentViewModel = formularioVM;
 
-            
+            /*
             DatosInicialesDTO dto = new DatosInicialesDTO() { CarpetaDestino="",
             CarpetaOrigen="",
             NombreCarpetaReplicada= @"C:\Users\camos\Downloads\Pruebas_DebugReplicator\CarpetaDestino\Debug",
@@ -36,7 +36,7 @@ namespace DebugReplicator
 
             var vistaListaArchivosViewModel = new VistaListaArchivosViewModel(null, null, dto);
             _navigationStore.CurrentViewModel = vistaListaArchivosViewModel;
-            
+            */
 
             var mainWindow = new MainWindow
             {

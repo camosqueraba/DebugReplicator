@@ -23,7 +23,8 @@ namespace DebugReplicator.ViewModel
         private readonly VistaPrincipalViewModel _VistaPrincipalViewModel;
 
         public ObservableCollection<FilesControl> FileItems { get; set; }
-        public ObservableCollection<FilesControl> SelectedFileItems { get; set; }
+        public ObservableCollection<FilesControl> TotalFileItems { get; set; }
+        public ObservableCollection<FilesControl> FileItemsSeleccionados { get; set; }
 
         public  Stack<string> RutasVisitadas { get; set; }
 
@@ -39,8 +40,9 @@ namespace DebugReplicator.ViewModel
             _VistaPrincipalViewModel = vistaPrincipalViewModel;
             _navigationStore         = navigationStore;  
 
-            FileItems         = new ObservableCollection<FilesControl>();
-            SelectedFileItems = new ObservableCollection<FilesControl>();
+            FileItems               = new ObservableCollection<FilesControl>();
+            FileItemsSeleccionados  = new ObservableCollection<FilesControl>();
+            TotalFileItems          = new ObservableCollection<FilesControl>();
 
             this.TryNavigateToPath(datosInicialesDTO.NombreCarpetaReplicada);
             
@@ -49,29 +51,32 @@ namespace DebugReplicator.ViewModel
             ActualRuta = datosInicialesDTO.NombreCarpetaReplicada;
 
             VolverCommand = new RelayCommand(Volver);
-            ContinuarCommand = new RelayCommand(ContinuarConArchivosIndexados, HayArchivosSeleccionados);
+            ContinuarCommand = new RelayCommand(ContinuarConFileItemmsSeleccionados, HayArchivosSeleccionados);
             DirectorioAnteriorCommand = new RelayCommand(IrADirectorioAnterior);
         }
 
         private bool HayArchivosSeleccionados()
         {
-            return FileItems.Any(f => f.File?.Seleccionado == true);
+            return TotalFileItems.Any(f => f.File?.Seleccionado == true);
         }
 
-        private void ContinuarConArchivosIndexados()
+        private void ContinuarConFileItemmsSeleccionados()
         {
-            SelectedFileItems.Clear();
+            FileItemsSeleccionados.Clear();
 
-            foreach (var archivo in FileItems)
+            foreach (var archivo in TotalFileItems)
             {
                 if(archivo.File.Seleccionado)
-                    SelectedFileItems.Add(archivo);
-            }            
+                    FileItemsSeleccionados.Add(archivo);
+            }
+
+            VistaIdexacionArchivosViewModel vistaIdexacionArchivosViewModel = new VistaIdexacionArchivosViewModel(this, _navigationStore);
+            _navigationStore.CurrentViewModel = vistaIdexacionArchivosViewModel;
         }
 
         private void IrADirectorioAnterior()
         {
-            string ultimaRutaVisitada = ExtraerUltimaRuta(); 
+            string ultimaRutaVisitada = ActualRuta = ExtraerUltimaRuta(); 
             TryNavigateToPath(ultimaRutaVisitada);
 
         }
@@ -122,8 +127,11 @@ namespace DebugReplicator.ViewModel
                 */
 
                 foreach (FileModel file in ExploradorDirectorios.ObtenerContenidoCarpeta(path))
-                {
+                {                    
                     FilesControl fc = CreateFileControl(file);
+
+                    if(fc != null && !FileItemYaAgregadoAlTotal(fc))
+                        TotalFileItems.Add(fc);
                     AddFile(fc);
                 }                
             }
@@ -147,6 +155,7 @@ namespace DebugReplicator.ViewModel
 
         public void AddFile(FilesControl file)
         {
+            //if(file.Name)
             FileItems.Add(file);
         }
 
@@ -197,6 +206,37 @@ namespace DebugReplicator.ViewModel
             }
 
             return ultimaRutaVisitada;
+        }
+
+        private bool FileItemYaAgregadoAlTotal(FilesControl file)
+        {
+            bool fileItemAgregado = false;
+
+            string ubicacion    = file.File.Path;
+            string name         = file.File.Name;
+            bool   seleccionado = file.File.Seleccionado;
+
+            foreach (var fileItem in TotalFileItems)
+            {
+                string ubicacionfileItem    = fileItem.File.Path;
+                string namefileItem         = fileItem.File.Name;
+                bool seleccionadofileItem   = fileItem.File.Seleccionado;
+
+                if (ubicacion == ubicacionfileItem && name == namefileItem && seleccionado == seleccionadofileItem)
+                {
+                    fileItemAgregado = true;
+                    break;
+                }
+                else if (ubicacion == ubicacionfileItem && name == namefileItem && seleccionado != seleccionadofileItem)
+                {
+                    fileItem.File.Seleccionado = seleccionado;
+                    fileItemAgregado = true;
+                }
+                else
+                    fileItemAgregado = false;
+            }
+
+            return fileItemAgregado;
         }
     }
 }

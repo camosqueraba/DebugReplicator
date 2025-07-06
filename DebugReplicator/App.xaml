@@ -51,7 +51,11 @@
             <DataTemplate DataType="{x:Type viewModels:VistaListaArchivosViewModel}">
                 <views:VistaListaArchivos/>
             </DataTemplate>
-            
+
+            <DataTemplate DataType="{x:Type viewModels:VistaIdexacionArchivosViewModel}">
+                <views:VistaIdexacionArchivos/>
+            </DataTemplate>
+
         </ResourceDictionary>
 
         

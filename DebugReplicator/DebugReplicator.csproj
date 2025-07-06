@@ -86,6 +86,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\UIControls\IndexedFilesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\VistaIdexacionArchivos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\VistaListaArchivos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -118,8 +126,10 @@
     <Compile Include="Controller\Explorer\ExploradorDirectorios.cs" />
     <Compile Include="Controller\Helpers\IconHelper.cs" />
     <Compile Include="Model\FileModel.cs" />
+    <Compile Include="Model\IndexedFileModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\MenuViewModel.cs" />
+    <Compile Include="ViewModel\VistaIdexacionArchivosViewModel.cs" />
     <Compile Include="ViewModel\VistaPrincipalViewModel.cs" />
     <Compile Include="View\UIControls\FilesControl.xaml.cs">
       <DependentUpon>FilesControl.xaml</DependentUpon>
@@ -129,6 +139,12 @@
     <Compile Include="Controller\Utilities\Command.cs" />
     <Compile Include="Controller\Utilities\CommandParam.cs" />
     <Compile Include="ViewModel\VistaListaArchivosViewModel.cs" />
+    <Compile Include="View\UIControls\IndexedFilesControl.xaml.cs">
+      <DependentUpon>IndexedFilesControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\VistaIdexacionArchivos.xaml.cs">
+      <DependentUpon>VistaIdexacionArchivos.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\VistaListaArchivos.xaml.cs">
       <DependentUpon>VistaListaArchivos.xaml</DependentUpon>
     </Compile>
