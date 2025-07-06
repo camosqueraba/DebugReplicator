@@ -16,7 +16,7 @@
                     </Border>
                     <Border Margin="5">
                         <StackPanel Orientation="Vertical">
-                            <TextBox x:Name="TextboxCarpetaOrigen" Text="{Binding CarpetaOrigen,  UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Width="200" Height="30" FontSize="14"/>
+                            <TextBox x:Name="TextboxCarpetaOrigen" Text="{Binding CarpetaOrigen,  UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" VerticalContentAlignment="Center" Width="200" Height="30" FontSize="14"/>                            
                             <TextBlock Foreground="Red"  Text="{Binding CarpetaOrigenError}" />
                         </StackPanel>
                         
@@ -32,7 +32,7 @@
                     </Border>
                     <Border Margin="5">
                         <StackPanel Orientation="Vertical">
-                            <TextBox x:Name="TextboxCarpetaDestino" Text="{Binding CarpetaDestino, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Width="200" Height="30" FontSize="14"/>
+                            <TextBox x:Name="TextboxCarpetaDestino" Text="{Binding CarpetaDestino, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" VerticalContentAlignment="Center" Width="200" Height="30" FontSize="14"/>
                             <TextBlock Foreground="Red"  Text="{Binding CarpetaDestinoError}" />
                         </StackPanel>
                     </Border>
@@ -47,7 +47,7 @@
                     </Border>
                     <Border Margin="5">
                         <StackPanel Orientation="Vertical">
-                            <TextBox x:Name="TextboxCarpetaReplicada" Text="{Binding NombreCarpetaReplicada, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                            <TextBox x:Name="TextboxCarpetaReplicada" Text="{Binding NombreCarpetaReplicada, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" VerticalContentAlignment="Center"
                                      Width="200" Height="30" FontSize="14"/>
                             <TextBlock Foreground="Red"  Text="{Binding NombreCarpetaReplicadaError}" />
                         </StackPanel>

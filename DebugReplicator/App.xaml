@@ -19,7 +19,7 @@
             <SolidColorBrush x:Key="gris_fondo"                     Color="#FFF8F8F8"/>
 
             <SolidColorBrush x:Key="gris_ventana_inactiva"      Color="#DCDCDC"/>
-            <SolidColorBrush x:Key="gris_transparente" Color="#7777" Opacity=".1"/>
+            <SolidColorBrush x:Key="gris_transparente" Color="#7777" Opacity="1"/>
 
 
             <SolidColorBrush x:Key="color_gris_texto_footer"        Color="#6E7783" Opacity="0.5"/>
@@ -51,7 +51,11 @@
             <DataTemplate DataType="{x:Type viewModels:VistaListaArchivosViewModel}">
                 <views:VistaListaArchivos/>
             </DataTemplate>
-            
+
+            <DataTemplate DataType="{x:Type viewModels:VistaIdexacionArchivosViewModel}">
+                <views:VistaIdexacionArchivos/>
+            </DataTemplate>
+
         </ResourceDictionary>
 
         
