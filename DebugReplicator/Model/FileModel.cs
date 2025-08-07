@@ -8,11 +8,9 @@ namespace DebugReplicator.Model
 {
     public class FileModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        
+        public event PropertyChangedEventHandler PropertyChanged;        
 
         // Using icon because it's easier
-
         public Icon Icon { get; set; }
 
         public string Name { get; set; }

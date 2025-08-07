@@ -1,4 +1,5 @@
-﻿using DebugReplicator.Model.DTOs;
+﻿using DebugReplicator.Model;
+using DebugReplicator.Model.DTOs;
 using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace DebugReplicator.Controller
     {
         public bool ReplicarCarpetaDebug(string urlCarpetaDebug, string baseNombreCarpetaReplicada,
                                             int indiceInicialCarpeta, int indiceFinalCarpeta,
-                                            string urlCarpertaDestino, string[] archivosIndexar )
+                                            string urlCarpertaDestino, string[] archivosIndexar)
         {
             bool ReplicarCarpeta = false;
             /*
@@ -27,7 +28,7 @@ namespace DebugReplicator.Controller
             string nombreCarpetaOrigen = FileSystem.GetName(urlCarpetaDebug);
             string nombreNuevaCarpetaDestino = Path.Combine(urlCarpertaDestino, baseNombreCarpetaReplicada);
 
-            GestorCarpetasArchivos.CopyDirectory(urlCarpetaDebug, nombreNuevaCarpetaDestino, true);
+            GestorCarpetasArchivos.CopiarDirectorio(urlCarpetaDebug, nombreNuevaCarpetaDestino, true);
 
             string nombrePrimeraCarpetaIndexada = baseNombreCarpetaReplicada + indiceInicialCarpeta;
             //FileSystem.RenameDirectory(nombreNuevaCarpetaDestino, baseNombreCarpetaReplicada);
@@ -36,7 +37,7 @@ namespace DebugReplicator.Controller
             {
                 string nombreCarpetaIndexada = nombreNuevaCarpetaDestino + indice;
                 FileSystem.CreateDirectory(nombreCarpetaIndexada);
-                GestorCarpetasArchivos.CopyDirectory(nombreNuevaCarpetaDestino, nombreCarpetaIndexada, true);
+                GestorCarpetasArchivos.CopiarDirectorio(nombreNuevaCarpetaDestino, nombreCarpetaIndexada, true);
 
             }
 
@@ -52,24 +53,127 @@ namespace DebugReplicator.Controller
             {
 
             }
-            
+
             return replicarExe;
         }
 
-        public ResultadoProceso CopiarCarpetaBaseADestino(string urlCarpetaBase, string carpetaDestino)
+        public ResultadoProceso CopiarCarpetaBaseADestino(string rutaCarpetaBase, string rutaCarpetaDestino)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
             bool copiado = false;
 
-            string nombreCarpetaOrigen = FileSystem.GetName(urlCarpetaBase);
-            string nombreNuevaCarpetaDestino = Path.Combine(carpetaDestino, nombreCarpetaOrigen);
+            string nombreCarpetaOrigen = GestorCarpetasArchivos.ObtenerNombreArchivo(rutaCarpetaBase);
+            string nombreNuevaCarpetaDestino = Path.Combine(rutaCarpetaDestino, nombreCarpetaOrigen);
 
-            GestorCarpetasArchivos.CopyDirectory(urlCarpetaBase, nombreNuevaCarpetaDestino, true);
+            GestorCarpetasArchivos.CopiarDirectorio(rutaCarpetaBase, nombreNuevaCarpetaDestino, true);
             copiado = true;
 
-            resultadoProceso.Resultado = copiado;
+            resultadoProceso.Completado = copiado;
             resultadoProceso.ResultadoContenido = nombreNuevaCarpetaDestino;
 
+            return resultadoProceso;
+        }
+
+        public ResultadoProceso ReplicarDebug(string urlCarpetaOrigen, string urlCarpetaDestino, string nombreBaseCarpetaReplica,
+            List<IndexedFileModel> archivosIndexados, int numeroReplicas)
+        {
+            ResultadoProceso resultadoProceso = new ResultadoProceso();
+            
+            resultadoProceso = ValidarRequisitos(urlCarpetaOrigen, urlCarpetaDestino,
+                                                  nombreBaseCarpetaReplica, archivosIndexados, numeroReplicas);
+            if (!resultadoProceso.Completado)
+                return resultadoProceso;
+
+            resultadoProceso = CopiarCarpetaBaseADestino(urlCarpetaOrigen, urlCarpetaDestino);
+            if (!resultadoProceso.Completado)
+                return resultadoProceso;
+
+            for (int indiceReplica = 1; indiceReplica <= numeroReplicas; indiceReplica++)
+            {
+                resultadoProceso = CrearCarpetaReplica(urlCarpetaDestino, nombreBaseCarpetaReplica, indiceReplica);
+                
+                if (!resultadoProceso.Completado)
+                    return resultadoProceso;
+
+
+                
+            }
+           
+            return resultadoProceso;
+        }
+
+        public ResultadoProceso CrearCarpetaReplica(string urlCarpetaDestino, string nombreBaseCarpetaReplica, int indiceCarpeta)
+        {
+            ResultadoProceso resultadoProceso = new ResultadoProceso();
+
+            string nombreCarpetaReplica = $"{nombreBaseCarpetaReplica}{indiceCarpeta}";
+            string rutaCarpetaReplica = Path.Combine(urlCarpetaDestino, nombreCarpetaReplica);
+
+            bool isCarpetaCreada = GestorCarpetasArchivos.CrearCarpeta(rutaCarpetaReplica);
+
+            if (!isCarpetaCreada)
+            {
+                resultadoProceso.Completado = false;
+                ErrorProceso errorProceso = new ErrorProceso
+                {
+                    ExisteError = true,
+                    MensajeError = $"No se pudo crear la carpeta: {rutaCarpetaReplica}"
+                };
+                resultadoProceso.Errores.Add(errorProceso);
+                return resultadoProceso;
+            }
+
+            resultadoProceso.ResultadoContenido = rutaCarpetaReplica;
+
+            return resultadoProceso;
+        }
+
+        private ResultadoProceso ValidarRequisitos(string urlCarpetaOrigen, string urlCarpetaDestino, string nombreBaseCarpetaReplica,
+            List<IndexedFileModel> archivosIndexados, int numeroReplicas)
+        {
+            ResultadoProceso resultadoProceso = new ResultadoProceso();
+            ErrorProceso errorProceso = new ErrorProceso();
+            if (string.IsNullOrEmpty(urlCarpetaOrigen) || !Directory.Exists(urlCarpetaOrigen))
+            {
+                resultadoProceso.Completado = false;
+                errorProceso.ExisteError = true;
+                errorProceso.MensajeError = "La carpeta de origen no es válida.";
+                resultadoProceso.Errores.Add(errorProceso);
+
+            }
+
+            if (string.IsNullOrEmpty(urlCarpetaDestino) || !Directory.Exists(urlCarpetaDestino))
+            {
+                resultadoProceso.Completado = false;
+                errorProceso.ExisteError = true;
+                errorProceso.MensajeError = "La carpeta de destino no es válida.";
+                resultadoProceso.Errores.Add(errorProceso);
+            }
+            
+            if (string.IsNullOrEmpty(nombreBaseCarpetaReplica))
+            {
+                resultadoProceso.Completado = false;
+                errorProceso.ExisteError = true;
+                errorProceso.MensajeError = "El nombre base de la carpeta replicada no puede estar vacío.";
+                resultadoProceso.Errores.Add(errorProceso);
+            }
+            
+            if (archivosIndexados == null || archivosIndexados.Count == 0)
+            {
+                resultadoProceso.Completado = false;
+                errorProceso.ExisteError = true;
+                errorProceso.MensajeError = "No se han proporcionado archivos para indexar.";
+                resultadoProceso.Errores.Add(errorProceso);
+            }
+            
+            if (numeroReplicas <= 0)
+            {
+                resultadoProceso.Completado = false;
+                errorProceso.ExisteError = true;
+                errorProceso.MensajeError = "El número de réplicas debe ser mayor que cero.";
+                resultadoProceso.Errores.Add(errorProceso);
+            }            
+            
             return resultadoProceso;
         }
     }

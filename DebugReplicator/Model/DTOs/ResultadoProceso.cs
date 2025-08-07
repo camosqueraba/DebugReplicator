@@ -8,8 +8,8 @@ namespace DebugReplicator.Model.DTOs
 {
     public class ResultadoProceso
     {
-        public bool Resultado {  get; set; }
+        public bool Completado {  get; set; }
         public string ResultadoContenido { get; set; }
-
+        public List<ErrorProceso> Errores { get; set; }
     }
 }

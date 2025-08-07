@@ -86,7 +86,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\UIControls\IndexedFilesControl.xaml">
+    <Page Include="View\UIControls\IndexedFileControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -112,6 +112,7 @@
     </Compile>
     <Compile Include="Controller\GestorCarpetasArchivos.cs" />
     <Compile Include="Controller\GlobalVars.cs" />
+    <Compile Include="Controller\IGestorCarpetasArchivos.cs" />
     <Compile Include="Controller\NavigationService.cs" />
     <Compile Include="Controller\NavigationStore.cs" />
     <Compile Include="Controller\RelayCommand.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Controller\Converters\FileSizeFormatConverter.cs" />
     <Compile Include="Controller\Converters\IconToImageConverter.cs" />
     <Compile Include="Model\DTOs\DatosInicialesDTO.cs" />
+    <Compile Include="Model\DTOs\ErrorProceso.cs" />
     <Compile Include="Model\DTOs\ResultadoProceso.cs" />
     <Compile Include="Controller\Explorer\ExplorerHelpers.cs" />
     <Compile Include="Controller\Explorer\ExploradorDirectorios.cs" />
@@ -139,8 +141,8 @@
     <Compile Include="Controller\Utilities\Command.cs" />
     <Compile Include="Controller\Utilities\CommandParam.cs" />
     <Compile Include="ViewModel\VistaListaArchivosViewModel.cs" />
-    <Compile Include="View\UIControls\IndexedFilesControl.xaml.cs">
-      <DependentUpon>IndexedFilesControl.xaml</DependentUpon>
+    <Compile Include="View\UIControls\IndexedFileControl.xaml.cs">
+      <DependentUpon>IndexedFileControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\VistaIdexacionArchivos.xaml.cs">
       <DependentUpon>VistaIdexacionArchivos.xaml</DependentUpon>

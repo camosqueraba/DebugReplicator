@@ -22,11 +22,11 @@
                         <TextBlock Text="Continuar"/>
                     </StackPanel>
                 </Button>
-                <!--
+                
                 <Border Margin="5,0,0,0">
-                    <TextBlock Text="{Binding ActualRuta}" Width="500" TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding RutaArchivo}" Width="500" TextWrapping="Wrap"/>
                 </Border>
-                -->
+                
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Width="730">
