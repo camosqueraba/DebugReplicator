@@ -21,21 +21,27 @@ namespace DebugReplicator.View.UIControls
     /// </summary>
     public partial class IndexedFileControl : UserControl
     {
-        public FileModel File
+        public IndexedFileModel IndexedFile
         {
-            get => this.DataContext as FileModel;
+            get => this.DataContext as IndexedFileModel;
             set => this.DataContext = value;
         }
+
+        /// <summary>
+        /// A callback used for telling 'something' to navigate to the path
+        /// </summary>
+        public Action<IndexedFileModel> BindToTextblockCallback { get; set; }
+
         public IndexedFileControl()
         {
             InitializeComponent();
-            File = new FileModel();
+            IndexedFile = new IndexedFileModel();
         }
 
-        public IndexedFileControl(FileModel fModel)
+        public IndexedFileControl(IndexedFileModel indexedFileModel)
         {
             InitializeComponent();
-            File = fModel;
+            IndexedFile = indexedFileModel;
         }
 
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
@@ -44,7 +50,7 @@ namespace DebugReplicator.View.UIControls
                 e.LeftButton == MouseButtonState.Pressed &&
                 e.ClickCount == 2)
             {
-                //NavigateToPathCallback?.Invoke(File);
+                BindToTextblockCallback?.Invoke(IndexedFile);
             }
         }
 

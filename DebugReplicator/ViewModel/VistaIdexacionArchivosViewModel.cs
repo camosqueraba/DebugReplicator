@@ -24,6 +24,13 @@ namespace DebugReplicator.ViewModel
 
         public ObservableCollection<IndexedFileControl> FileItemsIndexados { get; set; }
 
+        private string rutaArchivo;
+        public string RutaArchivo
+        {
+            get => rutaArchivo;
+            set { rutaArchivo = value; OnPropertyChanged(nameof(RutaArchivo)); }
+        }
+
         public VistaIdexacionArchivosViewModel(VistaListaArchivosViewModel vistaListaArchivosViewModel, NavigationStore navigationStore)
         {
             _VistaListaArchivosViewModel = vistaListaArchivosViewModel;
@@ -66,16 +73,29 @@ namespace DebugReplicator.ViewModel
             {
                 IndexedFileModel indexedFileModel = new IndexedFileModel();
 
-                indexedFileModel.Icon = fileItem.File.Icon;
-                indexedFileModel.Name = fileItem.File.Name;
-                indexedFileModel.Path = fileItem.File.Path;
-
+                indexedFileModel.Icon           = fileItem.File.Icon;
+                indexedFileModel.Name           = fileItem.File.Name;
+                indexedFileModel.Path           = fileItem.File.Path;
+                indexedFileModel.NombreIndexado = fileItem.File.Name;
+                
                 IndexedFileControl fileControl = new IndexedFileControl(indexedFileModel);
+                SetupIndexedFileControlCallbacks(fileControl);
+
                 fileItemsIndexados.Add(fileControl);
+
             }
 
             return fileItemsIndexados;
         }
-    }
 
+        public void BindToTextblock(IndexedFileModel file)
+        {            
+            RutaArchivo = file.Path;
+        }
+
+        public void SetupIndexedFileControlCallbacks(IndexedFileControl ifc)
+        {
+            ifc.BindToTextblockCallback = BindToTextblock;
+        }
+    }
 }

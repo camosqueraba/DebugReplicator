@@ -124,7 +124,7 @@ namespace DebugReplicator.ViewModel
             //replicador.ReplicarCarpetaDebug(RutaCarpetaOrigen, "BOT_", 1, 10, RutaCarpetaDestino, archivos_indexar);
             ResultadoProceso resultCopiar = replicador.CopiarCarpetaBaseADestino(CarpetaOrigen, CarpetaDestino);
 
-            if (resultCopiar != null && resultCopiar.Resultado)
+            if (resultCopiar != null && resultCopiar.Completado)
                 NombreCarpetaReplicada = resultCopiar.ResultadoContenido;
                 
 
