@@ -67,6 +67,9 @@
                     <Border Margin="5" >
                         <Button Content="Siguiente"  FontSize="14"   Width="100" Height="30"  Command="{Binding SiguienteCommand}"/>
                     </Border>
+                    <Border Margin="5" >
+                        <Button Content="Replicar"  FontSize="14"   Width="100" Height="30"  Command="{Binding ReplicarCommand}"/>
+                    </Border>
 
                 </StackPanel>
                 

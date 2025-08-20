@@ -67,6 +67,7 @@ namespace DebugReplicator.ViewModel
         public string NombreCarpetaReplicadaError => GetFirstError(nameof(NombreCarpetaReplicada));
 
         public ICommand SiguienteCommand { get; }
+        public ICommand ReplicarCommand { get; }
         public ICommand SeleccionarCarpetaOrigenCommand { get; }
         public ICommand SeleccionarCarpetaDestinoCommand { get; }
         
@@ -83,7 +84,8 @@ namespace DebugReplicator.ViewModel
             _folderDialog = folderDialog;
 
             SiguienteCommand = new RelayCommand(Siguiente, () => !HasErrors);
-            
+            ReplicarCommand = new RelayCommand(Replicar, () => !HasErrors);
+
             SeleccionarCarpetaOrigenCommand = new RelayCommand(SeleccionarCarpetaOrigen);
             SeleccionarCarpetaDestinoCommand = new RelayCommand(SeleccionarCarpetaDestino);
                    
@@ -140,6 +142,23 @@ namespace DebugReplicator.ViewModel
             VistaListaArchivosViewModel listaArchivoVM = new VistaListaArchivosViewModel(this, _navigationStore, datosInicialesDTO);
             _navigationStore.CurrentViewModel = listaArchivoVM;
         }
+
+        private void Replicar ()
+        {
+            Validar(CarpetaOrigen);
+            Validar(CarpetaDestino);
+            Validar(NombreCarpetaReplicada);
+
+            if (HasErrors)
+            {
+                MessageBox.Show("Corrige los errores antes de continuar.", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            
+            Replicador replicador = new Replicador();
+            replicador.ReplicarDebug(CarpetaOrigen, CarpetaDestino, NombreCarpetaReplicada, null, 5);
+            //MessageBox.Show("Replicación iniciada.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+        }   
 
         private void SeleccionarCarpetaOrigen()
         {

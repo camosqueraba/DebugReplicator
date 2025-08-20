@@ -10,6 +10,6 @@ namespace DebugReplicator.Model.DTOs
     {
         public bool Completado {  get; set; }
         public string ResultadoContenido { get; set; }
-        public List<ErrorProceso> Errores { get; set; }
+        public List<ErrorProceso> Errores { get; set; } = new List<ErrorProceso>();
     }
 }

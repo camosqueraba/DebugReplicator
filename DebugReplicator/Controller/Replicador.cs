@@ -80,7 +80,7 @@ namespace DebugReplicator.Controller
             ResultadoProceso resultadoProceso = new ResultadoProceso();
             
             resultadoProceso = ValidarRequisitos(urlCarpetaOrigen, urlCarpetaDestino,
-                                                  nombreBaseCarpetaReplica, archivosIndexados, numeroReplicas);
+                                                  nombreBaseCarpetaReplica, numeroReplicas, archivosIndexados );
             if (!resultadoProceso.Completado)
                 return resultadoProceso;
 
@@ -105,9 +105,10 @@ namespace DebugReplicator.Controller
         public ResultadoProceso CrearCarpetaReplica(string urlCarpetaDestino, string nombreBaseCarpetaReplica, int indiceCarpeta)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
+            resultadoProceso.Completado = true;
 
             string nombreCarpetaReplica = $"{nombreBaseCarpetaReplica}{indiceCarpeta}";
-            string rutaCarpetaReplica = Path.Combine(urlCarpetaDestino, nombreCarpetaReplica);
+            string rutaCarpetaReplica = Path.Combine(urlCarpetaDestino, nombreCarpetaReplica);            
 
             bool isCarpetaCreada = GestorCarpetasArchivos.CrearCarpeta(rutaCarpetaReplica);
 
@@ -129,10 +130,13 @@ namespace DebugReplicator.Controller
         }
 
         private ResultadoProceso ValidarRequisitos(string urlCarpetaOrigen, string urlCarpetaDestino, string nombreBaseCarpetaReplica,
-            List<IndexedFileModel> archivosIndexados, int numeroReplicas)
+            int numeroReplicas, List<IndexedFileModel> archivosIndexados = null)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
+            resultadoProceso.Completado = true;
+
             ErrorProceso errorProceso = new ErrorProceso();
+
             if (string.IsNullOrEmpty(urlCarpetaOrigen) || !Directory.Exists(urlCarpetaOrigen))
             {
                 resultadoProceso.Completado = false;
@@ -158,7 +162,7 @@ namespace DebugReplicator.Controller
                 resultadoProceso.Errores.Add(errorProceso);
             }
             
-            if (archivosIndexados == null || archivosIndexados.Count == 0)
+            if (archivosIndexados != null && archivosIndexados.Count == 0)
             {
                 resultadoProceso.Completado = false;
                 errorProceso.ExisteError = true;
