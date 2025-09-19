@@ -88,15 +88,22 @@ namespace DebugReplicator.Controller
             if (!resultadoProceso.Completado)
                 return resultadoProceso;
 
+            string rutaCarpetaBase = resultadoProceso.ResultadoContenido;
+            string rutaCarpetaBaseDuplicada = Path.Combine(urlCarpetaDestino, nombreBaseCarpetaReplica); 
+
             for (int indiceReplica = 1; indiceReplica <= numeroReplicas; indiceReplica++)
             {
-                resultadoProceso = CrearCarpetaReplica(urlCarpetaDestino, nombreBaseCarpetaReplica, indiceReplica);
-                
-                if (!resultadoProceso.Completado)
+                bool resultadoCopiar = GestorCarpetasArchivos.CopiarCarpeta(rutaCarpetaBase, rutaCarpetaBaseDuplicada + $"_{indiceReplica}", true);
+
+                if (!resultadoCopiar)
+                {
+                    resultadoProceso.Completado = false;
+                    resultadoProceso.Errores.Add(new ErrorProceso()
+                    {
+                        MensajeError = $"No se pudo copiar carpeta desde {nombreBaseCarpetaReplica} a {urlCarpetaDestino}"
+                    });
                     return resultadoProceso;
-
-
-                
+                }                
             }
            
             return resultadoProceso;

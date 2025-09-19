@@ -36,6 +36,48 @@ namespace DebugReplicator.Controller
             }
         }
 
+        public static bool CopiarCarpeta(string directorioOrigen, string directorioDestino, bool recursive)
+        {
+            try
+            {                
+                var dir = new DirectoryInfo(directorioOrigen);
+
+                if (!dir.Exists)
+                {
+                    LOGRobotica.Controllers.LogApplication.LogWrite("GestorCarpetasArchivos -> CopiarCarpeta: " + $"directorio origen no existe {dir.FullName}");
+                    return false;
+                }
+
+
+                DirectoryInfo[] dirs = dir.GetDirectories();
+
+                Directory.CreateDirectory(directorioDestino);
+
+                foreach (FileInfo file in dir.GetFiles())
+                {
+                    string targetFilePath = Path.Combine(directorioDestino, file.Name);
+                    file.CopyTo(targetFilePath, true);
+                }
+
+                if (recursive)
+                {
+                    foreach (DirectoryInfo subDir in dirs)
+                    {
+                        string newDestinationDir = Path.Combine(directorioDestino, subDir.Name);
+                        CopiarDirectorio(subDir.FullName, newDestinationDir, true);
+                    }
+                }
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LOGRobotica.Controllers.LogApplication.LogWrite("GestorCarpetasArchivos -> CopiarCarpeta: Exception " + ex.Message);
+                return false;
+            }
+            
+        }
+
         public static bool CrearCarpeta(string path)
         {
             if (!Directory.Exists(path))
