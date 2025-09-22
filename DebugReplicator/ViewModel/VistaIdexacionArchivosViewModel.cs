@@ -54,15 +54,19 @@ namespace DebugReplicator.ViewModel
 
         private void ContinuarConFileItemmsSeleccionados()
         {
-            /*
-            FileItemsSeleccionados.Clear();
+            
+            //FileItemsSeleccionados.Clear();
 
-            foreach (var archivo in TotalFileItems)
+            foreach (var archivo in FileItemsIndexados)
             {
+                var file = archivo.IndexedFile;
+
+                /*
                 if (archivo.File.Seleccionado)
                     FileItemsSeleccionados.Add(archivo);
+                */
             }
-            */
+            
         }
 
         private ObservableCollection<IndexedFileControl> CrearSelectedFileControls(ObservableCollection<FilesControl> fileItemsSeleccionados)

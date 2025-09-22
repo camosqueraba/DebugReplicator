@@ -75,7 +75,7 @@ namespace DebugReplicator.Controller
         }
 
         public ResultadoProceso ReplicarDebug(string urlCarpetaOrigen, string urlCarpetaDestino, string nombreBaseCarpetaReplica,
-            List<IndexedFileModel> archivosIndexados, int numeroReplicas)
+            int numeroReplicas, List<IndexedFileModel> archivosIndexados = null)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
             
@@ -89,25 +89,41 @@ namespace DebugReplicator.Controller
                 return resultadoProceso;
 
             string rutaCarpetaBase = resultadoProceso.ResultadoContenido;
-            string rutaCarpetaBaseDuplicada = Path.Combine(urlCarpetaDestino, nombreBaseCarpetaReplica); 
+            string rutaCarpetaBaseDuplicada = Path.Combine(urlCarpetaDestino, nombreBaseCarpetaReplica);            
 
             for (int indiceReplica = 1; indiceReplica <= numeroReplicas; indiceReplica++)
             {
-                bool resultadoCopiar = GestorCarpetasArchivos.CopiarCarpeta(rutaCarpetaBase, rutaCarpetaBaseDuplicada + $"_{indiceReplica}", true);
-
-                if (!resultadoCopiar)
+                if (archivosIndexados == null)
                 {
-                    resultadoProceso.Completado = false;
-                    resultadoProceso.Errores.Add(new ErrorProceso()
+                    bool resultadoCopiar = GestorCarpetasArchivos.CopiarCarpeta(rutaCarpetaBase, rutaCarpetaBaseDuplicada + $"_{indiceReplica}", true);
+
+                    if (!resultadoCopiar)
                     {
-                        MensajeError = $"No se pudo copiar carpeta desde {nombreBaseCarpetaReplica} a {urlCarpetaDestino}"
-                    });
-                    return resultadoProceso;
-                }                
+                        resultadoProceso.Completado = false;
+                        resultadoProceso.Errores.Add(new ErrorProceso()
+                        {
+                            MensajeError = $"No se pudo copiar carpeta desde {nombreBaseCarpetaReplica} a {urlCarpetaDestino}"
+                        });
+                        return resultadoProceso;
+                    }
+                }
+
+                if(archivosIndexados != null || archivosIndexados.Count > 0)
+                {
+                    ResultadoProceso resultadoIndexar = IndexarCarpeta(rutaCarpetaBaseDuplicada + $"_{indiceReplica}", archivosIndexados);
+                    if (!resultadoIndexar.Completado)
+                    {
+                        resultadoProceso.Completado = false;
+                        resultadoProceso.Errores.AddRange(resultadoIndexar.Errores);
+                        return resultadoProceso;
+                    }
+                } 
             }
-           
             return resultadoProceso;
         }
+
+
+        
 
         public ResultadoProceso CrearCarpetaReplica(string urlCarpetaDestino, string nombreBaseCarpetaReplica, int indiceCarpeta)
         {
@@ -185,6 +201,80 @@ namespace DebugReplicator.Controller
                 resultadoProceso.Errores.Add(errorProceso);
             }            
             
+            return resultadoProceso;
+        }
+
+        private ResultadoProceso IndexarArchivos(string rutaCarpetaDuplicada, List<IndexedFileModel> archivosIndexados)
+        {
+            ResultadoProceso resultadoProceso = new ResultadoProceso();
+            
+            foreach (var archivo in archivosIndexados)
+            {
+                string rutaArchivoOriginal = archivo.Path;
+                string nuevoNombreArchivo = archivo.NombreIndexado + Path.GetExtension(rutaArchivoOriginal);
+                string rutaNuevoArchivo = Path.Combine(rutaCarpetaDuplicada, nuevoNombreArchivo);
+
+                try
+                {
+                    if (File.Exists(rutaArchivoOriginal))
+                    {
+                        File.Copy(rutaArchivoOriginal, rutaNuevoArchivo, true);
+                    }
+                    else
+                    {
+                        resultadoProceso.Completado = false;
+                        resultadoProceso.Errores.Add(new ErrorProceso()
+                        {
+                            MensajeError = $"El archivo original no existe: {rutaArchivoOriginal}"
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    resultadoProceso.Completado = false;
+                    resultadoProceso.Errores.Add(new ErrorProceso()
+                    {
+                        MensajeError = $"Error al copiar el archivo {rutaArchivoOriginal} a {rutaNuevoArchivo}: {ex.Message}"
+                    });
+                }
+            }
+
+            return resultadoProceso;
+        }
+        
+        private ResultadoProceso IndexarCarpeta(string rutaCarpetaBase, List<IndexedFileModel> archivosIndexados)
+        {
+            ResultadoProceso resultadoProceso = new ResultadoProceso();
+            
+            foreach (var archivo in archivosIndexados)
+            {
+                string rutaArchivoOriginal = archivo.Path;
+                string nuevoNombreArchivo = archivo.NombreIndexado + Path.GetExtension(rutaArchivoOriginal);
+                string rutaNuevoArchivo = Path.Combine(rutaCarpetaBase, nuevoNombreArchivo);
+                try
+                {
+                    if (File.Exists(rutaArchivoOriginal))
+                    {
+                        File.Copy(rutaArchivoOriginal, rutaNuevoArchivo, true);
+                    }
+                    else
+                    {
+                        resultadoProceso.Completado = false;
+                        resultadoProceso.Errores.Add(new ErrorProceso()
+                        {
+                            MensajeError = $"El archivo original no existe: {rutaArchivoOriginal}"
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    resultadoProceso.Completado = false;
+                    resultadoProceso.Errores.Add(new ErrorProceso()
+                    {
+                        MensajeError = $"Error al copiar el archivo {rutaArchivoOriginal} a {rutaNuevoArchivo}: {ex.Message}"
+                    });
+                }
+            }
             return resultadoProceso;
         }
     }

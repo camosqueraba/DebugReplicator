@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace DebugReplicator.Controller
 {
     public class GestorCarpetasArchivos
@@ -103,6 +104,19 @@ namespace DebugReplicator.Controller
             if (!string.IsNullOrWhiteSpace(path))
                 fileName = Path.GetFileName(path);
             return fileName;
+        }
+
+        public static string ObtenerNombreCarpeta(string rutaCarpetaOrigen)
+        {
+            string nombreCarpeta = string.Empty;
+
+            if (Directory.Exists(rutaCarpetaOrigen))
+            {
+                DirectoryInfo infoCarpeta = new DirectoryInfo(rutaCarpetaOrigen);
+                nombreCarpeta = infoCarpeta.Name;
+            }
+                
+            return nombreCarpeta;
         }
     }
 }

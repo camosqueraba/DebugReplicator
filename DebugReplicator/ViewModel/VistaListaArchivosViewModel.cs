@@ -33,7 +33,7 @@ namespace DebugReplicator.ViewModel
         {
             get => actualRuta;
             set { actualRuta = value; OnPropertyChanged(nameof(ActualRuta)); }
-        }
+        } 
         public VistaListaArchivosViewModel(VistaPrincipalViewModel vistaPrincipalViewModel, NavigationStore navigationStore, DatosInicialesDTO datosInicialesDTO)
         {
 
@@ -44,11 +44,11 @@ namespace DebugReplicator.ViewModel
             FileItemsSeleccionados  = new ObservableCollection<FilesControl>();
             TotalFileItems          = new ObservableCollection<FilesControl>();
 
-            this.TryNavigateToPath(datosInicialesDTO.NombreCarpetaReplicada);
+            this.TryNavigateToPath(datosInicialesDTO.RutaCarpetaReplicada);
             
             RutasVisitadas = new Stack<string>();
             RutasVisitadas.Push(datosInicialesDTO.NombreCarpetaReplicada);
-            ActualRuta = datosInicialesDTO.NombreCarpetaReplicada;
+            ActualRuta = datosInicialesDTO.RutaCarpetaReplicada;
 
             VolverCommand = new RelayCommand(Volver);
             ContinuarCommand = new RelayCommand(ContinuarConFileItemmsSeleccionados, HayArchivosSeleccionados);

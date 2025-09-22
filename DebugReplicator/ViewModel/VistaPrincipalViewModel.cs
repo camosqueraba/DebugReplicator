@@ -45,7 +45,7 @@ namespace DebugReplicator.ViewModel
                 if (SetProperty(ref carpetaDestino, value))
                 {
                     Validar(nameof(CarpetaDestino));
-                    Validar(nameof(CarpetaOrigen)); // También depende de ella
+                    Validar(nameof(CarpetaOrigen));
                 }
             }
         }
@@ -62,21 +62,31 @@ namespace DebugReplicator.ViewModel
             }
         }
 
+        private string numeroReplicas;
+        public string NumeroReplicas
+        {
+            get => numeroReplicas;
+            set
+            {
+                if (SetProperty(ref numeroReplicas, value))
+                    Validar(nameof(NumeroReplicas));
+            }
+        }
+
+        private int NumeroReplicasInt { get; set; }
+
         public string CarpetaOrigenError => GetFirstError(nameof(CarpetaOrigen));
         public string CarpetaDestinoError => GetFirstError(nameof(CarpetaDestino));
         public string NombreCarpetaReplicadaError => GetFirstError(nameof(NombreCarpetaReplicada));
+        public string NumeroReplicasError => GetFirstError(nameof(NumeroReplicas));
 
         public ICommand SiguienteCommand { get; }
         public ICommand ReplicarCommand { get; }
         public ICommand SeleccionarCarpetaOrigenCommand { get; }
-        public ICommand SeleccionarCarpetaDestinoCommand { get; }
-        
+        public ICommand SeleccionarCarpetaDestinoCommand { get; }     
 
 
         Dictionary<string, List<string>> Errores = new Dictionary<string, List<string>>();
-        
-
-
 
         public VistaPrincipalViewModel(NavigationStore navigationStore, IFolderDialogService folderDialog)
         {
@@ -88,8 +98,6 @@ namespace DebugReplicator.ViewModel
 
             SeleccionarCarpetaOrigenCommand = new RelayCommand(SeleccionarCarpetaOrigen);
             SeleccionarCarpetaDestinoCommand = new RelayCommand(SeleccionarCarpetaDestino);
-                   
-            
         }
 
         private string GetFirstError(string propertyName)
@@ -110,9 +118,13 @@ namespace DebugReplicator.ViewModel
             if (string.IsNullOrWhiteSpace(NombreCarpetaReplicada))
                 NombreCarpetaReplicada = "";
 
+            if (string.IsNullOrWhiteSpace(NumeroReplicas))
+                NumeroReplicas = "";
+
             Validar(CarpetaOrigen);
             Validar(CarpetaDestino);
             Validar(NombreCarpetaReplicada);
+            Validar(NumeroReplicas);
 
             if (HasErrors)
             {
@@ -122,32 +134,53 @@ namespace DebugReplicator.ViewModel
 
             //string 
             Replicador replicador = new Replicador();
-            string[] archivos_indexar = new string[2];
+            //string[] archivos_indexar = new string[2];
             //replicador.ReplicarCarpetaDebug(RutaCarpetaOrigen, "BOT_", 1, 10, RutaCarpetaDestino, archivos_indexar);
             ResultadoProceso resultCopiar = replicador.CopiarCarpetaBaseADestino(CarpetaOrigen, CarpetaDestino);
 
+
             if (resultCopiar != null && resultCopiar.Completado)
-                NombreCarpetaReplicada = resultCopiar.ResultadoContenido;
-                
+            {
+                string rutaCarpetaReplicada = resultCopiar.ResultadoContenido;
 
 
-            DatosInicialesDTO datosInicialesDTO = new DatosInicialesDTO()
-                                                    {
-                                                        CarpetaDestino = this.CarpetaDestino,
-                                                        CarpetaOrigen = this.CarpetaOrigen,
-                                                        NombreCarpetaReplicada = this.NombreCarpetaReplicada
-                                                    };            
+                DatosInicialesDTO datosInicialesDTO = new DatosInicialesDTO()
+                {
+                    RutaCarpetaDestino = this.CarpetaDestino,
+                    RutaCarpetaOrigen = this.CarpetaOrigen,
+                    RutaCarpetaReplicada = rutaCarpetaReplicada,
+                    NombreCarpetaReplicada = this.NombreCarpetaReplicada,
+                    NumeroReplicas = this.NumeroReplicasInt
+                };
 
 
-            VistaListaArchivosViewModel listaArchivoVM = new VistaListaArchivosViewModel(this, _navigationStore, datosInicialesDTO);
-            _navigationStore.CurrentViewModel = listaArchivoVM;
+                VistaListaArchivosViewModel listaArchivoVM = new VistaListaArchivosViewModel(this, _navigationStore, datosInicialesDTO);
+                _navigationStore.CurrentViewModel = listaArchivoVM;
+            }
+            else
+            {
+                MessageBox.Show("Error al copiar la carpeta origen a destino.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void Replicar ()
         {
+            if (string.IsNullOrWhiteSpace(CarpetaOrigen))
+                CarpetaOrigen = "";
+
+            if (string.IsNullOrWhiteSpace(CarpetaDestino))
+                CarpetaDestino = "";
+
+            if (string.IsNullOrWhiteSpace(NombreCarpetaReplicada))
+                NombreCarpetaReplicada = "";
+
+            if (string.IsNullOrWhiteSpace(NumeroReplicas))
+                NumeroReplicas = "";
+
             Validar(CarpetaOrigen);
             Validar(CarpetaDestino);
             Validar(NombreCarpetaReplicada);
+            Validar(NumeroReplicas);
 
             if (HasErrors)
             {
@@ -156,7 +189,8 @@ namespace DebugReplicator.ViewModel
             }
             
             Replicador replicador = new Replicador();
-            replicador.ReplicarDebug(CarpetaOrigen, CarpetaDestino, NombreCarpetaReplicada, null, 5);
+
+            replicador.ReplicarDebug(CarpetaOrigen, CarpetaDestino, NombreCarpetaReplicada, NumeroReplicasInt);
             //MessageBox.Show("Replicación iniciada.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
         }   
 
@@ -205,6 +239,8 @@ namespace DebugReplicator.ViewModel
                         errores.Add("La carpeta no existe.");
                     if (CarpetaOrigen == CarpetaDestino)
                         errores.Add("Las carpetas deben ser diferentes.");
+                    if (!string.IsNullOrWhiteSpace(CarpetaOrigen) && Directory.Exists(CarpetaOrigen))
+                        NombreCarpetaReplicada = SetNombreCarpetaBase(CarpetaOrigen);
                     break;
 
                 case nameof(CarpetaDestino):
@@ -219,6 +255,17 @@ namespace DebugReplicator.ViewModel
                 case nameof(NombreCarpetaReplicada):
                     if (string.IsNullOrWhiteSpace(NombreCarpetaReplicada))
                         errores.Add("Carpeta replicada es requerido.");
+                    break;
+
+                case nameof(NumeroReplicas):
+                    if (string.IsNullOrWhiteSpace(NumeroReplicas))
+                        errores.Add("Numero replicas es requerido.");
+                    else if (!int.TryParse(NumeroReplicas, out int num) || num < 1)
+                    {
+                        errores.Add("Numero replicas debe ser un número entero mayor a 0.");
+                    }
+                    else
+                        NumeroReplicasInt = num;
                     break;
             }
 
@@ -246,12 +293,23 @@ namespace DebugReplicator.ViewModel
                 case nameof(NombreCarpetaReplicada):
                     error = nameof(NombreCarpetaReplicadaError);
                     break;
+                case nameof(NumeroReplicas):
+                    error = nameof(NumeroReplicasError);
+                    break;
                 default:
                     break;
             }
 
-            return error;
+            return error;            
+        }
+
+        private string SetNombreCarpetaBase(string RutaCarpetaOrigen)
+        {
+            string nombreCarpetaBase = "";
+
+            nombreCarpetaBase = GestorCarpetasArchivos.ObtenerNombreCarpeta(RutaCarpetaOrigen);
             
+            return nombreCarpetaBase;
         }
     }
 }
