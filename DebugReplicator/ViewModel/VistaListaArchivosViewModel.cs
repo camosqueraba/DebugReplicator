@@ -26,6 +26,7 @@ namespace DebugReplicator.ViewModel
         public ObservableCollection<FilesControl> TotalFileItems { get; set; }
         public ObservableCollection<FilesControl> FileItemsSeleccionados { get; set; }
 
+        public DatosInicialesDTO DatosInicialesDTO { get; set; }
         public  Stack<string> RutasVisitadas { get; set; }
 
         private string actualRuta;
@@ -44,10 +45,12 @@ namespace DebugReplicator.ViewModel
             FileItemsSeleccionados  = new ObservableCollection<FilesControl>();
             TotalFileItems          = new ObservableCollection<FilesControl>();
 
+            DatosInicialesDTO = datosInicialesDTO;
+
             this.TryNavigateToPath(datosInicialesDTO.RutaCarpetaReplicada);
             
             RutasVisitadas = new Stack<string>();
-            RutasVisitadas.Push(datosInicialesDTO.NombreCarpetaReplicada);
+            RutasVisitadas.Push(datosInicialesDTO.RutaCarpetaReplicada);
             ActualRuta = datosInicialesDTO.RutaCarpetaReplicada;
 
             VolverCommand = new RelayCommand(Volver);

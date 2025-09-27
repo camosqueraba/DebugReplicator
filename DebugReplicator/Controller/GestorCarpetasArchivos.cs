@@ -10,7 +10,7 @@ namespace DebugReplicator.Controller
 {
     public class GestorCarpetasArchivos
     {
-        public static void CopiarDirectorio(string sourceDir, string destinationDir, bool recursive)
+        public static bool CopiarDirectorio(string sourceDir, string destinationDir, bool recursive)
         {            
             var dir = new DirectoryInfo(sourceDir);
             
@@ -18,8 +18,8 @@ namespace DebugReplicator.Controller
                 throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
            
             DirectoryInfo[] dirs = dir.GetDirectories();
-            
-            Directory.CreateDirectory(destinationDir);
+           
+            Directory.CreateDirectory(destinationDir);          
             
             foreach (FileInfo file in dir.GetFiles())
             {
@@ -35,6 +35,8 @@ namespace DebugReplicator.Controller
                     CopiarDirectorio(subDir.FullName, newDestinationDir, true);
                 }
             }
+
+            return true;
         }
 
         public static bool CopiarCarpeta(string directorioOrigen, string directorioDestino, bool recursive)
@@ -103,6 +105,7 @@ namespace DebugReplicator.Controller
 
             if (!string.IsNullOrWhiteSpace(path))
                 fileName = Path.GetFileName(path);
+
             return fileName;
         }
 

@@ -12,270 +12,262 @@ using System.Threading.Tasks;
 namespace DebugReplicator.Controller
 {
     public class Replicador
-    {
-        public bool ReplicarCarpetaDebug(string urlCarpetaDebug, string baseNombreCarpetaReplicada,
-                                            int indiceInicialCarpeta, int indiceFinalCarpeta,
-                                            string urlCarpertaDestino, string[] archivosIndexar)
-        {
-            bool ReplicarCarpeta = false;
-            /*
-            if (Directory.Exists(urlCarpetaDebug) && Directory.Exists(urlCarpertaDestino))
-            {
-
-            }
-            */
-
-            string nombreCarpetaOrigen = FileSystem.GetName(urlCarpetaDebug);
-            string nombreNuevaCarpetaDestino = Path.Combine(urlCarpertaDestino, baseNombreCarpetaReplicada);
-
-            GestorCarpetasArchivos.CopiarDirectorio(urlCarpetaDebug, nombreNuevaCarpetaDestino, true);
-
-            string nombrePrimeraCarpetaIndexada = baseNombreCarpetaReplicada + indiceInicialCarpeta;
-            //FileSystem.RenameDirectory(nombreNuevaCarpetaDestino, baseNombreCarpetaReplicada);
-
-            for (int indice = indiceInicialCarpeta; indice <= indiceFinalCarpeta; indice++)
-            {
-                string nombreCarpetaIndexada = nombreNuevaCarpetaDestino + indice;
-                FileSystem.CreateDirectory(nombreCarpetaIndexada);
-                GestorCarpetasArchivos.CopiarDirectorio(nombreNuevaCarpetaDestino, nombreCarpetaIndexada, true);
-
-            }
-
-            return ReplicarCarpeta;
-        }
-
-
-        public bool ReplicarExe(string UrlExe)
-        {
-            bool replicarExe = false;
-
-            if (!string.IsNullOrEmpty(UrlExe) && File.Exists(UrlExe))
-            {
-
-            }
-
-            return replicarExe;
-        }
-
-        public ResultadoProceso CopiarCarpetaBaseADestino(string rutaCarpetaBase, string rutaCarpetaDestino)
+    {        
+        private static string RutaCarpetaBase {get; set;} 
+        public static ResultadoProceso ReplicarDebug(string urlCarpetaOrigen, string urlCarpetaDestino, string nombreBaseCarpetaReplica,
+            int numeroReplicas)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
-            bool copiado = false;
 
-            string nombreCarpetaOrigen = GestorCarpetasArchivos.ObtenerNombreArchivo(rutaCarpetaBase);
-            string nombreNuevaCarpetaDestino = Path.Combine(rutaCarpetaDestino, nombreCarpetaOrigen);
-
-            GestorCarpetasArchivos.CopiarDirectorio(rutaCarpetaBase, nombreNuevaCarpetaDestino, true);
-            copiado = true;
-
-            resultadoProceso.Completado = copiado;
-            resultadoProceso.ResultadoContenido = nombreNuevaCarpetaDestino;
-
-            return resultadoProceso;
-        }
-
-        public ResultadoProceso ReplicarDebug(string urlCarpetaOrigen, string urlCarpetaDestino, string nombreBaseCarpetaReplica,
-            int numeroReplicas, List<IndexedFileModel> archivosIndexados = null)
-        {
-            ResultadoProceso resultadoProceso = new ResultadoProceso();
-            
             resultadoProceso = ValidarRequisitos(urlCarpetaOrigen, urlCarpetaDestino,
-                                                  nombreBaseCarpetaReplica, numeroReplicas, archivosIndexados );
+                                                  nombreBaseCarpetaReplica, numeroReplicas);
             if (!resultadoProceso.Completado)
                 return resultadoProceso;
 
-            resultadoProceso = CopiarCarpetaBaseADestino(urlCarpetaOrigen, urlCarpetaDestino);
+
+            resultadoProceso = CopiarCarpetaBaseADestino(urlCarpetaOrigen, urlCarpetaDestino, nombreBaseCarpetaReplica);
             if (!resultadoProceso.Completado)
                 return resultadoProceso;
 
             string rutaCarpetaBase = resultadoProceso.ResultadoContenido;
-            string rutaCarpetaBaseDuplicada = Path.Combine(urlCarpetaDestino, nombreBaseCarpetaReplica);            
+            string rutaCarpetaBaseDuplicada = Path.Combine(urlCarpetaDestino, nombreBaseCarpetaReplica);
 
             for (int indiceReplica = 1; indiceReplica <= numeroReplicas; indiceReplica++)
             {
-                if (archivosIndexados == null)
-                {
-                    bool resultadoCopiar = GestorCarpetasArchivos.CopiarCarpeta(rutaCarpetaBase, rutaCarpetaBaseDuplicada + $"_{indiceReplica}", true);
+                string rutaCarpetaIndexada = "";
 
-                    if (!resultadoCopiar)
-                    {
-                        resultadoProceso.Completado = false;
-                        resultadoProceso.Errores.Add(new ErrorProceso()
-                        {
-                            MensajeError = $"No se pudo copiar carpeta desde {nombreBaseCarpetaReplica} a {urlCarpetaDestino}"
-                        });
-                        return resultadoProceso;
-                    }
+                if (rutaCarpetaBaseDuplicada.Contains(GlobalVars.CARACTER_BANDERA))
+                    rutaCarpetaIndexada = rutaCarpetaBaseDuplicada.Replace(GlobalVars.CARACTER_BANDERA, indiceReplica.ToString());
+                else
+                    rutaCarpetaIndexada = rutaCarpetaBaseDuplicada + "_" + indiceReplica.ToString();
+
+                bool resultadoCopiar = GestorCarpetasArchivos.CopiarCarpeta(rutaCarpetaBase, rutaCarpetaIndexada, true);
+
+                if (!resultadoCopiar)
+                {
+                    resultadoProceso.Completado = false;
+                    resultadoProceso.Errores.Add($"No se pudo copiar carpeta desde {nombreBaseCarpetaReplica} a {urlCarpetaDestino}");
+                    return resultadoProceso;
+                }                
+            }
+
+            resultadoProceso.Completado = true;
+            resultadoProceso.ResultadoContenido = "Proceso completado!!";
+
+            return resultadoProceso;
+        }
+
+        public static ResultadoProceso ReplicarDebug(string urlCarpetaOrigen, string urlCarpetaDestino, string nombreBaseCarpetaReplica,
+            int numeroReplicas, List<IndexedFileModel> archivosIndexados)
+        {
+            ResultadoProceso resultadoProceso = new ResultadoProceso();
+
+            resultadoProceso = ValidarRequisitos(urlCarpetaOrigen, urlCarpetaDestino,
+                                                  nombreBaseCarpetaReplica, numeroReplicas, archivosIndexados);
+            if (!resultadoProceso.Completado)
+                return resultadoProceso;
+           
+
+            string rutaCarpetaBase = resultadoProceso.ResultadoContenido;
+            string rutaCarpetaBaseDuplicada = Path.Combine(urlCarpetaDestino, nombreBaseCarpetaReplica);
+
+            for (int indiceReplica = 1; indiceReplica <= numeroReplicas; indiceReplica++)
+            {
+                string rutaCarpetaIndexada = rutaCarpetaBaseDuplicada.Replace(GlobalVars.CARACTER_BANDERA, indiceReplica.ToString());
+                
+                bool resultadoCopiar = GestorCarpetasArchivos.CopiarCarpeta(rutaCarpetaBaseDuplicada, rutaCarpetaIndexada, true);
+
+                if (!resultadoCopiar)
+                {
+                    resultadoProceso.Completado = false;
+                    resultadoProceso.Errores.Add($"No se pudo copiar carpeta desde {nombreBaseCarpetaReplica} a {urlCarpetaDestino}");
+                    return resultadoProceso;
                 }
 
-                if(archivosIndexados != null || archivosIndexados.Count > 0)
+
+                if (archivosIndexados != null || archivosIndexados.Count > 0)
                 {
-                    ResultadoProceso resultadoIndexar = IndexarCarpeta(rutaCarpetaBaseDuplicada + $"_{indiceReplica}", archivosIndexados);
+                    ResultadoProceso resultadoIndexar = IndexarCarpeta(rutaCarpetaIndexada, archivosIndexados, indiceReplica, true);
                     if (!resultadoIndexar.Completado)
                     {
                         resultadoProceso.Completado = false;
                         resultadoProceso.Errores.AddRange(resultadoIndexar.Errores);
                         return resultadoProceso;
                     }
-                } 
+                }
             }
+
+            resultadoProceso.Completado = true;
+            resultadoProceso.ResultadoContenido = "Proceso completado!!";
+
             return resultadoProceso;
         }
 
 
-        
-
-        public ResultadoProceso CrearCarpetaReplica(string urlCarpetaDestino, string nombreBaseCarpetaReplica, int indiceCarpeta)
+        public static ResultadoProceso CopiarCarpetaBaseADestino(string rutaCarpetaBase, string rutaCarpetaDestino, string nombreNuevaCarpeta="")
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
-            resultadoProceso.Completado = true;
+            bool copiado = false;
 
-            string nombreCarpetaReplica = $"{nombreBaseCarpetaReplica}{indiceCarpeta}";
-            string rutaCarpetaReplica = Path.Combine(urlCarpetaDestino, nombreCarpetaReplica);            
+            string nombreCarpetaCopiada = GestorCarpetasArchivos.ObtenerNombreArchivo(rutaCarpetaBase);
 
-            bool isCarpetaCreada = GestorCarpetasArchivos.CrearCarpeta(rutaCarpetaReplica);
+            if (!string.IsNullOrWhiteSpace(nombreNuevaCarpeta))
+                nombreCarpetaCopiada = nombreNuevaCarpeta;
 
-            if (!isCarpetaCreada)
-            {
-                resultadoProceso.Completado = false;
-                ErrorProceso errorProceso = new ErrorProceso
-                {
-                    ExisteError = true,
-                    MensajeError = $"No se pudo crear la carpeta: {rutaCarpetaReplica}"
-                };
-                resultadoProceso.Errores.Add(errorProceso);
-                return resultadoProceso;
-            }
+            string nombreNuevaCarpetaDestino = Path.Combine(rutaCarpetaDestino, nombreCarpetaCopiada);
 
-            resultadoProceso.ResultadoContenido = rutaCarpetaReplica;
+            GestorCarpetasArchivos.CopiarDirectorio(rutaCarpetaBase, nombreNuevaCarpetaDestino, true);
+            copiado = true;
+
+            resultadoProceso.Completado = copiado;
+            resultadoProceso.ResultadoContenido = RutaCarpetaBase = nombreNuevaCarpetaDestino;
 
             return resultadoProceso;
         }
-
-        private ResultadoProceso ValidarRequisitos(string urlCarpetaOrigen, string urlCarpetaDestino, string nombreBaseCarpetaReplica,
+        
+        
+        private static ResultadoProceso ValidarRequisitos(string urlCarpetaOrigen, string urlCarpetaDestino, string nombreBaseCarpetaReplica,
             int numeroReplicas, List<IndexedFileModel> archivosIndexados = null)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
             resultadoProceso.Completado = true;
 
-            ErrorProceso errorProceso = new ErrorProceso();
+            
 
             if (string.IsNullOrEmpty(urlCarpetaOrigen) || !Directory.Exists(urlCarpetaOrigen))
             {
-                resultadoProceso.Completado = false;
-                errorProceso.ExisteError = true;
-                errorProceso.MensajeError = "La carpeta de origen no es válida.";
-                resultadoProceso.Errores.Add(errorProceso);
+                resultadoProceso.Completado = false;                
+                resultadoProceso.Errores.Add("La carpeta de origen no es válida.");
 
             }
 
             if (string.IsNullOrEmpty(urlCarpetaDestino) || !Directory.Exists(urlCarpetaDestino))
             {
                 resultadoProceso.Completado = false;
-                errorProceso.ExisteError = true;
-                errorProceso.MensajeError = "La carpeta de destino no es válida.";
-                resultadoProceso.Errores.Add(errorProceso);
+                resultadoProceso.Errores.Add("La carpeta de destino no es válida.");
             }
             
             if (string.IsNullOrEmpty(nombreBaseCarpetaReplica))
             {
                 resultadoProceso.Completado = false;
-                errorProceso.ExisteError = true;
-                errorProceso.MensajeError = "El nombre base de la carpeta replicada no puede estar vacío.";
-                resultadoProceso.Errores.Add(errorProceso);
+                resultadoProceso.Errores.Add("El nombre base de la carpeta replicada no puede estar vacío.");
             }
             
             if (archivosIndexados != null && archivosIndexados.Count == 0)
             {
                 resultadoProceso.Completado = false;
-                errorProceso.ExisteError = true;
-                errorProceso.MensajeError = "No se han proporcionado archivos para indexar.";
-                resultadoProceso.Errores.Add(errorProceso);
+                resultadoProceso.Errores.Add("No se han proporcionado archivos para indexar.");
             }
             
             if (numeroReplicas <= 0)
             {
-                resultadoProceso.Completado = false;
-                errorProceso.ExisteError = true;
-                errorProceso.MensajeError = "El número de réplicas debe ser mayor que cero.";
-                resultadoProceso.Errores.Add(errorProceso);
+                resultadoProceso.Completado = false;               
+                resultadoProceso.Errores.Add("El número de réplicas debe ser mayor que cero.");
             }            
             
             return resultadoProceso;
-        }
-
-        private ResultadoProceso IndexarArchivos(string rutaCarpetaDuplicada, List<IndexedFileModel> archivosIndexados)
-        {
-            ResultadoProceso resultadoProceso = new ResultadoProceso();
-            
-            foreach (var archivo in archivosIndexados)
-            {
-                string rutaArchivoOriginal = archivo.Path;
-                string nuevoNombreArchivo = archivo.NombreIndexado + Path.GetExtension(rutaArchivoOriginal);
-                string rutaNuevoArchivo = Path.Combine(rutaCarpetaDuplicada, nuevoNombreArchivo);
-
-                try
-                {
-                    if (File.Exists(rutaArchivoOriginal))
-                    {
-                        File.Copy(rutaArchivoOriginal, rutaNuevoArchivo, true);
-                    }
-                    else
-                    {
-                        resultadoProceso.Completado = false;
-                        resultadoProceso.Errores.Add(new ErrorProceso()
-                        {
-                            MensajeError = $"El archivo original no existe: {rutaArchivoOriginal}"
-                        });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    resultadoProceso.Completado = false;
-                    resultadoProceso.Errores.Add(new ErrorProceso()
-                    {
-                        MensajeError = $"Error al copiar el archivo {rutaArchivoOriginal} a {rutaNuevoArchivo}: {ex.Message}"
-                    });
-                }
-            }
-
-            return resultadoProceso;
-        }
+        }      
         
-        private ResultadoProceso IndexarCarpeta(string rutaCarpetaBase, List<IndexedFileModel> archivosIndexados)
+        private static ResultadoProceso IndexarCarpeta(string rutaCarpetaBase, List<IndexedFileModel> archivosIndexados, int indice, bool revisarSubcarpetas)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
-            
-            foreach (var archivo in archivosIndexados)
+
+            try
             {
-                string rutaArchivoOriginal = archivo.Path;
-                string nuevoNombreArchivo = archivo.NombreIndexado + Path.GetExtension(rutaArchivoOriginal);
-                string rutaNuevoArchivo = Path.Combine(rutaCarpetaBase, nuevoNombreArchivo);
-                try
+                foreach (var archivoIndexado in archivosIndexados)
                 {
-                    if (File.Exists(rutaArchivoOriginal))
+                    string rutaArchivoOriginal = archivoIndexado.Path;
+                    string nombreArchivoIndexado = GestorCarpetasArchivos.ObtenerNombreArchivo(rutaArchivoOriginal);
+                    string nuevoNombreArchivo = archivoIndexado.NombreIndexado.Replace(GlobalVars.CARACTER_BANDERA, indice.ToString());
+                    string rutaNuevoArchivo = Path.Combine(rutaCarpetaBase, nuevoNombreArchivo);
+
+                    var carpetaBaseIndexada = new DirectoryInfo(rutaCarpetaBase);
+
+                    if (!carpetaBaseIndexada.Exists)
                     {
-                        File.Copy(rutaArchivoOriginal, rutaNuevoArchivo, true);
-                    }
-                    else
-                    {
+                        LOGRobotica.Controllers.LogApplication.LogWrite("GestorCarpetasArchivos -> IndexarCarpeta: " + $"directorio origen no existe {carpetaBaseIndexada.FullName}");
+
                         resultadoProceso.Completado = false;
-                        resultadoProceso.Errores.Add(new ErrorProceso()
-                        {
-                            MensajeError = $"El archivo original no existe: {rutaArchivoOriginal}"
-                        });
+                        resultadoProceso.Errores.Add($"directorio origen no existe {carpetaBaseIndexada.FullName}");
+
+                        return resultadoProceso;
                     }
-                }
-                catch (Exception ex)
-                {
-                    resultadoProceso.Completado = false;
-                    resultadoProceso.Errores.Add(new ErrorProceso()
+
+                    DirectoryInfo[] carpetaBaseIndexadaInfo = carpetaBaseIndexada.GetDirectories();
+
+                    foreach (FileInfo file in carpetaBaseIndexada.GetFiles())
                     {
-                        MensajeError = $"Error al copiar el archivo {rutaArchivoOriginal} a {rutaNuevoArchivo}: {ex.Message}"
-                    });
+                        if (file.Name == archivoIndexado.Name)
+                        {
+                            if(file.Name != nuevoNombreArchivo) 
+                                FileSystem.RenameFile(file.FullName, nuevoNombreArchivo);
+                        }
+                        //string targetFilePath = Path.Combine(carpetaBaseIndexada, file.Name);
+                        //file.CopyTo(targetFilePath, true);
+                    }
+
+                    if (revisarSubcarpetas)
+                    {
+                        foreach (DirectoryInfo subDir in carpetaBaseIndexadaInfo)
+                        {
+                            //string newDestinationDir = Path.Combine(directorioDestino, subDir.Name);
+                            //CopiarDirectorio(subDir.FullName, newDestinationDir, true);
+                            IndexarCarpeta(subDir.FullName, archivosIndexados, indice, true);
+                        }
+                    }
+                                       
                 }
+                resultadoProceso.Completado = true;
+                return resultadoProceso;
             }
-            return resultadoProceso;
+            catch (Exception ex)
+            {
+                LOGRobotica.Controllers.LogApplication.LogWrite("Replicador -> IndexarCarpeta: Exception " + ex.Message);
+                resultadoProceso.Completado = false;
+                resultadoProceso.Errores.Add(ex.Message);
+                return resultadoProceso;
+            }
+
+        }
+
+        public static ResultadoProceso CrearCarpetaConArchivosIndexados(string directorioOrigen, string directorioDestino, List<IndexedFileModel> archivosIndexados)
+        {
+            ResultadoProceso resultadoProceso = new ResultadoProceso();
+            try
+            {
+                DirectoryInfo carpetaOrigenInfo = new DirectoryInfo(directorioOrigen);
+
+                if (!carpetaOrigenInfo.Exists)
+                {
+                    LOGRobotica.Controllers.LogApplication.LogWrite("GestorCarpetasArchivos -> CopiarCarpeta: " + $"directorio origen no existe {carpetaOrigenInfo.FullName}");
+                    return resultadoProceso;
+                }
+
+                DirectoryInfo[] dirs = carpetaOrigenInfo.GetDirectories();
+
+                Directory.CreateDirectory(directorioDestino);
+
+                foreach (FileInfo file in carpetaOrigenInfo.GetFiles())
+                {
+                    string targetFilePath = Path.Combine(directorioDestino, file.Name);
+                    file.CopyTo(targetFilePath, true);
+                }
+                
+                foreach (DirectoryInfo subDir in dirs)
+                {
+                    string newDestinationDir = Path.Combine(directorioDestino, subDir.Name);
+                    //CopiarDirectorio(subDir.FullName, newDestinationDir, true);
+                }
+               
+
+                return resultadoProceso;
+            }
+            catch (Exception ex)
+            {
+                LOGRobotica.Controllers.LogApplication.LogWrite("GestorCarpetasArchivos -> CopiarCarpeta: Exception " + ex.Message);
+                return resultadoProceso;
+            }
+
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DebugReplicator.Controller;
 using DebugReplicator.Model;
+using DebugReplicator.Model.DTOs;
 using DebugReplicator.View.UIControls;
 using Shell32;
 using System;
@@ -17,6 +18,7 @@ namespace DebugReplicator.ViewModel
         public ICommand VolverCommand { get; }
         
         public ICommand ContinuarCommand { get; }
+        public ICommand ReplicarCommand { get; }
 
         private readonly NavigationStore _NavigationStore;
 
@@ -24,11 +26,18 @@ namespace DebugReplicator.ViewModel
 
         public ObservableCollection<IndexedFileControl> FileItemsIndexados { get; set; }
 
-        private string rutaArchivo;
-        public string RutaArchivo
+        private bool isVisibleLoading;
+        public bool IsVisibleLoading
         {
-            get => rutaArchivo;
-            set { rutaArchivo = value; OnPropertyChanged(nameof(RutaArchivo)); }
+            get => isVisibleLoading;
+            set { isVisibleLoading = value; OnPropertyChanged(nameof(IsVisibleLoading)); }
+        }
+
+        private string mensajeInfo;
+        public string MensajeInfo
+        {
+            get => mensajeInfo;
+            set { mensajeInfo = value; OnPropertyChanged(nameof(MensajeInfo)); }
         }
 
         public VistaIdexacionArchivosViewModel(VistaListaArchivosViewModel vistaListaArchivosViewModel, NavigationStore navigationStore)
@@ -39,6 +48,9 @@ namespace DebugReplicator.ViewModel
 
             VolverCommand = new RelayCommand(Volver);
             ContinuarCommand = new RelayCommand(ContinuarConFileItemmsSeleccionados, HayArchivosSeleccionados);
+            ReplicarCommand = new RelayCommand(ReplicarConFileItemmsSeleccionados, HayArchivosSeleccionados);
+
+            IsVisibleLoading = false;
         }
 
         private void Volver()
@@ -52,22 +64,75 @@ namespace DebugReplicator.ViewModel
             return true;
         }
 
-        private void ContinuarConFileItemmsSeleccionados()
+        private async void ContinuarConFileItemmsSeleccionados()
         {
-            
-            //FileItemsSeleccionados.Clear();
-
-            foreach (var archivo in FileItemsIndexados)
+            try
             {
-                var file = archivo.IndexedFile;
+                List<IndexedFileModel> indexedFiles = new List<IndexedFileModel>();
+                IsVisibleLoading = true;
 
-                /*
-                if (archivo.File.Seleccionado)
-                    FileItemsSeleccionados.Add(archivo);
-                */
+                foreach (var item in FileItemsIndexados)
+                {
+                    indexedFiles.Add(item.IndexedFile);
+                }
+
+                await Task.Run(() =>
+                {
+                    string rutaCarpetaBase = _VistaListaArchivosViewModel.DatosInicialesDTO.RutaCarpetaOrigen;
+                    string rutaCarpetaDestino = _VistaListaArchivosViewModel.DatosInicialesDTO.RutaCarpetaDestino;
+                    string nombreCarpetaReplicada = _VistaListaArchivosViewModel.DatosInicialesDTO.NombreCarpetaReplicada;
+                    int numeroReplicas = _VistaListaArchivosViewModel.DatosInicialesDTO.NumeroReplicas;                    
+                });
             }
-            
+            catch (Exception ex)
+            {
+                LOGRobotica.Controllers.LogApplication.LogWrite("VistaIdexacionArchivosViewModel -> ContinuarConFileItemmsSeleccionados: Exception " + ex.Message);
+            }
+            finally
+            {
+                IsVisibleLoading = false;
+            }
         }
+
+        private async void ReplicarConFileItemmsSeleccionados()
+        {
+            try
+            {
+                List<IndexedFileModel> indexedFiles = new List<IndexedFileModel>();
+                IsVisibleLoading = true;
+
+                foreach (var item in FileItemsIndexados)
+                {
+                    indexedFiles.Add(item.IndexedFile);
+                }
+
+                await Task.Run(() =>
+                {
+                    string rutaCarpetaBase = _VistaListaArchivosViewModel.DatosInicialesDTO.RutaCarpetaOrigen;
+                    string rutaCarpetaDestino = _VistaListaArchivosViewModel.DatosInicialesDTO.RutaCarpetaDestino;
+                    string rutaCarpetaBaseReplicada = _VistaListaArchivosViewModel.DatosInicialesDTO.RutaCarpetaReplicada;
+                    string nombreCarpetaReplicada = _VistaListaArchivosViewModel.DatosInicialesDTO.NombreCarpetaReplicada;
+                    int numeroReplicas = _VistaListaArchivosViewModel.DatosInicialesDTO.NumeroReplicas;
+                    
+
+                    ResultadoProceso resultadoProceso = Replicador.ReplicarDebug(rutaCarpetaBase, rutaCarpetaDestino, nombreCarpetaReplicada, numeroReplicas, indexedFiles);
+
+                    if (resultadoProceso != null && !resultadoProceso.Completado)
+                    {
+                        MensajeInfo = resultadoProceso.Errores[0] + resultadoProceso.ResultadoContenido;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                LOGRobotica.Controllers.LogApplication.LogWrite("VistaIdexacionArchivosViewModel -> ReplicarConFileItemmsSeleccionados: Exception " + ex.Message);
+            }
+            finally
+            {
+                IsVisibleLoading = false;
+            }
+        }
+
 
         private ObservableCollection<IndexedFileControl> CrearSelectedFileControls(ObservableCollection<FilesControl> fileItemsSeleccionados)
         {
@@ -83,23 +148,11 @@ namespace DebugReplicator.ViewModel
                 indexedFileModel.NombreIndexado = fileItem.File.Name;
                 
                 IndexedFileControl fileControl = new IndexedFileControl(indexedFileModel);
-                SetupIndexedFileControlCallbacks(fileControl);
 
                 fileItemsIndexados.Add(fileControl);
-
             }
 
             return fileItemsIndexados;
-        }
-
-        public void BindToTextblock(IndexedFileModel file)
-        {            
-            RutaArchivo = file.Path;
-        }
-
-        public void SetupIndexedFileControlCallbacks(IndexedFileControl ifc)
-        {
-            ifc.BindToTextblockCallback = BindToTextblock;
-        }
+        }        
     }
 }

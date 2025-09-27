@@ -112,7 +112,6 @@
     </Compile>
     <Compile Include="Controller\GestorCarpetasArchivos.cs" />
     <Compile Include="Controller\GlobalVars.cs" />
-    <Compile Include="Controller\IGestorCarpetasArchivos.cs" />
     <Compile Include="Controller\NavigationService.cs" />
     <Compile Include="Controller\NavigationStore.cs" />
     <Compile Include="Controller\RelayCommand.cs" />

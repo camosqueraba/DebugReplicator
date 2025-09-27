@@ -23,21 +23,25 @@ namespace DebugReplicator
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            /*
+            
             var formularioVM = new VistaPrincipalViewModel(_navigationStore, _folderDialogService);
             _navigationStore.CurrentViewModel = formularioVM;
-            */
             
-            DatosInicialesDTO dto = new DatosInicialesDTO() { RutaCarpetaDestino="",
-            RutaCarpetaOrigen="",
-            RutaCarpetaReplicada= @"C:\Users\camos\Downloads\Pruebas_DebugReplicator\CarpetaDestino\Debug",
+            /*
+            DatosInicialesDTO dto = new DatosInicialesDTO()
+            {
+                RutaCarpetaDestino= "C:\\Users\\carlos.mosquera\\Downloads\\Pruebas_Debug_Replicador\\Carpeta_Destino",
+                RutaCarpetaOrigen="",
+                RutaCarpetaReplicada= @"C:\Users\carlos.mosquera\Downloads\Pruebas_Debug_Replicador\Carpeta_Destino\HUBIntegration_BOT1",
+                NumeroReplicas = 3,
+                NombreCarpetaReplicada = "BOT"
             };
 
             var VistaPrincipalViewModel = new VistaPrincipalViewModel(_navigationStore, _folderDialogService);
 
             var vistaListaArchivosViewModel = new VistaListaArchivosViewModel(VistaPrincipalViewModel, _navigationStore, dto);
             _navigationStore.CurrentViewModel = vistaListaArchivosViewModel;
-            
+            */
 
             var mainWindow = new MainWindow
             {

@@ -132,27 +132,18 @@ namespace DebugReplicator.ViewModel
                 return;
             }
 
-            //string 
-            Replicador replicador = new Replicador();
-            //string[] archivos_indexar = new string[2];
-            //replicador.ReplicarCarpetaDebug(RutaCarpetaOrigen, "BOT_", 1, 10, RutaCarpetaDestino, archivos_indexar);
-            ResultadoProceso resultCopiar = replicador.CopiarCarpetaBaseADestino(CarpetaOrigen, CarpetaDestino);
-
+            ResultadoProceso resultCopiar = Replicador.CopiarCarpetaBaseADestino(CarpetaOrigen, CarpetaDestino, NombreCarpetaReplicada);
 
             if (resultCopiar != null && resultCopiar.Completado)
             {
-                string rutaCarpetaReplicada = resultCopiar.ResultadoContenido;
-
-
                 DatosInicialesDTO datosInicialesDTO = new DatosInicialesDTO()
                 {
                     RutaCarpetaDestino = this.CarpetaDestino,
                     RutaCarpetaOrigen = this.CarpetaOrigen,
-                    RutaCarpetaReplicada = rutaCarpetaReplicada,
+                    RutaCarpetaReplicada = resultCopiar.ResultadoContenido,
                     NombreCarpetaReplicada = this.NombreCarpetaReplicada,
                     NumeroReplicas = this.NumeroReplicasInt
                 };
-
 
                 VistaListaArchivosViewModel listaArchivoVM = new VistaListaArchivosViewModel(this, _navigationStore, datosInicialesDTO);
                 _navigationStore.CurrentViewModel = listaArchivoVM;
@@ -190,7 +181,7 @@ namespace DebugReplicator.ViewModel
             
             Replicador replicador = new Replicador();
 
-            replicador.ReplicarDebug(CarpetaOrigen, CarpetaDestino, NombreCarpetaReplicada, NumeroReplicasInt);
+            Replicador.ReplicarDebug(CarpetaOrigen, CarpetaDestino, NombreCarpetaReplicada, NumeroReplicasInt);
             //MessageBox.Show("Replicación iniciada.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
         }   
 
