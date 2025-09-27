@@ -8,16 +8,9 @@
              xmlns:controls="clr-namespace:DebugReplicator.View.UIControls"
              xmlns:viewmodel="clr-namespace:DebugReplicator.ViewModel"
              xmlns:Converters="clr-namespace:DebugReplicator.Controller.Converters"
-             d:DataContext="{d:DesignInstance Type=viewmodel:VistaIdexacionArchivosViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-    </UserControl.Resources>
-    <Grid Background="{StaticResource color_fondo_body}">
-        <controls:Loading 
-                Visibility="{Binding IsVisibleLoading, Converter={StaticResource BoolToVisibilityConverter}}"
-                Panel.ZIndex="10"/>
+             d:DesignHeight="450" d:DesignWidth="800">    
+    <Grid Background="{StaticResource color_fondo_body}">        
         
         <StackPanel Width="800">
             <Label Content="Configurar indexacion de archivos/carpetas" HorizontalAlignment="Center" Margin="0,20,0,20" FontSize="20" FontWeight="Bold"/>

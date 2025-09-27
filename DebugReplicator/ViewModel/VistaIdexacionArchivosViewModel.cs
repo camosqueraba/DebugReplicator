@@ -26,13 +26,7 @@ namespace DebugReplicator.ViewModel
 
         public ObservableCollection<IndexedFileControl> FileItemsIndexados { get; set; }
 
-        private bool isVisibleLoading;
-        public bool IsVisibleLoading
-        {
-            get => isVisibleLoading;
-            set { isVisibleLoading = value; OnPropertyChanged(nameof(IsVisibleLoading)); }
-        }
-
+        
         private string mensajeInfo;
         public string MensajeInfo
         {
@@ -50,7 +44,6 @@ namespace DebugReplicator.ViewModel
             ContinuarCommand = new RelayCommand(ContinuarConFileItemmsSeleccionados, ArchivosSeleccionadosTienenCaraterBandera);
             ReplicarCommand = new RelayCommand(ReplicarConFileItemmsSeleccionados, ArchivosSeleccionadosTienenCaraterBandera);
 
-            IsVisibleLoading = false;
         }
 
         private void Volver()
@@ -69,7 +62,8 @@ namespace DebugReplicator.ViewModel
             try
             {
                 List<IndexedFileModel> indexedFiles = new List<IndexedFileModel>();
-                IsVisibleLoading = true;
+
+                MainWindowViewModel.GetInstance(_NavigationStore).Show();
 
                 foreach (var item in FileItemsIndexados)
                 {
@@ -90,7 +84,7 @@ namespace DebugReplicator.ViewModel
             }
             finally
             {
-                IsVisibleLoading = false;
+                MainWindowViewModel.GetInstance(_NavigationStore).Hide();                
             }
         }
 
@@ -99,8 +93,9 @@ namespace DebugReplicator.ViewModel
             try
             {
                 List<IndexedFileModel> indexedFiles = new List<IndexedFileModel>();
-                IsVisibleLoading = true;
 
+                MainWindowViewModel.GetInstance(_NavigationStore).Show();
+                
                 foreach (var item in FileItemsIndexados)
                 {
                     indexedFiles.Add(item.IndexedFile);
@@ -128,7 +123,7 @@ namespace DebugReplicator.ViewModel
             }
             finally
             {
-                IsVisibleLoading = false;
+                MainWindowViewModel.GetInstance(_NavigationStore).Hide();
             }
         }
 

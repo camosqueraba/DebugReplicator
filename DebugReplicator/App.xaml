@@ -43,8 +43,8 @@
                         <Setter Property="BorderThickness" Value="2"/>
                     </Trigger>
                 </Style.Triggers>
-            </Style>            
-
+            </Style>
+            
             <DataTemplate DataType="{x:Type viewModels:VistaPrincipalViewModel}">
                 <views:VistaPrincipal/>
             </DataTemplate>
@@ -55,8 +55,8 @@
 
             <DataTemplate DataType="{x:Type viewModels:VistaIdexacionArchivosViewModel}">
                 <views:VistaIdexacionArchivos/>
-            </DataTemplate>
-            
+            </DataTemplate>            
+
             <controls:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>

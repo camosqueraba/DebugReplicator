@@ -45,7 +45,7 @@ namespace DebugReplicator
 
             var mainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(_navigationStore)
+                DataContext = MainWindowViewModel.GetInstance(_navigationStore)
             };
 
             mainWindow.Show();

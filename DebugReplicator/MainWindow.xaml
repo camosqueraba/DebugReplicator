@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:DebugReplicator"
+        xmlns:Converters="clr-namespace:DebugReplicator.Controller.Converters"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"        
         FontFamily="sans-serif"
@@ -12,7 +13,9 @@
         Height="500" Width="900"
         MinHeight="500" MinWidth="590"
         Closing="CerrarVentana">
-    
+    <Window.Resources>
+        <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
     <Border Background="{StaticResource color_fondo_body}">
         <Grid>
             <Grid.RowDefinitions>
@@ -31,8 +34,7 @@
                     </Grid>
                 </ScrollViewer>
 
-                <!--
-                <Grid x:Name="ContenedorLoading" Background="{StaticResource gris_transparente}">
+                <Grid x:Name="ContenedorLoading" Background="{StaticResource gris_transparente}" Visibility="{Binding IsVisible , Converter={StaticResource BoolToVisibilityConverter}}">
                     <Border  Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
 
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
@@ -53,7 +55,7 @@
                     </Border>
                     
                 </Grid>
-                -->
+                
                 
             </Grid>
             <!--#endregion-->
