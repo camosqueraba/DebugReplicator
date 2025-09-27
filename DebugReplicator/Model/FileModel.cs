@@ -32,24 +32,15 @@ namespace DebugReplicator.Model
             set
             {
                 seleccionado = value;
-                // Call OnPropertyChanged whenever the property is updated
                 OnPropertyChanged();
                 CommandManager.InvalidateRequerySuggested();
             }
         }
-
-        // Create the OnPropertyChanged method to raise the event
-        // The calling member's name will be used as the parameter.
+        
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        public FileModel Contenido {  get; set; } 
-
-        public bool IsFile => Type == FileType.File;
-        public bool IsFolder => Type == FileType.Folder;
-        public bool IsDrive => Type == FileType.Drive;
-        public bool IsShortcut => Type == FileType.Shortcut;
     }
 }

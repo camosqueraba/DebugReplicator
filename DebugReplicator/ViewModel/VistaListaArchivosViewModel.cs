@@ -113,21 +113,7 @@ namespace DebugReplicator.ViewModel
 
             else if (path.IsDirectory())
             {
-                ClearFiles();
-                /*
-                foreach(FileModel dir in ExploradorDirectorios.GetDirectories(path))
-                {
-                    FilesControl fc = CreateFileControl(dir);
-                    AddFile(fc);
-                }
-
-                
-                foreach (FileModel file in ExploradorDirectorios.GetFiles(path))
-                {
-                    FilesControl fc = CreateFileControl(file);
-                    AddFile(fc);
-                }
-                */
+                ClearFiles();                
 
                 foreach (FileModel file in ExploradorDirectorios.ObtenerContenidoCarpeta(path))
                 {                    

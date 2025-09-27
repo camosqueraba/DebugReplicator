@@ -90,6 +90,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\UIControls\Loading.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\VistaIdexacionArchivos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -110,6 +114,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controller\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Controller\GestorCarpetasArchivos.cs" />
     <Compile Include="Controller\GlobalVars.cs" />
     <Compile Include="Controller\NavigationService.cs" />
@@ -120,8 +125,8 @@
     <Compile Include="Controller\Services\IFolderDialogService.cs" />
     <Compile Include="Controller\Converters\FileSizeFormatConverter.cs" />
     <Compile Include="Controller\Converters\IconToImageConverter.cs" />
+    <Compile Include="Controller\Utilities\Utils.cs" />
     <Compile Include="Model\DTOs\DatosInicialesDTO.cs" />
-    <Compile Include="Model\DTOs\ErrorProceso.cs" />
     <Compile Include="Model\DTOs\ResultadoProceso.cs" />
     <Compile Include="Controller\Explorer\ExplorerHelpers.cs" />
     <Compile Include="Controller\Explorer\ExploradorDirectorios.cs" />
@@ -137,11 +142,12 @@
     </Compile>
     <Compile Include="Model\FileType.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
-    <Compile Include="Controller\Utilities\Command.cs" />
-    <Compile Include="Controller\Utilities\CommandParam.cs" />
     <Compile Include="ViewModel\VistaListaArchivosViewModel.cs" />
     <Compile Include="View\UIControls\IndexedFileControl.xaml.cs">
       <DependentUpon>IndexedFileControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UIControls\Loading.xaml.cs">
+      <DependentUpon>Loading.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\VistaIdexacionArchivos.xaml.cs">
       <DependentUpon>VistaIdexacionArchivos.xaml</DependentUpon>

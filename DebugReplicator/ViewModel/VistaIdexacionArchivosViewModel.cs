@@ -47,8 +47,8 @@ namespace DebugReplicator.ViewModel
             FileItemsIndexados = CrearSelectedFileControls(vistaListaArchivosViewModel.FileItemsSeleccionados);
 
             VolverCommand = new RelayCommand(Volver);
-            ContinuarCommand = new RelayCommand(ContinuarConFileItemmsSeleccionados, HayArchivosSeleccionados);
-            ReplicarCommand = new RelayCommand(ReplicarConFileItemmsSeleccionados, HayArchivosSeleccionados);
+            ContinuarCommand = new RelayCommand(ContinuarConFileItemmsSeleccionados, ArchivosSeleccionadosTienenCaraterBandera);
+            ReplicarCommand = new RelayCommand(ReplicarConFileItemmsSeleccionados, ArchivosSeleccionadosTienenCaraterBandera);
 
             IsVisibleLoading = false;
         }
@@ -58,7 +58,7 @@ namespace DebugReplicator.ViewModel
             _NavigationStore.CurrentViewModel = _VistaListaArchivosViewModel;
         }
 
-        private bool HayArchivosSeleccionados()
+        private bool ArchivosSeleccionadosTienenCaraterBandera()
         {
             //return FileItems.Any(f => f.File?.Seleccionado == true);
             return true;
@@ -108,12 +108,11 @@ namespace DebugReplicator.ViewModel
 
                 await Task.Run(() =>
                 {
-                    string rutaCarpetaBase = _VistaListaArchivosViewModel.DatosInicialesDTO.RutaCarpetaOrigen;
-                    string rutaCarpetaDestino = _VistaListaArchivosViewModel.DatosInicialesDTO.RutaCarpetaDestino;
+                    string rutaCarpetaBase          = _VistaListaArchivosViewModel.DatosInicialesDTO.RutaCarpetaOrigen;
+                    string rutaCarpetaDestino       = _VistaListaArchivosViewModel.DatosInicialesDTO.RutaCarpetaDestino;
                     string rutaCarpetaBaseReplicada = _VistaListaArchivosViewModel.DatosInicialesDTO.RutaCarpetaReplicada;
-                    string nombreCarpetaReplicada = _VistaListaArchivosViewModel.DatosInicialesDTO.NombreCarpetaReplicada;
-                    int numeroReplicas = _VistaListaArchivosViewModel.DatosInicialesDTO.NumeroReplicas;
-                    
+                    string nombreCarpetaReplicada   = _VistaListaArchivosViewModel.DatosInicialesDTO.NombreCarpetaReplicada;
+                    int numeroReplicas              = _VistaListaArchivosViewModel.DatosInicialesDTO.NumeroReplicas;                    
 
                     ResultadoProceso resultadoProceso = Replicador.ReplicarDebug(rutaCarpetaBase, rutaCarpetaDestino, nombreCarpetaReplicada, numeroReplicas, indexedFiles);
 

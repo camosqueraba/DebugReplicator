@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace DebugReplicator.Controller
@@ -96,7 +92,7 @@ namespace DebugReplicator.Controller
                     return false;
                 }
             }
-            return true; // Directory already exists
+            return true;
         }
 
         public static string ObtenerNombreArchivo(string path)

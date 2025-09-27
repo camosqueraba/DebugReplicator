@@ -4,9 +4,6 @@ using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace DebugReplicator.Controller
@@ -66,14 +63,17 @@ namespace DebugReplicator.Controller
                                                   nombreBaseCarpetaReplica, numeroReplicas, archivosIndexados);
             if (!resultadoProceso.Completado)
                 return resultadoProceso;
-           
-
-            string rutaCarpetaBase = resultadoProceso.ResultadoContenido;
+                                   
             string rutaCarpetaBaseDuplicada = Path.Combine(urlCarpetaDestino, nombreBaseCarpetaReplica);
 
             for (int indiceReplica = 1; indiceReplica <= numeroReplicas; indiceReplica++)
             {
-                string rutaCarpetaIndexada = rutaCarpetaBaseDuplicada.Replace(GlobalVars.CARACTER_BANDERA, indiceReplica.ToString());
+                string rutaCarpetaIndexada = "";
+
+                if (rutaCarpetaBaseDuplicada.Contains(GlobalVars.CARACTER_BANDERA))
+                    rutaCarpetaIndexada = rutaCarpetaBaseDuplicada.Replace(GlobalVars.CARACTER_BANDERA, indiceReplica.ToString());
+                else
+                    rutaCarpetaIndexada = rutaCarpetaBaseDuplicada + "_" + indiceReplica.ToString();                
                 
                 bool resultadoCopiar = GestorCarpetasArchivos.CopiarCarpeta(rutaCarpetaBaseDuplicada, rutaCarpetaIndexada, true);
 
@@ -83,7 +83,6 @@ namespace DebugReplicator.Controller
                     resultadoProceso.Errores.Add($"No se pudo copiar carpeta desde {nombreBaseCarpetaReplica} a {urlCarpetaDestino}");
                     return resultadoProceso;
                 }
-
 
                 if (archivosIndexados != null || archivosIndexados.Count > 0)
                 {
@@ -102,7 +101,6 @@ namespace DebugReplicator.Controller
 
             return resultadoProceso;
         }
-
 
         public static ResultadoProceso CopiarCarpetaBaseADestino(string rutaCarpetaBase, string rutaCarpetaDestino, string nombreNuevaCarpeta="")
         {
@@ -201,17 +199,13 @@ namespace DebugReplicator.Controller
                         {
                             if(file.Name != nuevoNombreArchivo) 
                                 FileSystem.RenameFile(file.FullName, nuevoNombreArchivo);
-                        }
-                        //string targetFilePath = Path.Combine(carpetaBaseIndexada, file.Name);
-                        //file.CopyTo(targetFilePath, true);
+                        }                        
                     }
 
                     if (revisarSubcarpetas)
                     {
                         foreach (DirectoryInfo subDir in carpetaBaseIndexadaInfo)
                         {
-                            //string newDestinationDir = Path.Combine(directorioDestino, subDir.Name);
-                            //CopiarDirectorio(subDir.FullName, newDestinationDir, true);
                             IndexarCarpeta(subDir.FullName, archivosIndexados, indice, true);
                         }
                     }
@@ -230,44 +224,5 @@ namespace DebugReplicator.Controller
 
         }
 
-        public static ResultadoProceso CrearCarpetaConArchivosIndexados(string directorioOrigen, string directorioDestino, List<IndexedFileModel> archivosIndexados)
-        {
-            ResultadoProceso resultadoProceso = new ResultadoProceso();
-            try
-            {
-                DirectoryInfo carpetaOrigenInfo = new DirectoryInfo(directorioOrigen);
-
-                if (!carpetaOrigenInfo.Exists)
-                {
-                    LOGRobotica.Controllers.LogApplication.LogWrite("GestorCarpetasArchivos -> CopiarCarpeta: " + $"directorio origen no existe {carpetaOrigenInfo.FullName}");
-                    return resultadoProceso;
-                }
-
-                DirectoryInfo[] dirs = carpetaOrigenInfo.GetDirectories();
-
-                Directory.CreateDirectory(directorioDestino);
-
-                foreach (FileInfo file in carpetaOrigenInfo.GetFiles())
-                {
-                    string targetFilePath = Path.Combine(directorioDestino, file.Name);
-                    file.CopyTo(targetFilePath, true);
-                }
-                
-                foreach (DirectoryInfo subDir in dirs)
-                {
-                    string newDestinationDir = Path.Combine(directorioDestino, subDir.Name);
-                    //CopiarDirectorio(subDir.FullName, newDestinationDir, true);
-                }
-               
-
-                return resultadoProceso;
-            }
-            catch (Exception ex)
-            {
-                LOGRobotica.Controllers.LogApplication.LogWrite("GestorCarpetasArchivos -> CopiarCarpeta: Exception " + ex.Message);
-                return resultadoProceso;
-            }
-
-        }
     }
 }

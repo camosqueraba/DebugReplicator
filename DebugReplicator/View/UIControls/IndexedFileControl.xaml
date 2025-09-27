@@ -23,7 +23,7 @@
             </Border>
             <Border>
                 <!--<TextBlock Text="{Binding DateModified}" HorizontalAlignment="Center"/>-->
-                <TextBox Text="{Binding NombreIndexado}" HorizontalAlignment="Center" Width="270"/>
+                <TextBox Text="{Binding NombreIndexado, Mode=TwoWay }" HorizontalAlignment="Center" Width="270"/>
             </Border>
             
         </StackPanel>

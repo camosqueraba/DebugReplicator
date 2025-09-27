@@ -1,16 +1,13 @@
 ﻿using DebugReplicator.Controller;
 using DebugReplicator.Controller.Services;
 using DebugReplicator.Model.DTOs;
-using DebugReplicator.View;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 
@@ -182,8 +179,8 @@ namespace DebugReplicator.ViewModel
             Replicador replicador = new Replicador();
 
             Replicador.ReplicarDebug(CarpetaOrigen, CarpetaDestino, NombreCarpetaReplicada, NumeroReplicasInt);
-            //MessageBox.Show("Replicación iniciada.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
-        }   
+            //Mostrar mensaje de éxito aqui
+        }
 
         private void SeleccionarCarpetaOrigen()
         {

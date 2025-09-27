@@ -31,6 +31,7 @@
                     </Grid>
                 </ScrollViewer>
 
+                <!--
                 <Grid x:Name="ContenedorLoading" Background="{StaticResource gris_transparente}">
                     <Border  Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
 
@@ -52,6 +53,8 @@
                     </Border>
                     
                 </Grid>
+                -->
+                
             </Grid>
             <!--#endregion-->
 

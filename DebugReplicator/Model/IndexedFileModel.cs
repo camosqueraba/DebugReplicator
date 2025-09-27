@@ -19,7 +19,6 @@ namespace DebugReplicator.Model
             set
             {
                 nombreIndexado = value;
-                // Call OnPropertyChanged whenever the property is updated
                 OnPropertyChanged();
                 CommandManager.InvalidateRequerySuggested();
             }
