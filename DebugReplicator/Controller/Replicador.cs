@@ -232,20 +232,23 @@ namespace DebugReplicator.Controller
             {
                 if (File.Exists(rutaArchivoConfig))
                 {
+                    Dictionary<string, string> paresClaveValor = LectorArchivosConfiguracion.LeerArchivoConfiguracionExterno(rutaArchivoConfig);
+                    
                     var configuracionesConfig = ConfigurationManager.AppSettings;
                     string[] claves = new string[configuracionesConfig.Count];
-
-                    foreach (var clave in configuracionesConfig.AllKeys)
+                    
+                    foreach (var claveValor in paresClaveValor)
                     {
-                        string valor = ConfigurationManager.AppSettings[clave];
+                        string clave = claveValor.Key;
+                        string valor = claveValor.Value;
+
                         configuraciones.Add(new ClaveValorModel()
                         {
                             Clave = clave,
                             Valor = valor
-                        });
-
-                        
+                        });                        
                     }
+                    
                 }
             }
             catch (Exception ex)

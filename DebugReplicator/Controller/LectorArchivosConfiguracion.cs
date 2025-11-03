@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace DebugReplicator.Controller
@@ -84,10 +86,29 @@ namespace DebugReplicator.Controller
         private static Dictionary<string, string> LoadXml(string filePath)
         {
             var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            var xml = XDocument.Load(filePath);
+            
+            XmlDocument docXml = new XmlDocument();
+            docXml.Load(filePath);
 
-            if (xml.Root != null)
-                ParseXmlElement(xml.Root, xml.Root.Name.LocalName, result);
+            XmlNodeList items = docXml.SelectNodes("/configuration/appSettings");
+            
+            foreach (XmlNode item in items)
+            {
+                if(item.ChildNodes.Count > 0)
+                {
+                    foreach (XmlNode configuracion in item.ChildNodes)
+                    {
+                        string algo = configuracion.OuterXml;
+                        XElement algoParseado = XElement.Parse(algo);
+
+                        // Extraemos los atributos "key" y "value"
+                        string key = algoParseado.Attribute("key")?.Value ?? string.Empty;
+                        string value = algoParseado.Attribute("value")?.Value ?? string.Empty;
+                        result.Add(key, value);
+                    }
+                }
+
+            }
 
             return result;
         }
