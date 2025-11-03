@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace DebugReplicator.Controller
+namespace DebugReplicator.Controller.Utilities
 {
     public class RelayCommand : ICommand
     {

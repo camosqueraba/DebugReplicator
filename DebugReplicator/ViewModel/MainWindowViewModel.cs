@@ -38,12 +38,12 @@ namespace DebugReplicator.ViewModel
             return Instance;
         }        
 
-        public void Show()
+        public void ShowLoading()
         {            
             IsVisible = true;
         }
 
-        public void Hide()
+        public void HideLoading()
         {
             IsVisible = false;
         }

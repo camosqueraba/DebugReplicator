@@ -117,5 +117,18 @@ namespace DebugReplicator.Controller
                 
             return nombreCarpeta;
         }
+
+        public static bool CompruebaTipoArchivoPorExtension(string path, string extension)
+        {
+            bool esArchivo = false;
+            if (!string.IsNullOrWhiteSpace(path))
+            {
+                string extensionArchivo = Path.GetExtension(path);
+                
+                if (!string.IsNullOrWhiteSpace(extensionArchivo) && extensionArchivo.Equals(extension, StringComparison.OrdinalIgnoreCase))
+                    esArchivo = true;
+            }
+            return esArchivo;
+        }
     }
 }

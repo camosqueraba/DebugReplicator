@@ -1,7 +1,7 @@
 ﻿using DebugReplicator.ViewModel;
 using System;
 
-namespace DebugReplicator.Controller
+namespace DebugReplicator.Controller.Services
 {
     public class NavigationService
     {

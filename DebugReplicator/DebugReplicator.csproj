@@ -82,6 +82,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\UIControls\ClaveValorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\UIControls\FilesControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -93,6 +97,10 @@
     <Page Include="View\UIControls\Loading.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\VistaEditarArchivosConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\VistaIdexacionArchivos.xaml">
       <SubType>Designer</SubType>
@@ -117,15 +125,17 @@
     <Compile Include="Controller\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Controller\GestorCarpetasArchivos.cs" />
     <Compile Include="Controller\GlobalVars.cs" />
-    <Compile Include="Controller\NavigationService.cs" />
+    <Compile Include="Controller\LectorArchivosConfiguracion.cs" />
+    <Compile Include="Controller\Services\NavigationService.cs" />
     <Compile Include="Controller\NavigationStore.cs" />
-    <Compile Include="Controller\RelayCommand.cs" />
+    <Compile Include="Controller\Utilities\RelayCommand.cs" />
     <Compile Include="Controller\Replicador.cs" />
     <Compile Include="Controller\Services\FolderDialogService.cs" />
     <Compile Include="Controller\Services\IFolderDialogService.cs" />
     <Compile Include="Controller\Converters\FileSizeFormatConverter.cs" />
     <Compile Include="Controller\Converters\IconToImageConverter.cs" />
     <Compile Include="Controller\Utilities\Utils.cs" />
+    <Compile Include="Model\ClaveValorModel.cs" />
     <Compile Include="Model\DTOs\DatosInicialesDTO.cs" />
     <Compile Include="Model\DTOs\ResultadoProceso.cs" />
     <Compile Include="Controller\Explorer\ExplorerHelpers.cs" />
@@ -133,10 +143,14 @@
     <Compile Include="Controller\Helpers\IconHelper.cs" />
     <Compile Include="Model\FileModel.cs" />
     <Compile Include="Model\IndexedFileModel.cs" />
+    <Compile Include="ViewModel\VistaEditarArchivosConfigViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\MenuViewModel.cs" />
     <Compile Include="ViewModel\VistaIdexacionArchivosViewModel.cs" />
     <Compile Include="ViewModel\VistaPrincipalViewModel.cs" />
+    <Compile Include="View\UIControls\ClaveValorControl.xaml.cs">
+      <DependentUpon>ClaveValorControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UIControls\FilesControl.xaml.cs">
       <DependentUpon>FilesControl.xaml</DependentUpon>
     </Compile>
@@ -148,6 +162,9 @@
     </Compile>
     <Compile Include="View\UIControls\Loading.xaml.cs">
       <DependentUpon>Loading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\VistaEditarArchivosConfig.xaml.cs">
+      <DependentUpon>VistaEditarArchivosConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\VistaIdexacionArchivos.xaml.cs">
       <DependentUpon>VistaIdexacionArchivos.xaml</DependentUpon>

@@ -55,7 +55,11 @@
 
             <DataTemplate DataType="{x:Type viewModels:VistaIdexacionArchivosViewModel}">
                 <views:VistaIdexacionArchivos/>
-            </DataTemplate>            
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:VistaEditarArchivosConfigViewModel}">
+                <views:VistaEditarArchivosCofig/>
+            </DataTemplate>
 
             <controls:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         </ResourceDictionary>

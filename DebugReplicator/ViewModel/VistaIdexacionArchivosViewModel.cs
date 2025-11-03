@@ -1,4 +1,5 @@
 ﻿using DebugReplicator.Controller;
+using DebugReplicator.Controller.Utilities;
 using DebugReplicator.Model;
 using DebugReplicator.Model.DTOs;
 using DebugReplicator.View.UIControls;
@@ -63,20 +64,12 @@ namespace DebugReplicator.ViewModel
             {
                 List<IndexedFileModel> indexedFiles = new List<IndexedFileModel>();
 
-                MainWindowViewModel.GetInstance(_NavigationStore).Show();
+                MainWindowViewModel.GetInstance(_NavigationStore).ShowLoading();
 
-                foreach (var item in FileItemsIndexados)
-                {
-                    indexedFiles.Add(item.IndexedFile);
-                }
+                
 
-                await Task.Run(() =>
-                {
-                    string rutaCarpetaBase = _VistaListaArchivosViewModel.DatosInicialesDTO.RutaCarpetaOrigen;
-                    string rutaCarpetaDestino = _VistaListaArchivosViewModel.DatosInicialesDTO.RutaCarpetaDestino;
-                    string nombreCarpetaReplicada = _VistaListaArchivosViewModel.DatosInicialesDTO.NombreCarpetaReplicada;
-                    int numeroReplicas = _VistaListaArchivosViewModel.DatosInicialesDTO.NumeroReplicas;                    
-                });
+                VistaEditarArchivosConfigViewModel vistaEditarArchivosConfigViewModel = new VistaEditarArchivosConfigViewModel(this, _NavigationStore);
+                _NavigationStore.CurrentViewModel = vistaEditarArchivosConfigViewModel;
             }
             catch (Exception ex)
             {
@@ -84,7 +77,7 @@ namespace DebugReplicator.ViewModel
             }
             finally
             {
-                MainWindowViewModel.GetInstance(_NavigationStore).Hide();                
+                MainWindowViewModel.GetInstance(_NavigationStore).HideLoading();                
             }
         }
 
@@ -94,7 +87,7 @@ namespace DebugReplicator.ViewModel
             {
                 List<IndexedFileModel> indexedFiles = new List<IndexedFileModel>();
 
-                MainWindowViewModel.GetInstance(_NavigationStore).Show();
+                MainWindowViewModel.GetInstance(_NavigationStore).ShowLoading();
                 
                 foreach (var item in FileItemsIndexados)
                 {
@@ -123,7 +116,7 @@ namespace DebugReplicator.ViewModel
             }
             finally
             {
-                MainWindowViewModel.GetInstance(_NavigationStore).Hide();
+                MainWindowViewModel.GetInstance(_NavigationStore).HideLoading();
             }
         }
 

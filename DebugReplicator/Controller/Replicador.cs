@@ -3,6 +3,7 @@ using DebugReplicator.Model.DTOs;
 using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 
 
@@ -222,6 +223,36 @@ namespace DebugReplicator.Controller
                 return resultadoProceso;
             }
 
+        }
+
+        public static List<ClaveValorModel> LeerArchivoConfiguraciones(string rutaArchivoConfig)
+        {
+            List<ClaveValorModel> configuraciones = new List<ClaveValorModel>();
+            try
+            {
+                if (File.Exists(rutaArchivoConfig))
+                {
+                    var configuracionesConfig = ConfigurationManager.AppSettings;
+                    string[] claves = new string[configuracionesConfig.Count];
+
+                    foreach (var clave in configuracionesConfig.AllKeys)
+                    {
+                        string valor = ConfigurationManager.AppSettings[clave];
+                        configuraciones.Add(new ClaveValorModel()
+                        {
+                            Clave = clave,
+                            Valor = valor
+                        });
+
+                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LOGRobotica.Controllers.LogApplication.LogWrite("Replicador -> LeerArchivoConfiguraciones: Exception " + ex.Message);
+            }
+            return configuraciones;
         }
 
     }
