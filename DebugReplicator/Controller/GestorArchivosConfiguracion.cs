@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Input;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -157,7 +159,7 @@ namespace DebugReplicator.Controller
             return result;
         }
 
-        public static ResultadoProceso ModificarArchivoConfiguracionExterno(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones)
+        public static ResultadoProceso ModificarArchivoConfiguracionExterno(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones, int indice)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
 
@@ -180,7 +182,7 @@ namespace DebugReplicator.Controller
                         break;
 
                     case ".config":
-                        resultadoProceso = ModificarXml(rutaArchivoConfig, nuevasConfiguraciones);
+                        resultadoProceso = ModificarXml(rutaArchivoConfig, nuevasConfiguraciones, indice);
                         break;
 
                     case ".ini":
@@ -197,8 +199,8 @@ namespace DebugReplicator.Controller
             }
             catch (Exception ex)
             {
-
-                throw;
+                resultadoProceso.Errores.Add(ex.Message);
+                return resultadoProceso;
             }
                
         }
@@ -208,54 +210,57 @@ namespace DebugReplicator.Controller
             throw new NotImplementedException();
         }
 
-        private static ResultadoProceso ModificarXml(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones)
+        private static ResultadoProceso ModificarXml(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones, int indice)
         {            
             
             ResultadoProceso resultadoProceso = new ResultadoProceso();
 
             try
             {
-                XmlDocument docXml = new XmlDocument();
-                docXml.Load(rutaArchivoConfig);
+                XDocument xmlDoc = XDocument.Load(rutaArchivoConfig);
 
-                XmlNodeList items = docXml.SelectNodes("/configuration/appSettings");
-
-                foreach (XmlNode item in items)
+                XElement appSettings = xmlDoc.Root.Element("appSettings");
+                
+                if (appSettings == null)
                 {
-                    if (item.ChildNodes.Count > 0)
+                    resultadoProceso.Completado = false;
+                    resultadoProceso.Errores.Add("El archivo config no contiene una sección <appSettings>.");
+                    return resultadoProceso;
+                }
+                    
+                foreach (XElement item in appSettings.Elements("add"))
+                {
+                    string key = item.Attribute("key").Value;
+                    
+                    if(string.IsNullOrEmpty(key))
+                        continue;
+                    
+                    ClaveValorModel nuevaConfiguracion = nuevasConfiguraciones.FirstOrDefault(c => c.Clave == key);
+
+                    if (nuevaConfiguracion != null)
                     {
-                        foreach (XmlNode configuracion in item.ChildNodes)
-                        {
-                            string tag = configuracion.OuterXml;
-                            XElement tagParseada = XElement.Parse(tag);
+                        string valorOriginal = nuevaConfiguracion.Valor;
+                        string valorIndexado = nuevaConfiguracion.Valor;
 
-                            // Extraemos los atributos "key" y "value"
-                            string key = tagParseada.Attribute("key")?.Value ?? string.Empty;
-
-                            if(key != string.Empty)
-                            {
-                                ClaveValorModel nuevaConfiguracion = nuevasConfiguraciones.FirstOrDefault(c => c.Clave == key);
-                                if(nuevaConfiguracion != null)
-                                {
-                                    tagParseada.SetAttributeValue("value", nuevaConfiguracion.Valor);
-                                    configuracion.InnerXml = tagParseada.ToString();
-                                }
-                            }
-
-                            string value = tagParseada.Attribute("value")?.Value ?? string.Empty;
-                            //result.Add(key, value);
-                        }                        
-                    }
+                        if (nuevaConfiguracion.Valor.Contains(GlobalVars.CARACTER_BANDERA))
+                        
+                            valorIndexado = valorOriginal.Replace(GlobalVars.CARACTER_BANDERA, indice.ToString());
+                        
+                                                
+                        item.SetAttributeValue("value", valorIndexado);
+                    } 
                 }
 
-                docXml.Save(rutaArchivoConfig);
+                xmlDoc.Save(rutaArchivoConfig);
+
+                resultadoProceso.Completado = true;
 
                 return resultadoProceso;
             }
             catch (Exception ex)
             {
-
-                throw;
+                resultadoProceso.Errores.Add(ex.Message);
+                return resultadoProceso;
             }            
         }
     }

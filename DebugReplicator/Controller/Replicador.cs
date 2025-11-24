@@ -206,7 +206,7 @@ namespace DebugReplicator.Controller
                             if (archivoIndexado.EsArchivoConfig)
                             {
                                 string fullPathArchivoIndexado = Path.Combine(archivoCarpetaIndexada.Directory.FullName, nuevoNombreArchivo); 
-                                ModificarArchivoConfiguraciones(fullPathArchivoIndexado, archivoIndexado.PropiedadesArchivoConfig);
+                                ModificarArchivoConfiguraciones(fullPathArchivoIndexado, archivoIndexado.PropiedadesArchivoConfig, indice);
                             }
                         }
                     }
@@ -266,14 +266,14 @@ namespace DebugReplicator.Controller
             return configuraciones;
         }
 
-        public static bool ModificarArchivoConfiguraciones(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones)
+        public static bool ModificarArchivoConfiguraciones(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones, int indice)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
             try
             {
                 if (File.Exists(rutaArchivoConfig))
                 {
-                    resultadoProceso = GestorArchivosConfiguracion.ModificarArchivoConfiguracionExterno(rutaArchivoConfig, nuevasConfiguraciones);
+                    resultadoProceso = GestorArchivosConfiguracion.ModificarArchivoConfiguracionExterno(rutaArchivoConfig, nuevasConfiguraciones, indice);
                     return true;
                 }
                 return false;
