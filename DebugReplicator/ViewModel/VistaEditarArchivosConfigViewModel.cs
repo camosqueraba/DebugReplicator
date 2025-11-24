@@ -28,9 +28,10 @@ namespace DebugReplicator.ViewModel
 
         public ObservableCollection<IndexedFileControl> FileItemsIndexados { get; set; }
 
-        public ObservableCollection<FileModel> ArchivosConfig { get; set; }
+        public ObservableCollection<ArchivoConfigModel> ArchivosConfig { get; set; }
 
         public ObservableCollection<ClaveValorControl> PropiedadesArchivoConfig { get; set; }
+        public DatosInicialesDTO DatosInicialesDTO { get; set; }
 
         private string mensajeInfo;
         public string MensajeInfo
@@ -39,9 +40,9 @@ namespace DebugReplicator.ViewModel
             set { mensajeInfo = value; OnPropertyChanged(nameof(MensajeInfo)); }
         }
 
-        private FileModel archivoConfigSeleccionado; // Replace MyItem with the actual type of your ComboBox items
+        private ArchivoConfigModel archivoConfigSeleccionado;
 
-        public FileModel ArchivoConfigSeleccionado
+        public ArchivoConfigModel ArchivoConfigSeleccionado
         {
             get { return archivoConfigSeleccionado; }
             set
@@ -51,12 +52,12 @@ namespace DebugReplicator.ViewModel
                     archivoConfigSeleccionado = value;
                     OnPropertyChanged(nameof(ArchivoConfigSeleccionado));
                     // Perform actions based on the new selection here
-                    HandleSelectionChange();
+                    ComboBoxArchivosConfigSelectionChange();
                 }
             }
         }
 
-        private void HandleSelectionChange()
+        private void ComboBoxArchivosConfigSelectionChange()
         {
             FileModel archivoConfigSeleccionado = this.ArchivoConfigSeleccionado;
 
@@ -67,18 +68,21 @@ namespace DebugReplicator.ViewModel
                 ClaveValorControl claveValorControl = new ClaveValorControl(item);
                 PropiedadesArchivoConfig.Add(claveValorControl);
             }
+
+            ArchivoConfigSeleccionado.PropiedadesArchivoConfig = PropiedadesArchivoConfig;
              
         }
 
-        public VistaEditarArchivosConfigViewModel(VistaIdexacionArchivosViewModel vistaIndexacionArchivosViewModel, NavigationStore navigationStore)
+        public VistaEditarArchivosConfigViewModel(VistaIdexacionArchivosViewModel vistaIndexacionArchivosViewModel, NavigationStore navigationStore, DatosInicialesDTO datosInicialesDTO)
         {
             _VistaIndexacionArchivosViewModel = vistaIndexacionArchivosViewModel;
             _NavigationStore = navigationStore;
             
+            DatosInicialesDTO = datosInicialesDTO;
 
             VolverCommand = new RelayCommand(Volver);
-            ContinuarCommand = new RelayCommand(ContinuarConFileItemmsSeleccionados, ArchivosSeleccionadosTienenCaraterBandera);
-            ReplicarCommand = new RelayCommand(ReplicarConFileItemmsSeleccionados, ArchivosSeleccionadosTienenCaraterBandera);
+            //ContinuarCommand = new RelayCommand(ContinuarConFileItemmsSeleccionados, ArchivosSeleccionadosTienenCaraterBandera);
+            ReplicarCommand = new RelayCommand(ReplicarConArchivosConfigEditados, ArchivosSeleccionadosTienenCaracterBandera);
 
             FileItemsIndexados = vistaIndexacionArchivosViewModel.FileItemsIndexados;
             ArchivosConfig = ObtenerArchivosConfig(vistaIndexacionArchivosViewModel.FileItemsIndexados);
@@ -90,46 +94,14 @@ namespace DebugReplicator.ViewModel
             _NavigationStore.CurrentViewModel = _VistaIndexacionArchivosViewModel;
         }
 
-        private bool ArchivosSeleccionadosTienenCaraterBandera()
+        private bool ArchivosSeleccionadosTienenCaracterBandera()
         {
             //return FileItems.Any(f => f.File?.Seleccionado == true);
             return true;
         }
+       
 
-        private async void ContinuarConFileItemmsSeleccionados()
-        {
-            try
-            {
-                /*
-                List<IndexedFileModel> indexedFiles = new List<IndexedFileModel>();
-
-                MainWindowViewModel.GetInstance(_NavigationStore).Show();
-
-                foreach (var item in FileItemsIndexados)
-                {
-                    indexedFiles.Add(item.IndexedFile);
-                }
-
-                await Task.Run(() =>
-                {
-                    string rutaCarpetaBase = _VistaIndexacionArchivosViewModel.DatosInicialesDTO.RutaCarpetaOrigen;
-                    string rutaCarpetaDestino = _VistaIndexacionArchivosViewModel.DatosInicialesDTO.RutaCarpetaDestino;
-                    string nombreCarpetaReplicada = _VistaIndexacionArchivosViewModel.DatosInicialesDTO.NombreCarpetaReplicada;
-                    int numeroReplicas = _VistaIndexacionArchivosViewModel.DatosInicialesDTO.NumeroReplicas;
-                });
-                */
-            }
-            catch (Exception ex)
-            {
-                LOGRobotica.Controllers.LogApplication.LogWrite("VistaIdexacionArchivosViewModel -> ContinuarConFileItemmsSeleccionados: Exception " + ex.Message);
-            }
-            finally
-            {
-                MainWindowViewModel.GetInstance(_NavigationStore).HideLoading();
-            }
-        }
-
-        private async void ReplicarConFileItemmsSeleccionados()
+        private async void ReplicarConArchivosConfigEditados()
         {
             try
             {
@@ -139,17 +111,30 @@ namespace DebugReplicator.ViewModel
 
                 foreach (var item in FileItemsIndexados)
                 {
+                    foreach (var archivoConfig in ArchivosConfig)
+                    {
+                        if(item.IndexedFile.Path == archivoConfig.Path)
+                        {
+                            item.IndexedFile.EsArchivoConfig = true;
+
+                            
+                            List<ClaveValorModel> listaPropiedades = ExtraerPropiedadesClaveValor(archivoConfig.PropiedadesArchivoConfig);
+                            
+                            item.IndexedFile.PropiedadesArchivoConfig = listaPropiedades;
+                        }
+                    }
+
                     indexedFiles.Add(item.IndexedFile);
                 }
 
                 await Task.Run(() =>
                 {
-                    /*
-                    string rutaCarpetaBase = _VistaIndexacionArchivosViewModel.DatosInicialesDTO.RutaCarpetaOrigen;
-                    string rutaCarpetaDestino = _VistaIndexacionArchivosViewModel.DatosInicialesDTO.RutaCarpetaDestino;
-                    string rutaCarpetaBaseReplicada = _VistaIndexacionArchivosViewModel.DatosInicialesDTO.RutaCarpetaReplicada;
-                    string nombreCarpetaReplicada = _VistaIndexacionArchivosViewModel.DatosInicialesDTO.NombreCarpetaReplicada;
-                    int numeroReplicas = _VistaIndexacionArchivosViewModel.DatosInicialesDTO.NumeroReplicas;
+                    
+                    string rutaCarpetaBase          = DatosInicialesDTO.RutaCarpetaOrigen;
+                    string rutaCarpetaDestino       = DatosInicialesDTO.RutaCarpetaDestino;
+                    string rutaCarpetaBaseReplicada = DatosInicialesDTO.RutaCarpetaReplicada;
+                    string nombreCarpetaReplicada   = DatosInicialesDTO.NombreCarpetaReplicada;
+                    int numeroReplicas              = DatosInicialesDTO.NumeroReplicas;
 
                     ResultadoProceso resultadoProceso = Replicador.ReplicarDebug(rutaCarpetaBase, rutaCarpetaDestino, nombreCarpetaReplicada, numeroReplicas, indexedFiles);
 
@@ -157,7 +142,7 @@ namespace DebugReplicator.ViewModel
                     {
                         MensajeInfo = resultadoProceso.Errores[0] + resultadoProceso.ResultadoContenido;
                     }
-                    */
+                    
                 });
             }
             catch (Exception ex)
@@ -170,17 +155,52 @@ namespace DebugReplicator.ViewModel
             }
         }
 
-
-        private ObservableCollection<FileModel> ObtenerArchivosConfig(ObservableCollection<IndexedFileControl> fileItemsSeleccionados)
+        private List<ClaveValorModel> ExtraerPropiedadesClaveValor(ObservableCollection<ClaveValorControl> propiedadesArchivoConfig)
         {
-            ObservableCollection<FileModel> archivosConfig = new ObservableCollection<FileModel>();
+            try
+            {
+
+                List<ClaveValorModel> listaPropiedades = new List<ClaveValorModel>();
+
+                foreach (var item in propiedadesArchivoConfig)
+                {
+                    string clave = item.ClaveValor.Clave;
+                    string valor = item.ClaveValor.Valor;
+
+                    listaPropiedades.Add(new ClaveValorModel()
+                    {
+                        Clave = clave,
+                        Valor = valor
+                    });
+                }
+
+                return listaPropiedades;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        private ObservableCollection<ArchivoConfigModel> ObtenerArchivosConfig(ObservableCollection<IndexedFileControl> fileItemsSeleccionados)
+        {
+            ObservableCollection<ArchivoConfigModel> archivosConfig = new ObservableCollection<ArchivoConfigModel>();
 
             foreach (IndexedFileControl fileItem in fileItemsSeleccionados)
             {
                 if(GestorCarpetasArchivos.CompruebaTipoArchivoPorExtension(fileItem.IndexedFile.Path, ".config") ||
                     GestorCarpetasArchivos.CompruebaTipoArchivoPorExtension(fileItem.IndexedFile.Path, ".json"))
                 {
-                    archivosConfig.Add(fileItem.IndexedFile);
+                    ArchivoConfigModel archivoConfig = new ArchivoConfigModel()
+                    {
+                        Name = fileItem.IndexedFile.Name,
+                        Path = fileItem.IndexedFile.Path,
+                        PropiedadesArchivoConfig = new ObservableCollection<ClaveValorControl>()
+
+                    };
+
+                    archivosConfig.Add(archivoConfig);
                 }               
             }
 

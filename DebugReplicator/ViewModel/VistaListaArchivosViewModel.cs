@@ -74,7 +74,7 @@ namespace DebugReplicator.ViewModel
                     FileItemsSeleccionados.Add(archivo);
             }
 
-            VistaIdexacionArchivosViewModel vistaIdexacionArchivosViewModel = new VistaIdexacionArchivosViewModel(this, _navigationStore);
+            VistaIdexacionArchivosViewModel vistaIdexacionArchivosViewModel = new VistaIdexacionArchivosViewModel(this, _navigationStore, DatosInicialesDTO);
             _navigationStore.CurrentViewModel = vistaIdexacionArchivosViewModel;
         }
 

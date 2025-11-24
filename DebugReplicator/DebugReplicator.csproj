@@ -125,7 +125,7 @@
     <Compile Include="Controller\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Controller\GestorCarpetasArchivos.cs" />
     <Compile Include="Controller\GlobalVars.cs" />
-    <Compile Include="Controller\LectorArchivosConfiguracion.cs" />
+    <Compile Include="Controller\GestorArchivosConfiguracion.cs" />
     <Compile Include="Controller\Services\NavigationService.cs" />
     <Compile Include="Controller\NavigationStore.cs" />
     <Compile Include="Controller\Utilities\RelayCommand.cs" />
@@ -135,6 +135,7 @@
     <Compile Include="Controller\Converters\FileSizeFormatConverter.cs" />
     <Compile Include="Controller\Converters\IconToImageConverter.cs" />
     <Compile Include="Controller\Utilities\Utils.cs" />
+    <Compile Include="Model\ArchivoConfigModel.cs" />
     <Compile Include="Model\ClaveValorModel.cs" />
     <Compile Include="Model\DTOs\DatosInicialesDTO.cs" />
     <Compile Include="Model\DTOs\ResultadoProceso.cs" />

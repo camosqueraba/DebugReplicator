@@ -1,5 +1,7 @@
-﻿using System;
+﻿using DebugReplicator.View.UIControls;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -23,5 +25,8 @@ namespace DebugReplicator.Model
                 CommandManager.InvalidateRequerySuggested();
             }
         }
+
+        public bool EsArchivoConfig { get; set; }
+        public List<ClaveValorModel> PropiedadesArchivoConfig { get; set; }
     }
 }

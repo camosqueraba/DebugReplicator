@@ -10,8 +10,8 @@ using System.IO;
 namespace DebugReplicator.Controller
 {
     public class Replicador
-    {        
-        private static string RutaCarpetaBase {get; set;} 
+    {
+        private static string RutaCarpetaBase { get; set; }
         public static ResultadoProceso ReplicarDebug(string urlCarpetaOrigen, string urlCarpetaDestino, string nombreBaseCarpetaReplica,
             int numeroReplicas)
         {
@@ -46,7 +46,7 @@ namespace DebugReplicator.Controller
                     resultadoProceso.Completado = false;
                     resultadoProceso.Errores.Add($"No se pudo copiar carpeta desde {nombreBaseCarpetaReplica} a {urlCarpetaDestino}");
                     return resultadoProceso;
-                }                
+                }
             }
 
             resultadoProceso.Completado = true;
@@ -64,7 +64,7 @@ namespace DebugReplicator.Controller
                                                   nombreBaseCarpetaReplica, numeroReplicas, archivosIndexados);
             if (!resultadoProceso.Completado)
                 return resultadoProceso;
-                                   
+
             string rutaCarpetaBaseDuplicada = Path.Combine(urlCarpetaDestino, nombreBaseCarpetaReplica);
 
             for (int indiceReplica = 1; indiceReplica <= numeroReplicas; indiceReplica++)
@@ -74,8 +74,8 @@ namespace DebugReplicator.Controller
                 if (rutaCarpetaBaseDuplicada.Contains(GlobalVars.CARACTER_BANDERA))
                     rutaCarpetaIndexada = rutaCarpetaBaseDuplicada.Replace(GlobalVars.CARACTER_BANDERA, indiceReplica.ToString());
                 else
-                    rutaCarpetaIndexada = rutaCarpetaBaseDuplicada + "_" + indiceReplica.ToString();                
-                
+                    rutaCarpetaIndexada = rutaCarpetaBaseDuplicada + "_" + indiceReplica.ToString();
+
                 bool resultadoCopiar = GestorCarpetasArchivos.CopiarCarpeta(rutaCarpetaBaseDuplicada, rutaCarpetaIndexada, true);
 
                 if (!resultadoCopiar)
@@ -103,7 +103,9 @@ namespace DebugReplicator.Controller
             return resultadoProceso;
         }
 
-        public static ResultadoProceso CopiarCarpetaBaseADestino(string rutaCarpetaBase, string rutaCarpetaDestino, string nombreNuevaCarpeta="")
+
+
+        public static ResultadoProceso CopiarCarpetaBaseADestino(string rutaCarpetaBase, string rutaCarpetaDestino, string nombreNuevaCarpeta = "")
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
             bool copiado = false;
@@ -123,19 +125,19 @@ namespace DebugReplicator.Controller
 
             return resultadoProceso;
         }
-        
-        
+
+
         private static ResultadoProceso ValidarRequisitos(string urlCarpetaOrigen, string urlCarpetaDestino, string nombreBaseCarpetaReplica,
             int numeroReplicas, List<IndexedFileModel> archivosIndexados = null)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
             resultadoProceso.Completado = true;
 
-            
+
 
             if (string.IsNullOrEmpty(urlCarpetaOrigen) || !Directory.Exists(urlCarpetaOrigen))
             {
-                resultadoProceso.Completado = false;                
+                resultadoProceso.Completado = false;
                 resultadoProceso.Errores.Add("La carpeta de origen no es válida.");
 
             }
@@ -145,29 +147,29 @@ namespace DebugReplicator.Controller
                 resultadoProceso.Completado = false;
                 resultadoProceso.Errores.Add("La carpeta de destino no es válida.");
             }
-            
+
             if (string.IsNullOrEmpty(nombreBaseCarpetaReplica))
             {
                 resultadoProceso.Completado = false;
                 resultadoProceso.Errores.Add("El nombre base de la carpeta replicada no puede estar vacío.");
             }
-            
+
             if (archivosIndexados != null && archivosIndexados.Count == 0)
             {
                 resultadoProceso.Completado = false;
                 resultadoProceso.Errores.Add("No se han proporcionado archivos para indexar.");
             }
-            
+
             if (numeroReplicas <= 0)
             {
-                resultadoProceso.Completado = false;               
+                resultadoProceso.Completado = false;
                 resultadoProceso.Errores.Add("El número de réplicas debe ser mayor que cero.");
-            }            
-            
+            }
+
             return resultadoProceso;
-        }      
-        
-        private static ResultadoProceso IndexarCarpeta(string rutaCarpetaBase, List<IndexedFileModel> archivosIndexados, int indice, bool revisarSubcarpetas)
+        }
+
+        private static ResultadoProceso IndexarCarpeta(string rutaCarpetaIndexada, List<IndexedFileModel> archivosIndexados, int indice, bool revisarSubcarpetas)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
 
@@ -178,9 +180,9 @@ namespace DebugReplicator.Controller
                     string rutaArchivoOriginal = archivoIndexado.Path;
                     string nombreArchivoIndexado = GestorCarpetasArchivos.ObtenerNombreArchivo(rutaArchivoOriginal);
                     string nuevoNombreArchivo = archivoIndexado.NombreIndexado.Replace(GlobalVars.CARACTER_BANDERA, indice.ToString());
-                    string rutaNuevoArchivo = Path.Combine(rutaCarpetaBase, nuevoNombreArchivo);
+                    string rutaNuevoArchivo = Path.Combine(rutaCarpetaIndexada, nuevoNombreArchivo);
 
-                    var carpetaBaseIndexada = new DirectoryInfo(rutaCarpetaBase);
+                    var carpetaBaseIndexada = new DirectoryInfo(rutaCarpetaIndexada);
 
                     if (!carpetaBaseIndexada.Exists)
                     {
@@ -194,13 +196,19 @@ namespace DebugReplicator.Controller
 
                     DirectoryInfo[] carpetaBaseIndexadaInfo = carpetaBaseIndexada.GetDirectories();
 
-                    foreach (FileInfo file in carpetaBaseIndexada.GetFiles())
+                    foreach (FileInfo archivoCarpetaIndexada in carpetaBaseIndexada.GetFiles())
                     {
-                        if (file.Name == archivoIndexado.Name)
+                        if (archivoCarpetaIndexada.Name == archivoIndexado.Name)
                         {
-                            if(file.Name != nuevoNombreArchivo) 
-                                FileSystem.RenameFile(file.FullName, nuevoNombreArchivo);
-                        }                        
+                            if (archivoCarpetaIndexada.Name != nuevoNombreArchivo)
+                                FileSystem.RenameFile(archivoCarpetaIndexada.FullName, nuevoNombreArchivo);
+
+                            if (archivoIndexado.EsArchivoConfig)
+                            {
+                                string fullPathArchivoIndexado = Path.Combine(archivoCarpetaIndexada.Directory.FullName, nuevoNombreArchivo); 
+                                ModificarArchivoConfiguraciones(fullPathArchivoIndexado, archivoIndexado.PropiedadesArchivoConfig);
+                            }
+                        }
                     }
 
                     if (revisarSubcarpetas)
@@ -210,7 +218,7 @@ namespace DebugReplicator.Controller
                             IndexarCarpeta(subDir.FullName, archivosIndexados, indice, true);
                         }
                     }
-                                       
+
                 }
                 resultadoProceso.Completado = true;
                 return resultadoProceso;
@@ -232,11 +240,11 @@ namespace DebugReplicator.Controller
             {
                 if (File.Exists(rutaArchivoConfig))
                 {
-                    Dictionary<string, string> paresClaveValor = LectorArchivosConfiguracion.LeerArchivoConfiguracionExterno(rutaArchivoConfig);
-                    
+                    Dictionary<string, string> paresClaveValor = GestorArchivosConfiguracion.LeerArchivoConfiguracionExterno(rutaArchivoConfig);
+
                     var configuracionesConfig = ConfigurationManager.AppSettings;
                     string[] claves = new string[configuracionesConfig.Count];
-                    
+
                     foreach (var claveValor in paresClaveValor)
                     {
                         string clave = claveValor.Key;
@@ -246,9 +254,9 @@ namespace DebugReplicator.Controller
                         {
                             Clave = clave,
                             Valor = valor
-                        });                        
+                        });
                     }
-                    
+
                 }
             }
             catch (Exception ex)
@@ -258,5 +266,24 @@ namespace DebugReplicator.Controller
             return configuraciones;
         }
 
+        public static bool ModificarArchivoConfiguraciones(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones)
+        {
+            ResultadoProceso resultadoProceso = new ResultadoProceso();
+            try
+            {
+                if (File.Exists(rutaArchivoConfig))
+                {
+                    resultadoProceso = GestorArchivosConfiguracion.ModificarArchivoConfiguracionExterno(rutaArchivoConfig, nuevasConfiguraciones);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                LOGRobotica.Controllers.LogApplication.LogWrite("Replicador -> ModificarArchivoConfiguraciones: Exception " + ex.Message);
+                return false;
+            }
+
+        }
     }
 }

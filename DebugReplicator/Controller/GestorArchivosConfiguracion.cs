@@ -1,4 +1,7 @@
-﻿using System;
+﻿using DebugReplicator.Model;
+using DebugReplicator.Model.DTOs;
+using MS.WindowsAPICodePack.Internal;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,21 +13,21 @@ using System.Xml.Linq;
 
 namespace DebugReplicator.Controller
 {
-    public class LectorArchivosConfiguracion
+    public class GestorArchivosConfiguracion
     {
         /// <summary>
         /// Carga un archivo de configuración externo y devuelve sus pares clave-valor.
         /// Soporta formatos JSON, XML y texto plano tipo INI.
         /// </summary>
-        public static Dictionary<string, string> LeerArchivoConfiguracionExterno(string filePath)
+        public static Dictionary<string, string> LeerArchivoConfiguracionExterno(string rutaArchivoConfig)
         {
-            if (string.IsNullOrWhiteSpace(filePath))
-                throw new ArgumentNullException(nameof(filePath));
+            if (string.IsNullOrWhiteSpace(rutaArchivoConfig))
+                throw new ArgumentNullException(nameof(rutaArchivoConfig));
 
-            if (!File.Exists(filePath))
-                throw new FileNotFoundException($"Archivo no encontrado: {filePath}");
+            if (!File.Exists(rutaArchivoConfig))
+                throw new FileNotFoundException($"Archivo no encontrado: {rutaArchivoConfig}");
 
-            string extension = Path.GetExtension(filePath).ToLowerInvariant();
+            string extension = Path.GetExtension(rutaArchivoConfig).ToLowerInvariant();
 
             Dictionary<string, string> claveValor = null;
 
@@ -35,13 +38,13 @@ namespace DebugReplicator.Controller
                     break;
                 
                 case ".config":
-                    claveValor = LoadXml(filePath);
+                    claveValor = LoadXml(rutaArchivoConfig);
                     break;
 
                 case ".ini":
                 case ".conf":
                 case ".txt":
-                    LoadKeyValue(filePath);
+                    LoadKeyValue(rutaArchivoConfig);
                     break;
 
                 default:
@@ -152,6 +155,108 @@ namespace DebugReplicator.Controller
             }
 
             return result;
+        }
+
+        public static ResultadoProceso ModificarArchivoConfiguracionExterno(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones)
+        {
+            ResultadoProceso resultadoProceso = new ResultadoProceso();
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(rutaArchivoConfig))
+                    throw new ArgumentNullException(nameof(rutaArchivoConfig));
+
+                if (!File.Exists(rutaArchivoConfig))
+                    throw new FileNotFoundException($"Archivo no encontrado: {rutaArchivoConfig}");
+
+                string extension = Path.GetExtension(rutaArchivoConfig).ToLowerInvariant();
+
+               
+
+                switch (extension)
+                {
+                    case ".json":
+                        //LoadJson(rutaArchivoConfig);
+                        break;
+
+                    case ".config":
+                        resultadoProceso = ModificarXml(rutaArchivoConfig, nuevasConfiguraciones);
+                        break;
+
+                    case ".ini":
+                    case ".conf":
+                    case ".txt":
+                        resultadoProceso = ModificarKeyValue(rutaArchivoConfig, nuevasConfiguraciones);
+                        break;
+
+                    default:
+                        break;
+                }
+
+                return resultadoProceso;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+               
+        }
+
+        private static ResultadoProceso ModificarKeyValue(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static ResultadoProceso ModificarXml(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones)
+        {            
+            
+            ResultadoProceso resultadoProceso = new ResultadoProceso();
+
+            try
+            {
+                XmlDocument docXml = new XmlDocument();
+                docXml.Load(rutaArchivoConfig);
+
+                XmlNodeList items = docXml.SelectNodes("/configuration/appSettings");
+
+                foreach (XmlNode item in items)
+                {
+                    if (item.ChildNodes.Count > 0)
+                    {
+                        foreach (XmlNode configuracion in item.ChildNodes)
+                        {
+                            string tag = configuracion.OuterXml;
+                            XElement tagParseada = XElement.Parse(tag);
+
+                            // Extraemos los atributos "key" y "value"
+                            string key = tagParseada.Attribute("key")?.Value ?? string.Empty;
+
+                            if(key != string.Empty)
+                            {
+                                ClaveValorModel nuevaConfiguracion = nuevasConfiguraciones.FirstOrDefault(c => c.Clave == key);
+                                if(nuevaConfiguracion != null)
+                                {
+                                    tagParseada.SetAttributeValue("value", nuevaConfiguracion.Valor);
+                                    configuracion.InnerXml = tagParseada.ToString();
+                                }
+                            }
+
+                            string value = tagParseada.Attribute("value")?.Value ?? string.Empty;
+                            //result.Add(key, value);
+                        }                        
+                    }
+                }
+
+                docXml.Save(rutaArchivoConfig);
+
+                return resultadoProceso;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }            
         }
     }
 }
