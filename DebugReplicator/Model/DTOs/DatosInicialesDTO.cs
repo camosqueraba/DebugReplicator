@@ -8,6 +8,7 @@ namespace DebugReplicator.Model.DTOs
         public string RutaCarpetaDestino { get; set; }
         public string RutaCarpetaReplicada { get; set; }
         public string NombreCarpetaReplicada { get; set; }
-        public int NumeroReplicas { get; set; }
+        public int RangoFin { get; set; }
+        public int RangoInicio { get; set; }
     }
 }

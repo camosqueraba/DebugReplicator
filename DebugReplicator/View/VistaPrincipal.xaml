@@ -58,13 +58,18 @@
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal"  Margin="0,5,0,0">
                     <Border Width="125" Margin="5">
-                        <TextBlock Text="Numero de copias"  FontSize="14"/>
+                        <TextBlock Text="Rango"  FontSize="14"/>
                     </Border>
                     <Border Margin="5">
                         <StackPanel Orientation="Vertical">
-                            <TextBox x:Name="TextboxNumeroCopias" Text="{Binding NumeroReplicas, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" VerticalContentAlignment="Center" HorizontalAlignment="Left"
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox x:Name="TextboxRangoInicio" Text="{Binding RangoInicio, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" VerticalContentAlignment="Center" HorizontalAlignment="Left"
                                 Width="50" Height="30" FontSize="14"/>
-                            <TextBlock Foreground="Red"  Text="{Binding NumeroReplicasError}" Width="300"/>
+                                <Label Content=" - " FontSize="12" HorizontalAlignment="Left"/>                                
+                                <TextBox x:Name="TextboxRangoFin" Text="{Binding RangoFin, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" VerticalContentAlignment="Center" HorizontalAlignment="Left"
+                                Width="50" Height="30" FontSize="14"/>
+                            </StackPanel>                                
+                            <TextBlock Foreground="Red"  Text="{Binding RangoError}" Width="300"/>
                         </StackPanel>
                     </Border>
                     <Border Margin="5" >

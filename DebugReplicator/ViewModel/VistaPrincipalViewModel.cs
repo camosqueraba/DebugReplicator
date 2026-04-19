@@ -60,23 +60,36 @@ namespace DebugReplicator.ViewModel
             }
         }
 
-        private string numeroReplicas;
-        public string NumeroReplicas
+        private string rangoFin;
+        public string RangoFin
         {
-            get => numeroReplicas;
+            get => rangoFin;
             set
             {
-                if (SetProperty(ref numeroReplicas, value))
-                    Validar(nameof(NumeroReplicas));
+                if (SetProperty(ref rangoFin, value))
+                    Validar(nameof(RangoFin));
             }
         }
 
-        private int NumeroReplicasInt { get; set; }
+        private int RangoFinInt { get; set; }
+
+        private string rangoInicio;
+        public string RangoInicio
+        {
+            get => rangoInicio;
+            set
+            {
+                if (SetProperty(ref rangoInicio, value))
+                    Validar(nameof(RangoInicio));
+            }
+        }
+
+        private int RangoInicioInt { get; set; }
 
         public string CarpetaOrigenError => GetFirstError(nameof(CarpetaOrigen));
         public string CarpetaDestinoError => GetFirstError(nameof(CarpetaDestino));
         public string NombreCarpetaReplicadaError => GetFirstError(nameof(NombreCarpetaReplicada));
-        public string NumeroReplicasError => GetFirstError(nameof(NumeroReplicas));
+        public string RangoError => GetFirstError(nameof(RangoFin));
 
         public ICommand SiguienteCommand { get; }
         public ICommand ReplicarCommand { get; }
@@ -116,13 +129,17 @@ namespace DebugReplicator.ViewModel
             if (string.IsNullOrWhiteSpace(NombreCarpetaReplicada))
                 NombreCarpetaReplicada = "";
 
-            if (string.IsNullOrWhiteSpace(NumeroReplicas))
-                NumeroReplicas = "";
+            if (string.IsNullOrWhiteSpace(RangoFin))
+                RangoFin = "";
+
+            if (string.IsNullOrWhiteSpace(RangoInicio))
+                RangoInicio = "";
 
             Validar(CarpetaOrigen);
             Validar(CarpetaDestino);
             Validar(NombreCarpetaReplicada);
-            Validar(NumeroReplicas);
+            Validar(RangoFin);
+            Validar(RangoInicio);
 
             if (HasErrors)
             {
@@ -140,7 +157,8 @@ namespace DebugReplicator.ViewModel
                     RutaCarpetaOrigen = this.CarpetaOrigen,
                     RutaCarpetaReplicada = resultCopiar.ResultadoContenido,
                     NombreCarpetaReplicada = this.NombreCarpetaReplicada,
-                    NumeroReplicas = this.NumeroReplicasInt
+                    RangoFin = this.RangoFinInt,
+                    RangoInicio = this.RangoInicioInt
                 };
 
                 VistaListaArchivosViewModel listaArchivoVM = new VistaListaArchivosViewModel(this, _navigationStore, datosInicialesDTO);
@@ -163,13 +181,13 @@ namespace DebugReplicator.ViewModel
             if (string.IsNullOrWhiteSpace(NombreCarpetaReplicada))
                 NombreCarpetaReplicada = "";
 
-            if (string.IsNullOrWhiteSpace(NumeroReplicas))
-                NumeroReplicas = "";
+            if (string.IsNullOrWhiteSpace(RangoFin))
+                RangoFin = "";
 
             Validar(CarpetaOrigen);
             Validar(CarpetaDestino);
             Validar(NombreCarpetaReplicada);
-            Validar(NumeroReplicas);
+            Validar(RangoFin);
 
             if (HasErrors)
             {
@@ -179,7 +197,7 @@ namespace DebugReplicator.ViewModel
             
             Replicador replicador = new Replicador();
 
-            Replicador.ReplicarDebug(CarpetaOrigen, CarpetaDestino, NombreCarpetaReplicada, NumeroReplicasInt);
+            Replicador.ReplicarDebug(CarpetaOrigen, CarpetaDestino, NombreCarpetaReplicada, RangoFinInt, RangoInicioInt);
             //Mostrar mensaje de éxito aqui
         }
 
@@ -246,19 +264,34 @@ namespace DebugReplicator.ViewModel
                         errores.Add("Carpeta replicada es requerido.");
                     break;
 
-                case nameof(NumeroReplicas):
-                    if (string.IsNullOrWhiteSpace(NumeroReplicas))
+                case nameof(RangoFin):
+                    if (string.IsNullOrWhiteSpace(RangoFin))
                         errores.Add("Numero replicas es requerido.");
-                    else if (!int.TryParse(NumeroReplicas, out int num) || num < 1)
+                    else if (!int.TryParse(RangoFin, out int num) || num < 1)
                     {
                         errores.Add("Numero replicas debe ser un número entero mayor a 0.");
                     }
                     else
-                        NumeroReplicasInt = num;
+                        RangoFinInt = num;
+                    break;
+
+                case nameof(RangoInicio):
+                    if (string.IsNullOrWhiteSpace(RangoInicio))
+                        errores.Add("Numero replicas es requerido.");
+                    else if (!int.TryParse(RangoInicio, out int num) || num < 1)
+                    {
+                        errores.Add("Numero replicas debe ser un número entero mayor a 0.");
+                    }
+                    else if (num > RangoFinInt)
+                    {
+                        errores.Add("Numero replicas debe ser un número entero menor o igual al rango final.");
+                    }
+                    else
+                        RangoInicioInt = num;
                     break;
             }
 
-            if(errores.Any())
+           if(errores.Any())
                 Errores[propiedad] = errores;
 
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propiedad));
@@ -282,8 +315,12 @@ namespace DebugReplicator.ViewModel
                 case nameof(NombreCarpetaReplicada):
                     error = nameof(NombreCarpetaReplicadaError);
                     break;
-                case nameof(NumeroReplicas):
-                    error = nameof(NumeroReplicasError);
+                case nameof(RangoFin):
+                    error = nameof(RangoError);
+                    break;
+
+                case nameof(RangoInicio):
+                    error = nameof(RangoError);
                     break;
                 default:
                     break;

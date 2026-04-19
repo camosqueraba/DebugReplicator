@@ -13,12 +13,12 @@ namespace DebugReplicator.Controller
     {
         private static string RutaCarpetaBase { get; set; }
         public static ResultadoProceso ReplicarDebug(string urlCarpetaOrigen, string urlCarpetaDestino, string nombreBaseCarpetaReplica,
-            int numeroReplicas)
+            int rangoFin, int rangoInicio)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
 
             resultadoProceso = ValidarRequisitos(urlCarpetaOrigen, urlCarpetaDestino,
-                                                  nombreBaseCarpetaReplica, numeroReplicas);
+                                                  nombreBaseCarpetaReplica, rangoFin, rangoInicio);
             if (!resultadoProceso.Completado)
                 return resultadoProceso;
 
@@ -30,7 +30,7 @@ namespace DebugReplicator.Controller
             string rutaCarpetaBase = resultadoProceso.ResultadoContenido;
             string rutaCarpetaBaseDuplicada = Path.Combine(urlCarpetaDestino, nombreBaseCarpetaReplica);
 
-            for (int indiceReplica = 1; indiceReplica <= numeroReplicas; indiceReplica++)
+            for (int indiceReplica = rangoInicio; indiceReplica <= rangoFin; indiceReplica++)
             {
                 string rutaCarpetaIndexada = "";
 
@@ -56,18 +56,18 @@ namespace DebugReplicator.Controller
         }
 
         public static ResultadoProceso ReplicarDebug(string urlCarpetaOrigen, string urlCarpetaDestino, string nombreBaseCarpetaReplica,
-            int numeroReplicas, List<IndexedFileModel> archivosIndexados)
+            int rangoFin, int rangoInicio, List<IndexedFileModel> archivosIndexados)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
 
             resultadoProceso = ValidarRequisitos(urlCarpetaOrigen, urlCarpetaDestino,
-                                                  nombreBaseCarpetaReplica, numeroReplicas, archivosIndexados);
+                                                  nombreBaseCarpetaReplica, rangoFin, rangoInicio, archivosIndexados);
             if (!resultadoProceso.Completado)
                 return resultadoProceso;
 
             string rutaCarpetaBaseDuplicada = Path.Combine(urlCarpetaDestino, nombreBaseCarpetaReplica);
 
-            for (int indiceReplica = 1; indiceReplica <= numeroReplicas; indiceReplica++)
+            for (int indiceReplica = rangoInicio; indiceReplica <= rangoFin; indiceReplica++)
             {
                 string rutaCarpetaIndexada = "";
 
@@ -128,7 +128,7 @@ namespace DebugReplicator.Controller
 
 
         private static ResultadoProceso ValidarRequisitos(string urlCarpetaOrigen, string urlCarpetaDestino, string nombreBaseCarpetaReplica,
-            int numeroReplicas, List<IndexedFileModel> archivosIndexados = null)
+            int rangoFin, int rangoInicio,List<IndexedFileModel> archivosIndexados = null)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
             resultadoProceso.Completado = true;
@@ -160,10 +160,22 @@ namespace DebugReplicator.Controller
                 resultadoProceso.Errores.Add("No se han proporcionado archivos para indexar.");
             }
 
-            if (numeroReplicas <= 0)
+            if (rangoFin <= 0)
             {
                 resultadoProceso.Completado = false;
                 resultadoProceso.Errores.Add("El número de réplicas debe ser mayor que cero.");
+            }
+
+            if (rangoInicio <= 0)
+            {
+                resultadoProceso.Completado = false;
+                resultadoProceso.Errores.Add("El número de réplicas debe ser mayor que cero.");
+            }
+
+            if(rangoInicio > rangoFin)
+            {
+                resultadoProceso.Completado = false;
+                resultadoProceso.Errores.Add("El rango de inicio de réplicas no puede ser mayor que el rango de fin.");
             }
 
             return resultadoProceso;

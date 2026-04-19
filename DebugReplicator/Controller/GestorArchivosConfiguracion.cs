@@ -129,8 +129,8 @@ namespace DebugReplicator.Controller
             }
             else
             {
-                foreach (var child in element.Elements())
-                    ParseXmlElement(child, $"{path}:{child.Name.LocalName}", dict);
+                //foreach (var child in element.Elements())
+                    //ParseXmlElement(child, $"{path}:{child.Name.LocalName}", dict);
             }
         }
 

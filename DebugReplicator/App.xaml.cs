@@ -33,7 +33,7 @@ namespace DebugReplicator
                 RutaCarpetaDestino= "C:\\Users\\carlos.mosquera\\Downloads\\Pruebas_Debug_Replicador\\Carpeta_Destino",
                 RutaCarpetaOrigen="",
                 RutaCarpetaReplicada= @"C:\Users\carlos.mosquera\Downloads\Pruebas_Debug_Replicador\Carpeta_Destino\HUBIntegration_BOT1",
-                NumeroReplicas = 3,
+                RangoFin = 3,
                 NombreCarpetaReplicada = "BOT"
             };
 

@@ -102,9 +102,10 @@ namespace DebugReplicator.ViewModel
                     string rutaCarpetaDestino       = _VistaListaArchivosViewModel.DatosInicialesDTO.RutaCarpetaDestino;
                     string rutaCarpetaBaseReplicada = _VistaListaArchivosViewModel.DatosInicialesDTO.RutaCarpetaReplicada;
                     string nombreCarpetaReplicada   = _VistaListaArchivosViewModel.DatosInicialesDTO.NombreCarpetaReplicada;
-                    int numeroReplicas              = _VistaListaArchivosViewModel.DatosInicialesDTO.NumeroReplicas;                    
+                    int rangoFin                    = _VistaListaArchivosViewModel.DatosInicialesDTO.RangoFin;
+                    int rangoInicio                 = _VistaListaArchivosViewModel.DatosInicialesDTO.RangoInicio;
 
-                    ResultadoProceso resultadoProceso = Replicador.ReplicarDebug(rutaCarpetaBase, rutaCarpetaDestino, nombreCarpetaReplicada, numeroReplicas, indexedFiles);
+                    ResultadoProceso resultadoProceso = Replicador.ReplicarDebug(rutaCarpetaBase, rutaCarpetaDestino, nombreCarpetaReplicada, rangoFin, rangoInicio, indexedFiles);
 
                     if (resultadoProceso != null && !resultadoProceso.Completado)
                     {

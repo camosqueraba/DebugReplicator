@@ -134,9 +134,10 @@ namespace DebugReplicator.ViewModel
                     string rutaCarpetaDestino       = DatosInicialesDTO.RutaCarpetaDestino;
                     string rutaCarpetaBaseReplicada = DatosInicialesDTO.RutaCarpetaReplicada;
                     string nombreCarpetaReplicada   = DatosInicialesDTO.NombreCarpetaReplicada;
-                    int numeroReplicas              = DatosInicialesDTO.NumeroReplicas;
+                    int rangoFin                    = DatosInicialesDTO.RangoFin;
+                    int rangoInicio                 = DatosInicialesDTO.RangoInicio;
 
-                    ResultadoProceso resultadoProceso = Replicador.ReplicarDebug(rutaCarpetaBase, rutaCarpetaDestino, nombreCarpetaReplicada, numeroReplicas, indexedFiles);
+                    ResultadoProceso resultadoProceso = Replicador.ReplicarDebug(rutaCarpetaBase, rutaCarpetaDestino, nombreCarpetaReplicada, rangoFin, rangoInicio,indexedFiles);
 
                     if (resultadoProceso != null && !resultadoProceso.Completado)
                     {
