@@ -67,7 +67,11 @@ namespace DebugReplicator.ViewModel
             set
             {
                 if (SetProperty(ref rangoFin, value))
+                {
                     Validar(nameof(RangoFin));
+                    Validar(nameof(RangoInicio));
+                }
+                    
             }
         }
 
@@ -79,8 +83,10 @@ namespace DebugReplicator.ViewModel
             get => rangoInicio;
             set
             {
-                if (SetProperty(ref rangoInicio, value))
+                if (SetProperty(ref rangoInicio, value)) { 
                     Validar(nameof(RangoInicio));
+                    Validar(nameof(RangoFin));
+                }
             }
         }
 
@@ -266,28 +272,29 @@ namespace DebugReplicator.ViewModel
 
                 case nameof(RangoFin):
                     if (string.IsNullOrWhiteSpace(RangoFin))
-                        errores.Add("Numero replicas es requerido.");
-                    else if (!int.TryParse(RangoFin, out int num) || num < 1)
-                    {
-                        errores.Add("Numero replicas debe ser un número entero mayor a 0.");
-                    }
-                    else
-                        RangoFinInt = num;
+                        errores.Add("Rango fin es requerido.");
+                    
+                    if (!int.TryParse(RangoFin, out int rangoFin) || rangoFin < 1)                    
+                        errores.Add("Rango fin debe ser un número entero mayor a 0.");
+                   
+                    if (rangoFin < RangoInicioInt)                    
+                        errores.Add("Rango fin debe ser un número entero mayor rango inicio.");
+                    
+                    RangoFinInt = rangoFin;
+
                     break;
 
                 case nameof(RangoInicio):
                     if (string.IsNullOrWhiteSpace(RangoInicio))
-                        errores.Add("Numero replicas es requerido.");
-                    else if (!int.TryParse(RangoInicio, out int num) || num < 1)
-                    {
-                        errores.Add("Numero replicas debe ser un número entero mayor a 0.");
-                    }
-                    else if (num > RangoFinInt)
-                    {
-                        errores.Add("Numero replicas debe ser un número entero menor o igual al rango final.");
-                    }
-                    else
-                        RangoInicioInt = num;
+                        errores.Add("Rango inicio es requerido.");
+
+                    if (!int.TryParse(RangoInicio, out int rangoInicio) || rangoInicio < 1)                    
+                        errores.Add("Rango inicio debe ser un número entero mayor a 0.");
+                    
+                    if (rangoInicio > RangoFinInt)                    
+                        errores.Add("Rango inicio debe ser un número entero menor  al rango fin.");
+                                        
+                    RangoInicioInt = rangoInicio;
                     break;
             }
 
