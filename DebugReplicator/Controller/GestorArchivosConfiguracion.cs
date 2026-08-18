@@ -103,12 +103,15 @@ namespace DebugReplicator.Controller
                 {
                     foreach (XmlNode configuracion in item.ChildNodes)
                     {
-                        string algo = configuracion.OuterXml;
-                        XElement algoParseado = XElement.Parse(algo);
+                        string xmlNode = configuracion.OuterXml;
+                        if (xmlNode.Contains("<!--"))
+                            continue;
+
+                        XElement xmlNodeParseado = XElement.Parse(xmlNode);
 
                         // Extraemos los atributos "key" y "value"
-                        string key = algoParseado.Attribute("key")?.Value ?? string.Empty;
-                        string value = algoParseado.Attribute("value")?.Value ?? string.Empty;
+                        string key = xmlNodeParseado.Attribute("key")?.Value ?? string.Empty;
+                        string value = xmlNodeParseado.Attribute("value")?.Value ?? string.Empty;
                         result.Add(key, value);
                     }
                 }
