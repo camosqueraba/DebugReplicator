@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
-using static System.Net.WebRequestMethods;
 
 namespace DebugReplicator.Explorer
 {
@@ -17,18 +16,15 @@ namespace DebugReplicator.Explorer
 
             if (!directory.IsDirectory())
                 return files;
-
-            // for exception handling
+           
             string currentFile = "";
-
-            // code for getting all files
+            
             try
             {
                 foreach (string file in Directory.GetFiles(directory))
                     {
                         currentFile = file;
-
-                        // Checks if it isn't an extension.
+                        
                         if (Path.GetExtension(file) != ".lnk")
                         {
                             FileInfo fInfo = new FileInfo(file);

@@ -1,4 +1,5 @@
 ﻿using DebugReplicator.Controller;
+using DebugReplicator.Controller.Utilities;
 using DebugReplicator.Explorer;
 using DebugReplicator.Model;
 using DebugReplicator.Model.DTOs;
@@ -26,6 +27,7 @@ namespace DebugReplicator.ViewModel
         public ObservableCollection<FilesControl> TotalFileItems { get; set; }
         public ObservableCollection<FilesControl> FileItemsSeleccionados { get; set; }
 
+        public DatosInicialesDTO DatosInicialesDTO { get; set; }
         public  Stack<string> RutasVisitadas { get; set; }
 
         private string actualRuta;
@@ -33,7 +35,7 @@ namespace DebugReplicator.ViewModel
         {
             get => actualRuta;
             set { actualRuta = value; OnPropertyChanged(nameof(ActualRuta)); }
-        }
+        } 
         public VistaListaArchivosViewModel(VistaPrincipalViewModel vistaPrincipalViewModel, NavigationStore navigationStore, DatosInicialesDTO datosInicialesDTO)
         {
 
@@ -44,11 +46,13 @@ namespace DebugReplicator.ViewModel
             FileItemsSeleccionados  = new ObservableCollection<FilesControl>();
             TotalFileItems          = new ObservableCollection<FilesControl>();
 
-            this.TryNavigateToPath(datosInicialesDTO.NombreCarpetaReplicada);
+            DatosInicialesDTO = datosInicialesDTO;
+
+            this.TryNavigateToPath(datosInicialesDTO.RutaCarpetaReplicada);
             
             RutasVisitadas = new Stack<string>();
-            RutasVisitadas.Push(datosInicialesDTO.NombreCarpetaReplicada);
-            ActualRuta = datosInicialesDTO.NombreCarpetaReplicada;
+            RutasVisitadas.Push(datosInicialesDTO.RutaCarpetaReplicada);
+            ActualRuta = datosInicialesDTO.RutaCarpetaReplicada;
 
             VolverCommand = new RelayCommand(Volver);
             ContinuarCommand = new RelayCommand(ContinuarConFileItemmsSeleccionados, HayArchivosSeleccionados);
@@ -70,7 +74,7 @@ namespace DebugReplicator.ViewModel
                     FileItemsSeleccionados.Add(archivo);
             }
 
-            VistaIdexacionArchivosViewModel vistaIdexacionArchivosViewModel = new VistaIdexacionArchivosViewModel(this, _navigationStore);
+            VistaIdexacionArchivosViewModel vistaIdexacionArchivosViewModel = new VistaIdexacionArchivosViewModel(this, _navigationStore, DatosInicialesDTO);
             _navigationStore.CurrentViewModel = vistaIdexacionArchivosViewModel;
         }
 
@@ -110,21 +114,7 @@ namespace DebugReplicator.ViewModel
 
             else if (path.IsDirectory())
             {
-                ClearFiles();
-                /*
-                foreach(FileModel dir in ExploradorDirectorios.GetDirectories(path))
-                {
-                    FilesControl fc = CreateFileControl(dir);
-                    AddFile(fc);
-                }
-
-                
-                foreach (FileModel file in ExploradorDirectorios.GetFiles(path))
-                {
-                    FilesControl fc = CreateFileControl(file);
-                    AddFile(fc);
-                }
-                */
+                ClearFiles();                
 
                 foreach (FileModel file in ExploradorDirectorios.ObtenerContenidoCarpeta(path))
                 {                    

@@ -7,8 +7,7 @@ namespace DebugReplicator.View
     /// Lógica de interacción para VistaListaArchivos.xaml
     /// </summary>
     public partial class VistaListaArchivos : UserControl
-    {
-        private MainWindow VentanaPrincipal = (MainWindow)Application.Current.MainWindow;  
+    {  
 
         public VistaListaArchivos()
         {

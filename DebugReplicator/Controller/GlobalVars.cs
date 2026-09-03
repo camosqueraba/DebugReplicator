@@ -1,23 +1,16 @@
 ﻿#region
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 #endregion
 
 namespace DebugReplicator.Controller
-{  
+{
     public class GlobalVars
     {
         #region Global Variables        
-        public static string LOGs_GUID { get; set; } = Guid.NewGuid().ToString("N");
-        public static bool OrderCerrar { get; set; }
-        public static string RutaDescargaCarta { get; set; }
-
+        public static readonly string CARACTER_BANDERA  = ConfigurationManager.AppSettings["CaracterBandera"];        
         #endregion
 
         #region Datos Maquina/ BOT

@@ -34,14 +34,7 @@ namespace DebugReplicator
 
             lbl_nombre_usuario.Content = usuarioRed + " ";
             lbl_informacion_maquina.Content = nombreMaquina + " " + direccionIP + " ";
-            lbl_vesion_proyecto.Content = GlobalVars.VersionProject;
-            ContenedorLoading.Visibility = Visibility.Hidden;
-
-            //GridContenidoPrincipal.Children.Clear();
-            //GridContenidoPrincipal.Children.Add(new VistaPrincipal());
-            //GridContenidoPrincipal.Children.Add(new VistaListaArchivos(@"C:\Users\camos\Downloads\Pruebas_DebugReplicator\CarpetaDestino\Debug"));
-            //GridContenidoPrincipal.Children.Add(new VistaListaArchivos());
-
+            lbl_vesion_proyecto.Content = GlobalVars.VersionProject;  
         }
 
 

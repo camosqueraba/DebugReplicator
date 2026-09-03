@@ -1,16 +1,14 @@
 ﻿using DebugReplicator.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DebugReplicator.Model.DTOs
 {
     public class DatosInicialesDTO : BaseViewModel
     {
-        public string CarpetaOrigen { get; set; }
-        public string CarpetaDestino { get; set; }
+        public string RutaCarpetaOrigen { get; set; }
+        public string RutaCarpetaDestino { get; set; }
+        public string RutaCarpetaReplicada { get; set; }
         public string NombreCarpetaReplicada { get; set; }
+        public int RangoFin { get; set; }
+        public int RangoInicio { get; set; }
     }
 }

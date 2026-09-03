@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DebugReplicator.Controller
+namespace DebugReplicator.Controller.Utilities
 {
-    public interface IGestorCarpetasArchivos
+    public class Utils
     {
     }
 }

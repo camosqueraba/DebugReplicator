@@ -4,8 +4,9 @@
              xmlns:local="clr-namespace:DebugReplicator"
              xmlns:viewModels="clr-namespace:DebugReplicator.ViewModel"
              xmlns:views="clr-namespace:DebugReplicator.View"
+             xmlns:controls="clr-namespace:DebugReplicator.Controller.Converters"
              >
-    <Application.Resources>
+    <Application.Resources>        
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ProgressBar.xaml" />
@@ -42,8 +43,8 @@
                         <Setter Property="BorderThickness" Value="2"/>
                     </Trigger>
                 </Style.Triggers>
-            </Style>            
-
+            </Style>
+            
             <DataTemplate DataType="{x:Type viewModels:VistaPrincipalViewModel}">
                 <views:VistaPrincipal/>
             </DataTemplate>
@@ -56,8 +57,11 @@
                 <views:VistaIdexacionArchivos/>
             </DataTemplate>
 
-        </ResourceDictionary>
+            <DataTemplate DataType="{x:Type viewModels:VistaEditarArchivosConfigViewModel}">
+                <views:VistaEditarArchivosCofig/>
+            </DataTemplate>
 
-        
+            <controls:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
