@@ -19,7 +19,7 @@
                         <TextBlock Text="Atras"/>
                     </StackPanel>
                 </Button>
-                <Button Width="100" Height="30" HorizontalAlignment="Left" Margin="30,0,0,10" Command="{Binding ContinuarCommand}">
+                <Button Foreground="Blue" FontWeight="Bold" BorderBrush="Blue" Width="100" Height="30" HorizontalAlignment="Left" Margin="30,0,0,10" Command="{Binding ContinuarCommand}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Continuar"/>
                     </StackPanel>

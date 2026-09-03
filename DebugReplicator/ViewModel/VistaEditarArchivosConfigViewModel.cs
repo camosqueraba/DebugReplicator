@@ -19,7 +19,7 @@ namespace DebugReplicator.ViewModel
 
         public ICommand VolverCommand { get; }
 
-        public ICommand ContinuarCommand { get; }
+        public ICommand IniciarCommand { get; }
         public ICommand ReplicarCommand { get; }
         
         private readonly NavigationStore _NavigationStore;
@@ -81,7 +81,7 @@ namespace DebugReplicator.ViewModel
             DatosInicialesDTO = datosInicialesDTO;
 
             VolverCommand = new RelayCommand(Volver);
-            //ContinuarCommand = new RelayCommand(ContinuarConFileItemmsSeleccionados, ArchivosSeleccionadosTienenCaraterBandera);
+            IniciarCommand = new RelayCommand(Iniciar);
             ReplicarCommand = new RelayCommand(ReplicarConArchivosConfigEditados, ArchivosSeleccionadosTienenCaracterBandera);
 
             FileItemsIndexados = vistaIndexacionArchivosViewModel.FileItemsIndexados;
@@ -91,6 +91,13 @@ namespace DebugReplicator.ViewModel
 
         private void Volver()
         {
+            _NavigationStore.CurrentViewModel = _VistaIndexacionArchivosViewModel;
+        }
+
+        private void Iniciar()
+        {
+
+
             _NavigationStore.CurrentViewModel = _VistaIndexacionArchivosViewModel;
         }
 

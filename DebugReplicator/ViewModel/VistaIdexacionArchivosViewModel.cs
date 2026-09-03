@@ -16,8 +16,7 @@ namespace DebugReplicator.ViewModel
 {
     public class VistaIdexacionArchivosViewModel : BaseViewModel
     {
-        public ICommand VolverCommand { get; }
-        
+        public ICommand VolverCommand { get; }        
         public ICommand ContinuarCommand { get; }
         public ICommand ReplicarCommand { get; }
 

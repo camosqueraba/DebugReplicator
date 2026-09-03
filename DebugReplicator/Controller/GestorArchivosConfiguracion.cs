@@ -12,6 +12,8 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml;
 using System.Xml.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace DebugReplicator.Controller
 {
@@ -162,6 +164,23 @@ namespace DebugReplicator.Controller
             return result;
         }
 
+        private static ResultadoProceso LoadJson(string rutaArchivoConfig)
+        {
+            ResultadoProceso resultadoProceso = new ResultadoProceso();
+
+            if (string.IsNullOrWhiteSpace(rutaArchivoConfig))
+                throw new ArgumentNullException(nameof(rutaArchivoConfig));
+
+            if (!File.Exists(rutaArchivoConfig))
+                throw new FileNotFoundException($"Archivo no encontrado: {rutaArchivoConfig}");
+
+            string jsonString = File.ReadAllText(rutaArchivoConfig);
+            JsonNode rootNode = JsonNode.Parse(jsonString);
+
+
+            return resultadoProceso;
+        }
+
         public static ResultadoProceso ModificarArchivoConfiguracionExterno(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones, int indice)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
@@ -266,5 +285,7 @@ namespace DebugReplicator.Controller
                 return resultadoProceso;
             }            
         }
+
+        //private static ResultadoProceso ModificarJson(string rutaArchivoConfig)
     }
 }
