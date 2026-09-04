@@ -14,6 +14,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Newtonsoft.Json.Linq;
 
 namespace DebugReplicator.Controller
 {
@@ -38,7 +39,7 @@ namespace DebugReplicator.Controller
             switch (extension)
             {
                 case ".json":
-                    //LoadJson(filePath);
+                    claveValor = LoadJson(rutaArchivoConfig);
                     break;
                 
                 case ".config":
@@ -164,9 +165,9 @@ namespace DebugReplicator.Controller
             return result;
         }
 
-        private static ResultadoProceso LoadJson(string rutaArchivoConfig)
+        private static Dictionary<string, string> LoadJson(string rutaArchivoConfig)
         {
-            ResultadoProceso resultadoProceso = new ResultadoProceso();
+            Dictionary<string, string> result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             if (string.IsNullOrWhiteSpace(rutaArchivoConfig))
                 throw new ArgumentNullException(nameof(rutaArchivoConfig));
@@ -175,10 +176,126 @@ namespace DebugReplicator.Controller
                 throw new FileNotFoundException($"Archivo no encontrado: {rutaArchivoConfig}");
 
             string jsonString = File.ReadAllText(rutaArchivoConfig);
-            JsonNode rootNode = JsonNode.Parse(jsonString);
+            //JsonNode rootNode = JsonNode.Parse(jsonString);
+            result = ExtractFromJson(jsonString);
 
+            return result;
+        }
 
-            return resultadoProceso;
+        public static Dictionary<string, string> ExtractFromJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                throw new ArgumentException(
+                    "El JSON no puede estar vacío.",
+                    "json");
+            }
+
+            JObject root;
+
+            try
+            {
+                root = JObject.Parse(json);
+            }
+            catch (Exception ex)
+            {
+                throw new FormatException(
+                    "El contenido proporcionado no es un JSON válido.",
+                    ex);
+            }
+
+            var result = new Dictionary<string, string>(
+                StringComparer.OrdinalIgnoreCase);
+
+            ExtractToken(root, result, string.Empty);
+
+            return result;
+        }
+
+        private static void ExtractToken(JToken token, Dictionary<string, string> result, string path)
+        {
+            if (token == null)
+                return;
+
+            if (token.Type == JTokenType.Object)
+            {
+                foreach (JProperty property in token.Children<JProperty>())
+                {
+                    string currentPath;
+
+                    if (string.IsNullOrEmpty(path))
+                    {
+                        currentPath = property.Name;
+                    }
+                    else
+                    {
+                        currentPath = path + "." + property.Name;
+                    }
+
+                    if (property.Value.Type == JTokenType.Object ||
+                        property.Value.Type == JTokenType.Array)
+                    {
+                        ExtractToken(
+                            property.Value,
+                            result,
+                            currentPath);
+                    }
+                    else
+                    {
+                        result[currentPath] =
+                            GetValueAsString(property.Value);
+                    }
+                }
+            }
+            else if (token.Type == JTokenType.Array)
+            {
+                int index = 0;
+
+                foreach (JToken item in token.Children())
+                {
+                    string currentPath =
+                        path + "[" + index + "]";
+
+                    if (item.Type == JTokenType.Object ||
+                        item.Type == JTokenType.Array)
+                    {
+                        ExtractToken(
+                            item,
+                            result,
+                            currentPath);
+                    }
+                    else
+                    {
+                        result[currentPath] =
+                            GetValueAsString(item);
+                    }
+
+                    index++;
+                }
+            }
+        }
+
+        private static string GetValueAsString(JToken token)
+        {
+            if (token == null ||
+                token.Type == JTokenType.Null)
+            {
+                return string.Empty;
+            }
+
+            if (token.Type == JTokenType.String)
+            {
+                return token.Value<string>() ?? string.Empty;
+            }
+
+            if (token.Type == JTokenType.Boolean)
+            {
+                return token.Value<bool>()
+                    ? "true"
+                    : "false";
+            }
+
+            return token.ToString();
         }
 
         public static ResultadoProceso ModificarArchivoConfiguracionExterno(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones, int indice)
@@ -200,7 +317,7 @@ namespace DebugReplicator.Controller
                 switch (extension)
                 {
                     case ".json":
-                        //LoadJson(rutaArchivoConfig);
+                        resultadoProceso = ModificarJson(rutaArchivoConfig, nuevasConfiguraciones, indice);
                         break;
 
                     case ".config":
@@ -226,6 +343,8 @@ namespace DebugReplicator.Controller
             }
                
         }
+
+        
 
         private static ResultadoProceso ModificarKeyValue(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones)
         {
@@ -286,6 +405,64 @@ namespace DebugReplicator.Controller
             }            
         }
 
+        private static ResultadoProceso ModificarJson(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones, int indice)
+        {
+            ResultadoProceso resultadoProceso = new ResultadoProceso();
+
+            try
+            { 
+                string jsonString = File.ReadAllText(rutaArchivoConfig);
+                JObject root = Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString) as JObject;
+
+                JToken jToken = jsonObject.SelectToken()
+                /*
+                XDocument xmlDoc = XDocument.Load(rutaArchivoConfig);
+
+                XElement appSettings = xmlDoc.Root.Element("appSettings");
+
+                if (appSettings == null)
+                {
+                    resultadoProceso.Completado = false;
+                    resultadoProceso.Errores.Add("El archivo config no contiene una sección <appSettings>.");
+                    return resultadoProceso;
+                }
+
+                foreach (XElement item in appSettings.Elements("add"))
+                {
+                    string key = item.Attribute("key").Value;
+
+                    if (string.IsNullOrEmpty(key))
+                        continue;
+
+                    ClaveValorModel nuevaConfiguracion = nuevasConfiguraciones.FirstOrDefault(c => c.Clave == key);
+
+                    if (nuevaConfiguracion != null)
+                    {
+                        string valorOriginal = nuevaConfiguracion.Valor;
+                        string valorIndexado = nuevaConfiguracion.Valor;
+
+                        if (nuevaConfiguracion.Valor.Contains(GlobalVars.CARACTER_BANDERA))
+
+                            valorIndexado = valorOriginal.Replace(GlobalVars.CARACTER_BANDERA, indice.ToString());
+
+
+                        item.SetAttributeValue("value", valorIndexado);
+                    }
+                }
+
+                xmlDoc.Save(rutaArchivoConfig);
+
+                resultadoProceso.Completado = true;
+                */
+
+                return resultadoProceso;
+            }
+            catch (Exception ex)
+            {
+                resultadoProceso.Errores.Add(ex.Message);
+                return resultadoProceso;
+            }
+        }
         //private static ResultadoProceso ModificarJson(string rutaArchivoConfig)
     }
 }
