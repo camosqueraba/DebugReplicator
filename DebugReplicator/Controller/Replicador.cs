@@ -278,22 +278,30 @@ namespace DebugReplicator.Controller
             return configuraciones;
         }
 
-        public static bool ModificarArchivoConfiguraciones(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones, int indice)
+        public static ResultadoProceso ModificarArchivoConfiguraciones(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones, int indice)
         {
             ResultadoProceso resultadoProceso = new ResultadoProceso();
             try
             {
-                if (File.Exists(rutaArchivoConfig))
+                if (File.Exists(rutaArchivoConfig) )
                 {
                     resultadoProceso = GestorArchivosConfiguracion.ModificarArchivoConfiguracionExterno(rutaArchivoConfig, nuevasConfiguraciones, indice);
-                    return true;
+                    return resultadoProceso;
                 }
-                return false;
+                else if (!File.Exists(rutaArchivoConfig) || nuevasConfiguraciones == null || nuevasConfiguraciones.Count == 0 || indice < 0)
+                {
+                    LOGRobotica.Controllers.LogApplication.LogWrite("Replicador -> ModificarArchivoConfiguraciones: No se puede modificar el archivo de configuración. Verifique que la ruta del archivo sea correcta, que las nuevas configuraciones no estén vacías y que el índice sea válido.");
+                    resultadoProceso.Completado = false;
+                    resultadoProceso.Errores.Add("No se puede modificar el archivo de configuración. Verifique que la ruta del archivo sea correcta, que las nuevas configuraciones no estén vacías y que el índice sea válido.");
+                }
+                return resultadoProceso;
             }
             catch (Exception ex)
             {
                 LOGRobotica.Controllers.LogApplication.LogWrite("Replicador -> ModificarArchivoConfiguraciones: Exception " + ex.Message);
-                return false;
+                resultadoProceso.Completado = false;
+                resultadoProceso.Errores.Add(ex.Message);
+                return resultadoProceso;
             }
 
         }

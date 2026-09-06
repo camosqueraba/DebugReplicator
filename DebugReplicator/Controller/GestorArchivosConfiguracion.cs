@@ -412,48 +412,39 @@ namespace DebugReplicator.Controller
             try
             { 
                 string jsonString = File.ReadAllText(rutaArchivoConfig);
-                JObject root = Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString) as JObject;
+                
 
-                JToken jToken = jsonObject.SelectToken()
-                /*
-                XDocument xmlDoc = XDocument.Load(rutaArchivoConfig);
+                JObject jsonObjectOriginal = Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString) as JObject;
+                
 
-                XElement appSettings = xmlDoc.Root.Element("appSettings");
-
-                if (appSettings == null)
+                if (jsonObjectOriginal == null)
                 {
                     resultadoProceso.Completado = false;
-                    resultadoProceso.Errores.Add("El archivo config no contiene una sección <appSettings>.");
+                    resultadoProceso.Errores.Add("El archivo JSON no contiene un objeto raíz válido.");
                     return resultadoProceso;
                 }
-
-                foreach (XElement item in appSettings.Elements("add"))
+                else
                 {
-                    string key = item.Attribute("key").Value;
-
-                    if (string.IsNullOrEmpty(key))
-                        continue;
-
-                    ClaveValorModel nuevaConfiguracion = nuevasConfiguraciones.FirstOrDefault(c => c.Clave == key);
-
-                    if (nuevaConfiguracion != null)
-                    {
+                    foreach (var nuevaConfiguracion in nuevasConfiguraciones)
+                    {   
+                        string key = nuevaConfiguracion.Clave;
                         string valorOriginal = nuevaConfiguracion.Valor;
                         string valorIndexado = nuevaConfiguracion.Valor;
-
+                     
                         if (nuevaConfiguracion.Valor.Contains(GlobalVars.CARACTER_BANDERA))
-
                             valorIndexado = valorOriginal.Replace(GlobalVars.CARACTER_BANDERA, indice.ToString());
-
-
-                        item.SetAttributeValue("value", valorIndexado);
+                        
+                        JToken token = jsonObjectOriginal.SelectToken(key);
+                        
+                        if (token != null)
+                        {
+                            token.Replace(valorIndexado);
+                        }                        
                     }
+                      
+                    File.WriteAllText(rutaArchivoConfig, jsonObjectOriginal.ToString());
+                    resultadoProceso.Completado = true;
                 }
-
-                xmlDoc.Save(rutaArchivoConfig);
-
-                resultadoProceso.Completado = true;
-                */
 
                 return resultadoProceso;
             }
@@ -462,7 +453,6 @@ namespace DebugReplicator.Controller
                 resultadoProceso.Errores.Add(ex.Message);
                 return resultadoProceso;
             }
-        }
-        //private static ResultadoProceso ModificarJson(string rutaArchivoConfig)
+        }          
     }
 }

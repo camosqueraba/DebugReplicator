@@ -20,7 +20,7 @@ namespace DebugReplicator.ViewModel
         public ICommand VolverCommand { get; }
 
         public ICommand IniciarCommand { get; }
-        public ICommand ReplicarCommand { get; }
+        public ICommand ReplicarCommand { get; }      
         
         private readonly NavigationStore _NavigationStore;
 
@@ -59,7 +59,9 @@ namespace DebugReplicator.ViewModel
 
         private void ComboBoxArchivosConfigSelectionChange()
         {
+            PropiedadesArchivoConfig.Clear();
             FileModel archivoConfigSeleccionado = this.ArchivoConfigSeleccionado;
+
 
             List<ClaveValorModel> claveValorModels = Replicador.LeerArchivoConfiguraciones(archivoConfigSeleccionado.Path);
 
