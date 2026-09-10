@@ -27,6 +27,6 @@ namespace DebugReplicator.Model
         }
 
         public bool EsArchivoConfig { get; set; }
-        public List<ClaveValorModel> PropiedadesArchivoConfig { get; set; }
+        public List<ClaveValorModel> PropiedadesClaveValor { get; set; }
     }
 }

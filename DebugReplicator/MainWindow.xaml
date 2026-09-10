@@ -8,26 +8,129 @@
         xmlns:Converters="clr-namespace:DebugReplicator.Controller.Converters"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"        
-        FontFamily="sans-serif"
-        Background="Transparent"
-        Height="500" Width="900"
-        MinHeight="500" MinWidth="590"
-        Closing="CerrarVentana">
+            WindowStyle="None"        
+    Height="500" Width="900"
+    MinHeight="500" MinWidth="555" StateChanged="Window_StateChanged" Closing="Window_Closing" >
+
     <Window.Resources>
-        <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <Style x:Key="boton_ventana" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{StaticResource azul_principal_konecta}" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Margin" Value="5,0,0,0"/>
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Template" >
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="50">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource blanco}" />
+                    <Setter Property="Background" Value="{StaticResource azul_principal_konecta}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="boton_ventana_cerrar" BasedOn="{StaticResource boton_ventana}" TargetType="{x:Type Button}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource danger_red}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="border_barra_superior_activo" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource blanco}" />
+            <Setter Property="CornerRadius" Value="20, 20, 0, 0" />
+            <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
+            <Setter Property="BorderBrush" Value="{StaticResource azul_principal_konecta}"/>
+        </Style>
+        <Style x:Key="border_barra_superior_desactivo" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource gris_texto_secundario}" />
+            <Setter Property="CornerRadius" Value="20, 20, 0, 0" />
+            <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
+            <Setter Property="BorderBrush" Value="{StaticResource azul_principal_konecta}"/>
+        </Style>
     </Window.Resources>
-    <Border Background="{StaticResource color_fondo_body}">
-        <Grid>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="40" 
+          ResizeBorderThickness="5" 
+          GlassFrameThickness="0" 
+          CornerRadius="20" />
+    </WindowChrome.WindowChrome>
+
+    <Border BorderThickness="0.5" BorderBrush="Gray">
+        <Grid Background="Transparent">
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <!-- Title Bar Row -->
+                <RowDefinition Height="35"/>
+                <!-- Main Content Row -->
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
 
+            <!-- Custom Title Bar Grid -->
+            <Grid x:Name="barra_titulo" Grid.Row="0" Background="LightGray"  >
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="*"/>
+                    <!-- Title Text Area -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Window Control Buttons -->
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                    <Image Source="Images/konecta_icon.png" Width="20" Height="20" Margin="5"/>
+                    <!-- App Title -->
+                    <TextBlock x:Name="texblock_titulo_ventana"  Text="Titulo Ventana" 
+                    Foreground="Black" VerticalAlignment="Center" 
+                    Margin="15,0,0,0" FontSize="14" FontWeight="SemiBold"/>
+                </StackPanel>
+
+
+                <!-- Window Caption Buttons Area -->
+                <!-- WindowChrome.IsHitTestVisible="True" ensures the buttons remain clickable -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" IsHitTestVisible="True" WindowChrome.IsHitTestVisibleInChrome="True" Margin="0 0 10 0">
+                    <Button x:Name="boton_minimizar" Style="{StaticResource boton_ventana}" ToolTip="Minimizar" Click="Minimizar_Ventana">
+                        <materialDesign:PackIcon Kind="WindowMinimize"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Center" Height="20" Width="20"/>
+                    </Button>
+                    <Button x:Name="boton_restaurar" Style="{StaticResource boton_ventana}" ToolTip="Minimizar" Click="Restaurar_Ventana">
+                        <materialDesign:PackIcon Kind="WindowRestore"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Center" Height="20" Width="20"/>
+                    </Button>
+                    <Button x:Name="boton_maximizar" Style="{StaticResource boton_ventana}" ToolTip="Maximizar" Click="Maximizar_Ventana">
+                        <materialDesign:PackIcon Kind="WindowMaximize"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center" Height="20" Width="20"/>
+                    </Button>
+                    <Button x:Name="boton_cerrar" Style="{StaticResource boton_ventana_cerrar}" ToolTip="Cerrar" Click="Cerrar_Ventana">
+                        <materialDesign:PackIcon Kind="CloseThick"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center" Height="20" Width="20"/>
+                    </Button>
+                    <!--<Button x:Name="boton_minimizar" Content="—"  Width="45" Background="Transparent" Foreground="Black" BorderThickness="0" Click="Minimizar_Ventana"/>
+                <Button x:Name="boton_maximizar" Content="🗖" Width="45" Background="Transparent" Foreground="Black" BorderThickness="0" Click="Maximizar_Ventana"/>
+                <Button x:Name="boton_restaurar" Content="🗗" Width="45" Background="Transparent" Foreground="Black" BorderThickness="0" Click="Restaurar_Ventana"/>
+                <Button x:Name="boton_cerrar"    Content="✕" Width="45" Background="Transparent" Foreground="Black" BorderThickness="0" Click="Cerrar_Ventana"/>-->
+                </StackPanel>
+            </Grid>          
+
 
             <!--#region Contenido principal-->
-            <Grid Grid.Row="0" Background="#FFF8F8F8" >
+            <Grid Grid.Row="1" Background="#FFF8F8F8" >
                 <ScrollViewer x:Name="ScrollView_Principal" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                              VerticalContentAlignment="Top" Margin="10">
+                  VerticalContentAlignment="Top" Margin="10">
 
                     <Grid x:Name="GridContenidoPrincipal">
                         <ContentControl Content="{Binding CurrentViewModel}" />
@@ -43,42 +146,36 @@
                                  Style="{StaticResource MaterialDesignCircularProgressBar}"
                                  Width="20" Height="20"
                                  Value="0"
-                                 Foreground="{StaticResource principal_konecta}">
+                                 Foreground="{StaticResource azul_principal_konecta}">
                                 <ProgressBar.LayoutTransform>
                                     <ScaleTransform CenterX="0.8" CenterY="0.8" ScaleX="3" ScaleY="3" />
                                 </ProgressBar.LayoutTransform>
                             </ProgressBar>
                             <Label x:Name="lbl_wait" Content="Cargando..."  HorizontalContentAlignment="Center" VerticalAlignment="Center"
-                                   FontSize="25" Foreground="{StaticResource principal_konecta}" Background="{x:Null}"/>
+                                FontSize="25" Foreground="{StaticResource azul_principal_konecta}" Background="{x:Null}"/>
 
                         </StackPanel>
                     </Border>
-                    
                 </Grid>
-                
-                
             </Grid>
             <!--#endregion-->
 
             <!--#region Barra inferior-->
-            <Grid Grid.Row="1">
-                <Border Background="{StaticResource principal_konecta}"  BorderBrush="{StaticResource principal_konecta}">
-                    <StackPanel Orientation="Horizontal" Margin="10, 0" HorizontalAlignment="Center">
-                        <materialDesign:PackIcon Kind="Account" Width="20" Height="20" VerticalAlignment="Center" Foreground="White"/>
-                        <Label x:Name="lbl_nombre_usuario" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
+            <Grid Grid.Row="2" Background="{StaticResource azul_footer_konecta}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="20,0,0,0">
+                    <materialDesign:PackIcon Kind="Account" Width="15" Height="15" VerticalAlignment="Center" Foreground="White"/>
+                    <Label x:Name="lbl_nombre_usuario" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
 
-                        <materialDesign:PackIcon Kind="Monitor" Width="20" Height="20" VerticalAlignment="Center" Foreground="White"/>
-                        <Label x:Name="lbl_informacion_maquina" FontSize="14" Foreground="White"  VerticalAlignment="Center"/>
+                    <materialDesign:PackIcon Kind="Monitor" Width="15" Height="15" VerticalAlignment="Center" Foreground="White"/>
+                    <Label x:Name="lbl_informacion_maquina" FontSize="14" Foreground="White"  VerticalAlignment="Center"/>
 
-                        <materialDesign:PackIcon Kind="Calendar" Width="20" Height="20" VerticalAlignment="Center" Foreground="White"/>
-                        <Label x:Name="lbl_fecha"   FontSize="14"  Foreground="White"  VerticalAlignment="Center"/>
+                    <materialDesign:PackIcon Kind="Calendar" Width="15" Height="15" VerticalAlignment="Center" Foreground="White"/>
+                    <Label x:Name="lbl_fecha"   FontSize="14"  Foreground="White"  VerticalAlignment="Center"/>
 
-                        <materialDesign:PackIcon Kind="SourceBranch" Width="20" Height="20" VerticalAlignment="Center" Foreground="White"/>
-                        <Label x:Name="lbl_vesion_proyecto" FontSize="14" Foreground="White"  VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
+                    <materialDesign:PackIcon Kind="SourceBranch" Width="15" Height="15" VerticalAlignment="Center" Foreground="White"/>
+                    <Label x:Name="lbl_vesion_proyecto" FontSize="14" Foreground="White"  VerticalAlignment="Center"/>
+                </StackPanel>
             </Grid>
-            <!--#endregion-->
         </Grid>
     </Border>
 </Window>

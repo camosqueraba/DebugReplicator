@@ -218,7 +218,7 @@ namespace DebugReplicator.Controller
                             if (archivoIndexado.EsArchivoConfig)
                             {
                                 string fullPathArchivoIndexado = Path.Combine(archivoCarpetaIndexada.Directory.FullName, nuevoNombreArchivo); 
-                                ModificarArchivoConfiguraciones(fullPathArchivoIndexado, archivoIndexado.PropiedadesArchivoConfig, indice);
+                                ModificarArchivoConfiguraciones(fullPathArchivoIndexado, archivoIndexado.PropiedadesClaveValor, indice);
                             }
                         }
                     }

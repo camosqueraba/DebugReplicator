@@ -10,7 +10,6 @@ namespace DebugReplicator.Model
 {
     public class ArchivoConfigModel : IndexedFileModel
     {
-        //public List<ClaveValorModel> ItemsClaveValor { get; set; }
         public ObservableCollection<ClaveValorControl> PropiedadesArchivoConfig { get; set; }
     }
 }

@@ -54,7 +54,7 @@ namespace DebugReplicator.ViewModel
             }
         }
 
-        private ObservableCollection<ClaveValorControl> propiedadesArchivoConfig { get; set; }
+        private ObservableCollection<ClaveValorControl> propiedadesArchivoConfig;
         public ObservableCollection<ClaveValorControl> PropiedadesArchivoConfig
         {
             get { return propiedadesArchivoConfig; }
@@ -131,7 +131,7 @@ namespace DebugReplicator.ViewModel
                             
                             List<ClaveValorModel> listaPropiedades = ExtraerPropiedadesClaveValor(archivoConfig.PropiedadesArchivoConfig);
                             
-                            item.IndexedFile.PropiedadesArchivoConfig = listaPropiedades;
+                            item.IndexedFile.PropiedadesClaveValor = listaPropiedades;
                         }
                     }
 
@@ -189,8 +189,8 @@ namespace DebugReplicator.ViewModel
             }
             catch (Exception ex)
             {
-
-                throw;
+                LOGRobotica.Controllers.LogApplication.LogWrite("VistaIdexacionArchivosViewModel -> ExtraerPropiedadesClaveValor: Exception " + ex.Message);
+                return null;
             }
         }
 

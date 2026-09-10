@@ -62,7 +62,7 @@ namespace DebugReplicator.ViewModel
             return true;
         }
 
-        private async void ContinuarConFileItemmsSeleccionados()
+        private void ContinuarConFileItemmsSeleccionados()
         {
             try
             {
