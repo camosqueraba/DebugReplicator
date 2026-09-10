@@ -1,20 +1,12 @@
 ﻿using DebugReplicator.Model;
 using DebugReplicator.Model.DTOs;
-using MS.WindowsAPICodePack.Internal;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Input;
 using System.Xml;
 using System.Xml.Linq;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using Newtonsoft.Json.Linq;
 
 namespace DebugReplicator.Controller
 {

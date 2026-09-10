@@ -1,14 +1,13 @@
 ﻿using DebugReplicator.Controller;
+using DebugReplicator.Controller.Services;
 using DebugReplicator.Controller.Utilities;
 using DebugReplicator.Model;
 using DebugReplicator.Model.DTOs;
 using DebugReplicator.View.UIControls;
-using Shell32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -16,21 +15,19 @@ namespace DebugReplicator.ViewModel
 {
     public class VistaEditarArchivosConfigViewModel : BaseViewModel
     {
-
         public ICommand VolverCommand { get; }
-
         public ICommand IniciarCommand { get; }
         public ICommand ReplicarCommand { get; }      
         
         private readonly NavigationStore _NavigationStore;
 
         private readonly VistaIdexacionArchivosViewModel _VistaIndexacionArchivosViewModel;
+        private readonly VistaPrincipalViewModel _VistaPrincipalViewModel;
 
         public ObservableCollection<IndexedFileControl> FileItemsIndexados { get; set; }
 
         public ObservableCollection<ArchivoConfigModel> ArchivosConfig { get; set; }
-
-        public ObservableCollection<ClaveValorControl> PropiedadesArchivoConfig { get; set; }
+        
         public DatosInicialesDTO DatosInicialesDTO { get; set; }
 
         private string mensajeInfo;
@@ -57,27 +54,31 @@ namespace DebugReplicator.ViewModel
             }
         }
 
-        private void ComboBoxArchivosConfigSelectionChange()
+        private ObservableCollection<ClaveValorControl> propiedadesArchivoConfig { get; set; }
+        public ObservableCollection<ClaveValorControl> PropiedadesArchivoConfig
         {
-            PropiedadesArchivoConfig.Clear();
-            FileModel archivoConfigSeleccionado = this.ArchivoConfigSeleccionado;
-
-
-            List<ClaveValorModel> claveValorModels = Replicador.LeerArchivoConfiguraciones(archivoConfigSeleccionado.Path);
-
-            foreach (var item in claveValorModels)
+            get { return propiedadesArchivoConfig; }
+            set
             {
-                ClaveValorControl claveValorControl = new ClaveValorControl(item);
-                PropiedadesArchivoConfig.Add(claveValorControl);
+                if(propiedadesArchivoConfig != value)
+                {
+                    propiedadesArchivoConfig = value;
+                    OnPropertyChanged(nameof(PropiedadesArchivoConfig));
+                }
             }
-
-            ArchivoConfigSeleccionado.PropiedadesArchivoConfig = PropiedadesArchivoConfig;
-             
         }
 
-        public VistaEditarArchivosConfigViewModel(VistaIdexacionArchivosViewModel vistaIndexacionArchivosViewModel, NavigationStore navigationStore, DatosInicialesDTO datosInicialesDTO)
+        private void ComboBoxArchivosConfigSelectionChange()
+        {            
+            var archivoConfigSeleccionado = ArchivosConfig.FirstOrDefault(archivo => archivo.Name == ArchivoConfigSeleccionado.Name);
+            PropiedadesArchivoConfig.Clear();
+            PropiedadesArchivoConfig = new ObservableCollection<ClaveValorControl>(archivoConfigSeleccionado.PropiedadesArchivoConfig);
+        }
+
+        public VistaEditarArchivosConfigViewModel(VistaIdexacionArchivosViewModel vistaIndexacionArchivosViewModel, NavigationStore navigationStore, DatosInicialesDTO datosInicialesDTO, VistaPrincipalViewModel vistaPrincipalViewModel)
         {
             _VistaIndexacionArchivosViewModel = vistaIndexacionArchivosViewModel;
+            _VistaPrincipalViewModel = vistaPrincipalViewModel;
             _NavigationStore = navigationStore;
             
             DatosInicialesDTO = datosInicialesDTO;
@@ -89,6 +90,9 @@ namespace DebugReplicator.ViewModel
             FileItemsIndexados = vistaIndexacionArchivosViewModel.FileItemsIndexados;
             ArchivosConfig = ObtenerArchivosConfig(vistaIndexacionArchivosViewModel.FileItemsIndexados);
             PropiedadesArchivoConfig = new ObservableCollection<ClaveValorControl>();
+
+            AgregarPropiedadesArchivoConfig(ArchivosConfig);
+            
         }
 
         private void Volver()
@@ -98,9 +102,7 @@ namespace DebugReplicator.ViewModel
 
         private void Iniciar()
         {
-
-
-            _NavigationStore.CurrentViewModel = _VistaIndexacionArchivosViewModel;
+            _NavigationStore.CurrentViewModel = _VistaPrincipalViewModel;
         }
 
         private bool ArchivosSeleccionadosTienenCaracterBandera()
@@ -169,7 +171,6 @@ namespace DebugReplicator.ViewModel
         {
             try
             {
-
                 List<ClaveValorModel> listaPropiedades = new List<ClaveValorModel>();
 
                 foreach (var item in propiedadesArchivoConfig)
@@ -216,6 +217,29 @@ namespace DebugReplicator.ViewModel
 
             return archivosConfig;
         }
+
+        private bool AgregarPropiedadesArchivoConfig(ObservableCollection<ArchivoConfigModel> archivosConfig)
+        {
+            bool result = false;
+
+            if (archivosConfig == null || archivosConfig.Count < 1)
+                return false;
+
+            foreach (var archivoConfig in archivosConfig)
+            {
+                List<ClaveValorModel> claveValorModels = Replicador.LeerArchivoConfiguraciones(archivoConfig.Path);
+
+                foreach (var item in claveValorModels)
+                {
+                    ClaveValorControl claveValorControl = new ClaveValorControl(item);
+                    archivoConfig.PropiedadesArchivoConfig.Add(claveValorControl);
+                }
+            }
+
+
+            return result;
+        }        
+        
     }
 }
 

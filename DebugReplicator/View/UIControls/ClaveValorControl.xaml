@@ -10,7 +10,7 @@
     <Grid  Width="730">
         <StackPanel Orientation="Horizontal"  HorizontalAlignment="Left">            
             <Border>
-                <TextBlock Text="{Binding Clave}" Width="380"/>
+                <TextBox Text="{Binding Clave}" ToolTip="{Binding Clave}" Width="380" IsReadOnly="True"/>
             </Border>
             <Border>
                 <!--<TextBlock Text="{Binding DateModified}" HorizontalAlignment="Center"/>-->

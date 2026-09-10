@@ -23,6 +23,7 @@ namespace DebugReplicator.ViewModel
         private readonly NavigationStore _NavigationStore;
 
         private readonly VistaListaArchivosViewModel _VistaListaArchivosViewModel;
+        private readonly VistaPrincipalViewModel _VistaPrincipalViewModel;
 
         public ObservableCollection<IndexedFileControl> FileItemsIndexados { get; set; }
 
@@ -35,9 +36,10 @@ namespace DebugReplicator.ViewModel
             set { mensajeInfo = value; OnPropertyChanged(nameof(MensajeInfo)); }
         }
 
-        public VistaIdexacionArchivosViewModel(VistaListaArchivosViewModel vistaListaArchivosViewModel, NavigationStore navigationStore, DatosInicialesDTO datosInicialesDTO)
+        public VistaIdexacionArchivosViewModel(VistaListaArchivosViewModel vistaListaArchivosViewModel, NavigationStore navigationStore, DatosInicialesDTO datosInicialesDTO, VistaPrincipalViewModel vistaPrincipalViewModel)
         {
             _VistaListaArchivosViewModel = vistaListaArchivosViewModel;
+            _VistaPrincipalViewModel = vistaPrincipalViewModel;
             _NavigationStore = navigationStore;
             FileItemsIndexados = CrearSelectedFileControls(vistaListaArchivosViewModel.FileItemsSeleccionados);
 
@@ -69,7 +71,7 @@ namespace DebugReplicator.ViewModel
                 MainWindowViewModel.GetInstance(_NavigationStore).ShowLoading();
                 
 
-                VistaEditarArchivosConfigViewModel vistaEditarArchivosConfigViewModel = new VistaEditarArchivosConfigViewModel(this, _NavigationStore, DatosInicialesDTO);
+                VistaEditarArchivosConfigViewModel vistaEditarArchivosConfigViewModel = new VistaEditarArchivosConfigViewModel(this, _NavigationStore, DatosInicialesDTO, _VistaPrincipalViewModel);
                 _NavigationStore.CurrentViewModel = vistaEditarArchivosConfigViewModel;
             }
             catch (Exception ex)

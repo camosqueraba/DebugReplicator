@@ -20,12 +20,12 @@ namespace DebugReplicator.ViewModel
         public ICommand ContinuarCommand { get; }
 
         private readonly NavigationStore _navigationStore;
-
+        
         private readonly VistaPrincipalViewModel _VistaPrincipalViewModel;
-
         public ObservableCollection<FilesControl> FileItems { get; set; }
         public ObservableCollection<FilesControl> TotalFileItems { get; set; }
         public ObservableCollection<FilesControl> FileItemsSeleccionados { get; set; }
+
 
         public DatosInicialesDTO DatosInicialesDTO { get; set; }
         public  Stack<string> RutasVisitadas { get; set; }
@@ -41,6 +41,7 @@ namespace DebugReplicator.ViewModel
 
             _VistaPrincipalViewModel = vistaPrincipalViewModel;
             _navigationStore         = navigationStore;  
+           
 
             FileItems               = new ObservableCollection<FilesControl>();
             FileItemsSeleccionados  = new ObservableCollection<FilesControl>();
@@ -74,7 +75,7 @@ namespace DebugReplicator.ViewModel
                     FileItemsSeleccionados.Add(archivo);
             }
 
-            VistaIdexacionArchivosViewModel vistaIdexacionArchivosViewModel = new VistaIdexacionArchivosViewModel(this, _navigationStore, DatosInicialesDTO);
+            VistaIdexacionArchivosViewModel vistaIdexacionArchivosViewModel = new VistaIdexacionArchivosViewModel(this, _navigationStore, DatosInicialesDTO, _VistaPrincipalViewModel);
             _navigationStore.CurrentViewModel = vistaIdexacionArchivosViewModel;
         }
 

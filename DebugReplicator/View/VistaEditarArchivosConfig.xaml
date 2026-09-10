@@ -18,12 +18,12 @@
                         <TextBlock Text="Atras"/>
                     </StackPanel>
                 </Button>
-                <Button Foreground="Blue" FontWeight="Bold" BorderBrush="Blue" Width="100" Height="30" HorizontalAlignment="Left" Margin="30,0,0,10" Command="{Binding ReplicarCommand}">
+                <Button  Width="100" Height="30" HorizontalAlignment="Left" Margin="30,0,0,10" Command="{Binding ReplicarCommand}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Replicar"/>
                     </StackPanel>
                 </Button>
-                <Button Foreground="Red" FontWeight="Bold" BorderBrush="Red" Width="100" Height="30" HorizontalAlignment="Left" Margin="30,0,0,10" Command="{Binding IniciarCommand}">
+                <Button  Width="100" Height="30" HorizontalAlignment="Left" Margin="30,0,0,10" Command="{Binding IniciarCommand}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Inicio"/>
                     </StackPanel>
@@ -34,14 +34,14 @@
                 </Border>
             </StackPanel>
             <StackPanel Orientation="Vertical">
-                <Border Margin="35 0 0 0" HorizontalAlignment="Left">
+                <Border Margin="35 0 0 10" HorizontalAlignment="Left">
                     <ComboBox Width="200"  ItemsSource="{Binding ArchivosConfig}" SelectedItem="{Binding ArchivoConfigSeleccionado, Mode=TwoWay}" DisplayMemberPath="Name">
                         
                     </ComboBox>
                 </Border>
 
 
-                <ListBox ItemsSource="{Binding PropiedadesArchivoConfig, UpdateSourceTrigger=PropertyChanged}"
+                <ListBox ItemsSource="{Binding PropiedadesArchivoConfig, UpdateSourceTrigger=PropertyChanged}" Height="250"
                             HorizontalContentAlignment="Stretch" Margin="0,0,0,0" ScrollViewer.HorizontalScrollBarVisibility="Auto"
                      />
                 
