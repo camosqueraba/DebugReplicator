@@ -221,7 +221,10 @@
     <Content Include="Library\LOGRobotica.dll" />
     <Content Include="Library\MaterialDesignColors.dll" />
     <Content Include="Library\MaterialDesignThemes.Wpf.dll" />
+    <Content Include="Library\Microsoft.WindowsAPICodePack.dll" />
+    <Content Include="Library\Microsoft.WindowsAPICodePack.Shell.dll" />
     <Content Include="Library\Microsoft.Xaml.Behaviors.dll" />
+    <Content Include="Library\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Shell32">
