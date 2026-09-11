@@ -1,5 +1,4 @@
 ﻿using DebugReplicator.Controller;
-using DebugReplicator.Controller.Services;
 using DebugReplicator.Controller.Utilities;
 using DebugReplicator.Model;
 using DebugReplicator.Model.DTOs;
@@ -48,7 +47,6 @@ namespace DebugReplicator.ViewModel
                 {
                     archivoConfigSeleccionado = value;
                     OnPropertyChanged(nameof(ArchivoConfigSeleccionado));
-                    // Perform actions based on the new selection here
                     ComboBoxArchivosConfigSelectionChange();
                 }
             }
@@ -236,10 +234,8 @@ namespace DebugReplicator.ViewModel
                 }
             }
 
-
             return result;
         }        
         
     }
 }
-
