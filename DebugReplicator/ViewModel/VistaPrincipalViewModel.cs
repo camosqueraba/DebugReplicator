@@ -48,8 +48,7 @@ namespace DebugReplicator.ViewModel
             }
         }
 
-        private string nombreCarpetaReplicada;        
-
+        private string nombreCarpetaReplicada;
         public string NombreCarpetaReplicada
         {
             get => nombreCarpetaReplicada;
@@ -100,10 +99,9 @@ namespace DebugReplicator.ViewModel
         public ICommand SiguienteCommand { get; }
         public ICommand ReplicarCommand { get; }
         public ICommand SeleccionarCarpetaOrigenCommand { get; }
-        public ICommand SeleccionarCarpetaDestinoCommand { get; }     
+        public ICommand SeleccionarCarpetaDestinoCommand { get; }
 
-
-        Dictionary<string, List<string>> Errores = new Dictionary<string, List<string>>();
+        private Dictionary<string, List<string>> Errores { get; set; } = new Dictionary<string, List<string>>();
 
         public VistaPrincipalViewModel(NavigationStore navigationStore, IFolderDialogService folderDialog)
         {
@@ -153,7 +151,7 @@ namespace DebugReplicator.ViewModel
                 return;
             }
 
-            ResultadoProceso resultCopiar = Replicador.CopiarCarpetaBaseADestino(CarpetaOrigen, CarpetaDestino, NombreCarpetaReplicada);
+            ResultadoProceso resultCopiar = GestorCarpetasArchivos.CopiarCarpetaBaseADestino(CarpetaOrigen, CarpetaDestino, NombreCarpetaReplicada);
 
             if (resultCopiar != null && resultCopiar.Completado)
             {
@@ -199,12 +197,9 @@ namespace DebugReplicator.ViewModel
             {
                 MessageBox.Show("Corrige los errores antes de continuar.", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
-            }
-            
-            Replicador replicador = new Replicador();
+            }            
 
             Replicador.ReplicarDebug(CarpetaOrigen, CarpetaDestino, NombreCarpetaReplicada, RangoFinInt, RangoInicioInt);
-            //Mostrar mensaje de éxito aqui
         }
 
         private void SeleccionarCarpetaOrigen()

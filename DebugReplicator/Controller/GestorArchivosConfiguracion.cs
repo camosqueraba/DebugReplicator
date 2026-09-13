@@ -178,9 +178,7 @@ namespace DebugReplicator.Controller
         {
             if (string.IsNullOrWhiteSpace(json))
             {
-                throw new ArgumentException(
-                    "El JSON no puede estar vacío.",
-                    "json");
+                throw new ArgumentException("El JSON no puede estar vacío.", "json");
             }
 
             JObject root;
@@ -191,13 +189,10 @@ namespace DebugReplicator.Controller
             }
             catch (Exception ex)
             {
-                throw new FormatException(
-                    "El contenido proporcionado no es un JSON válido.",
-                    ex);
+                throw new FormatException("El contenido proporcionado no es un JSON válido.", ex);
             }
 
-            var result = new Dictionary<string, string>(
-                StringComparer.OrdinalIgnoreCase);
+            var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             ExtractToken(root, result, string.Empty);
 
@@ -282,9 +277,7 @@ namespace DebugReplicator.Controller
 
             if (token.Type == JTokenType.Boolean)
             {
-                return token.Value<bool>()
-                    ? "true"
-                    : "false";
+                return token.Value<bool>() ? "true": "false";
             }
 
             return token.ToString();
@@ -302,9 +295,7 @@ namespace DebugReplicator.Controller
                 if (!File.Exists(rutaArchivoConfig))
                     throw new FileNotFoundException($"Archivo no encontrado: {rutaArchivoConfig}");
 
-                string extension = Path.GetExtension(rutaArchivoConfig).ToLowerInvariant();
-
-               
+                string extension = Path.GetExtension(rutaArchivoConfig).ToLowerInvariant();               
 
                 switch (extension)
                 {
@@ -335,7 +326,6 @@ namespace DebugReplicator.Controller
             }
                
         }
-
         
 
         private static ResultadoProceso ModificarKeyValue(string rutaArchivoConfig, List<ClaveValorModel> nuevasConfiguraciones)
@@ -427,11 +417,16 @@ namespace DebugReplicator.Controller
                             valorIndexado = valorOriginal.Replace(GlobalVars.CARACTER_BANDERA, indice.ToString());
                         
                         JToken token = jsonObjectOriginal.SelectToken(key);
-                        
-                        if (token != null)
+                                                
+                        JToken valorConvertido = ConvertirTipo(token, valorIndexado);
+
+                        if (token == null)
                         {
-                            token.Replace(valorIndexado);
-                        }                        
+                            resultadoProceso.Errores.Add($"La clave '{key}' no se encontró en el archivo JSON.");
+                            return resultadoProceso;
+                        }
+
+                        token.Replace(valorConvertido);
                     }
                       
                     File.WriteAllText(rutaArchivoConfig, jsonObjectOriginal.ToString());
@@ -445,6 +440,38 @@ namespace DebugReplicator.Controller
                 resultadoProceso.Errores.Add(ex.Message);
                 return resultadoProceso;
             }
-        }          
+        }
+        
+        
+        private static JToken ConvertirTipo(JToken token, string valorIndexado)
+        {
+            try
+            {
+                if (token == null || string.IsNullOrEmpty(valorIndexado))
+                    return null;
+                
+                switch (token.Type)
+                {
+                    case JTokenType.Integer:
+                        return JToken.FromObject(int.Parse(valorIndexado));
+                    case JTokenType.Float:
+                        return JToken.FromObject(float.Parse(valorIndexado));
+                    case JTokenType.Boolean:
+                        return JToken.FromObject(bool.Parse(valorIndexado));
+                    case JTokenType.String:
+                        return JToken.FromObject(valorIndexado);
+                    default:
+                        return token;
+                }
+            }
+            catch (Exception ex)
+            {                
+                LOGRobotica.Controllers.LogApplication.LogWrite("GestorArchivosConfiguracion -> ConvertirTipo: Exception " + ex.Message);  
+                return null;
+            }
+            
+        }
+        
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DebugReplicator.Model.DTOs;
+using System;
 using System.IO;
 
 
@@ -7,32 +8,40 @@ namespace DebugReplicator.Controller
     public class GestorCarpetasArchivos
     {
         public static bool CopiarDirectorio(string sourceDir, string destinationDir, bool recursive)
-        {            
-            var dir = new DirectoryInfo(sourceDir);
-            
-            if (!dir.Exists)
-                throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
-           
-            DirectoryInfo[] dirs = dir.GetDirectories();
-           
-            Directory.CreateDirectory(destinationDir);          
-            
-            foreach (FileInfo file in dir.GetFiles())
+        {
+            try
             {
-                string targetFilePath = Path.Combine(destinationDir, file.Name);
-                file.CopyTo(targetFilePath, true);
-            }
-           
-            if (recursive)
-            {
-                foreach (DirectoryInfo subDir in dirs)
-                {
-                    string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
-                    CopiarDirectorio(subDir.FullName, newDestinationDir, true);
-                }
-            }
+                var dir = new DirectoryInfo(sourceDir);
 
-            return true;
+                if (!dir.Exists)
+                    throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
+
+                DirectoryInfo[] dirs = dir.GetDirectories();
+
+                Directory.CreateDirectory(destinationDir);
+
+                foreach (FileInfo file in dir.GetFiles())
+                {
+                    string targetFilePath = Path.Combine(destinationDir, file.Name);
+                    file.CopyTo(targetFilePath, true);
+                }
+
+                if (recursive)
+                {
+                    foreach (DirectoryInfo subDir in dirs)
+                    {
+                        string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
+                        CopiarDirectorio(subDir.FullName, newDestinationDir, true);
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LOGRobotica.Controllers.LogApplication.LogWrite($"GestorCarpetasArchivos -> CopiarDirectorio: {ex.Message}");
+                return false;
+            }            
         }
 
         public static bool CopiarCarpeta(string directorioOrigen, string directorioDestino, bool recursive)
@@ -77,23 +86,6 @@ namespace DebugReplicator.Controller
             
         }
 
-        public static bool CrearCarpeta(string path)
-        {
-            if (!Directory.Exists(path))
-            {
-                try
-                {
-                    Directory.CreateDirectory(path);
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error creating directory: {ex.Message}");
-                    return false;
-                }
-            }
-            return true;
-        }
 
         public static string ObtenerNombreArchivo(string path)
         {
@@ -129,6 +121,27 @@ namespace DebugReplicator.Controller
                     esArchivo = true;
             }
             return esArchivo;
+        }
+
+        public static ResultadoProceso CopiarCarpetaBaseADestino(string rutaCarpetaBase, string rutaCarpetaDestino, string nombreNuevaCarpeta = "")
+        {
+            ResultadoProceso resultadoProceso = new ResultadoProceso();
+            bool copiado = false;
+
+            string nombreCarpetaCopiada = ObtenerNombreArchivo(rutaCarpetaBase);
+
+            if (!string.IsNullOrWhiteSpace(nombreNuevaCarpeta))
+                nombreCarpetaCopiada = nombreNuevaCarpeta;
+
+            string nombreNuevaCarpetaDestino = Path.Combine(rutaCarpetaDestino, nombreCarpetaCopiada);
+
+            copiado = CopiarDirectorio(rutaCarpetaBase, nombreNuevaCarpetaDestino, true);
+
+
+            resultadoProceso.Completado = copiado;
+            resultadoProceso.ResultadoContenido = nombreNuevaCarpetaDestino;
+
+            return resultadoProceso;
         }
     }
 }
